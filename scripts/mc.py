@@ -437,21 +437,38 @@ def _rec_time(rec):
 
 def merge_progress(p, new):
     """Merge an exported progress blob into p.
-    Checks: the export is the full state. Levels and skills: keep the higher, unless the export carries a
-    page edit stamp (stamp["l:char"], stamp["s:char:prof"]) newer than what p has, so corrections stick.
-    Name mappings are unioned (the export wins on a conflict)."""
+    Checks: the export is the full state. Levels and skills: keep the higher. Page edit stamps
+    (stamp["c:id"], stamp["l:char"], stamp["s:char:prof"], stamp["n"]) override both rules in either
+    direction: an incoming stamp newer than the stored one wins, and a stored stamp newer than unstamped
+    incoming data is kept, so a stale export can't undo a page edit. Name mappings are unioned (the export
+    wins on a conflict)."""
     st, mine_st = new.get("stamp") or {}, p.setdefault("stamp", {})
+    eday = _rec_time({"updated": new.get("updated")})
 
     def wins(key, t=0):
         return key in st and st[key] >= max(mine_st.get(key, 0), t)
 
+    def held(key, t=0):
+        return key not in st and key in mine_st and mine_st[key] > (t or eday)
+
     if "checks" in new:
-        p["checks"] = {k: True for k, v in new["checks"].items() if v}
+        old_checks = p.get("checks") or {}
+        checks = {k: True for k, v in new["checks"].items() if v}
+        for key in {k for k in list(st) + list(mine_st) if k.startswith("c:")}:
+            k = key[2:]
+            if held(key) or (key in st and not wins(key)):
+                if old_checks.get(k):
+                    checks[k] = True
+                else:
+                    checks.pop(k, None)
+        p["checks"] = checks
     for cid, lv in (new.get("levels") or {}).items():
         old = p["levels"].setdefault(cid, {})
         if f"l:{cid}" in st:
             if wins(f"l:{cid}", _rec_time(old)):
                 old.update(lv)
+        elif held(f"l:{cid}", _rec_time(lv)):
+            continue
         elif (lv.get("level") or 0) >= (old.get("level") or 0):
             old.update(lv)
     for cid, sk in (new.get("skills") or {}).items():
@@ -461,9 +478,9 @@ def merge_progress(p, new):
             if k in st:
                 if wins(k):
                     mine[prof] = int(v or 0)
-            else:
+            elif not held(k):
                 mine[prof] = max(int(v or 0), int(mine.get(prof) or 0))
-    if ("n" in st and wins("n")) or ("n" not in st and new.get("notes")):
+    if ("n" in st and wins("n")) or ("n" not in st and new.get("notes") and not held("n")):
         p["notes"] = new.get("notes") or ""
     p.setdefault("map", {}).update(new.get("map") or {})
     for k, v in st.items():

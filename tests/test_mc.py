@@ -321,6 +321,33 @@ class ProgressSafety(unittest.TestCase):
         mc.merge_progress(p, {"levels": {"aldric": {"level": 12}}, "skills": {"aldric": {"Mining": 80}}})
         self.assertEqual((p["levels"]["aldric"]["level"], p["skills"]["aldric"]["Mining"]), (20, 120))
 
+    def test_stored_stamp_beats_stale_export(self):
+        # #41: a stamped edit already stored is not undone by an older, unstamped export
+        p = self.base()
+        t = mc._rec_time({"updated": "2026-11-06"})
+        mc.merge_progress(p, {"updated": "2026-11-06", "checks": {"b": True}, "levels": {"aldric": {"level": 12, "updated": "2026-11-06"}},
+                              "skills": {"aldric": {"Mining": 80}}, "notes": "fixed",
+                              "stamp": {"c:a": t, "l:aldric": t, "s:aldric:Mining": t, "n": t}})
+        stale = {"updated": "2026-11-05", "checks": {"a": True, "b": True}, "levels": {"aldric": {"level": 20, "updated": "2026-11-05"}},
+                 "skills": {"aldric": {"Mining": 120}}, "notes": "old"}
+        mc.merge_progress(p, stale)
+        self.assertNotIn("a", p["checks"])
+        self.assertTrue(p["checks"]["b"])
+        self.assertEqual(p["levels"]["aldric"]["level"], 12)
+        self.assertEqual(p["skills"]["aldric"]["Mining"], 80)
+        self.assertEqual(p["notes"], "fixed")
+        # newer unstamped data (a later addon read) still goes through
+        mc.merge_progress(p, {"updated": "2026-11-08", "checks": {"b": True, "c": True}, "levels": {"aldric": {"level": 22, "lastSeenEpoch": t // 1000 + 86400 * 2}}})
+        self.assertEqual(p["levels"]["aldric"]["level"], 22)
+        self.assertTrue(p["checks"].get("c"))
+        self.assertNotIn("a", p["checks"])
+
+    def test_older_incoming_check_stamp_loses(self):
+        p = self.base()
+        mc.merge_progress(p, {"checks": {"b": True}, "stamp": {"c:a": 2000}})
+        mc.merge_progress(p, {"checks": {"a": True, "b": True}, "stamp": {"c:a": 1000}})
+        self.assertNotIn("a", p["checks"])
+
     def test_map_survives_merge(self):
         p = self.base()
         mc.merge_progress(p, {"map": {"SomeAlt": "elowen"}})

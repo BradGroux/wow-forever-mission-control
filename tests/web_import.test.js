@@ -51,6 +51,18 @@ assert.strictEqual(merge(merge(blank(), newer), local).levels.aldric.level, 25);
 // unstamped data keeps the old rules
 assert.strictEqual(merge(base, { levels: { aldric: { level: 9 } } }).levels.aldric.level, 20);
 
+// a stored page edit survives a stale, unstamped export (#41)
+const stale = Object.assign(blank(), { updated: "2026-11-05", checks: { a: true, b: true }, skills: { aldric: { Mining: 120 } }, notes: "baked" });
+stale.levels.aldric = { level: 20, updated: "2026-11-05" };
+const kept = merge(reloaded, stale);
+assert.ok(!kept.checks.a, "stale export re-ticked a stamped untick");
+assert.strictEqual(kept.levels.aldric.level, 12, "stale export raised a stamped level");
+assert.strictEqual(kept.skills.aldric.Mining, 80);
+assert.strictEqual(kept.notes, "");
+// newer unstamped data still applies
+const fresh = merge(reloaded, { updated: "2026-11-09", levels: { aldric: { level: 30, updated: "2026-11-09" } } });
+assert.strictEqual(fresh.levels.aldric.level, 30);
+
 // map survives and is exported (#19)
 const m = merge(merge(blank(), { map: { Aldricthebold: "aldric" } }), { map: { SomeAlt: "elowen" } });
 assert.deepStrictEqual(m.map, { Aldricthebold: "aldric", SomeAlt: "elowen" });
