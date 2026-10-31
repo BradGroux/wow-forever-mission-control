@@ -1059,7 +1059,8 @@
   },
   "Replica Ironforge Air Rifle": {
    "type": "item",
-   "id": 281060
+   "id": 276236,
+   "tooltip": "Holstered Replica Ironforge Air Rifle"
   },
   "Researching the Corruption": {
    "id": 1275,
