@@ -272,6 +272,79 @@ class SpelunkerNames(unittest.TestCase):
                     self.assertTrue(alt in names or alt.split(": ")[0] in names, alt)
 
 
+class CraftDue(unittest.TestCase):
+    # #49: no craft target or projected point before the craft is trained
+    def plan(self, start, until=None):
+        c = mc.load_config(mc.EXAMPLE)
+        p = c["characters"][1]["professions"][1]
+        p["from"] = start
+        if until:
+            p["until"] = until
+        self.assertEqual(mc.validate(c, G)[0], [])
+        return mc.build_plan(c, G)
+
+    def test_late_starts(self):
+        lo = {b["id"]: int(b["id"].split("-")[0]) for b in self.plan(1)["brackets"]}
+        for start in (26, 33, 40, 51):
+            p = self.plan(start)
+            for b in p["brackets"]:
+                for t in b["tasks"]["elowen"]:
+                    if t["text"].startswith("Alchemy to"):
+                        self.assertGreaterEqual(int(b["id"].split("-")[1]), start, (start, b["id"], t["text"]))
+                        self.assertTrue(lo[b["id"]] <= start or b["id"] != "1-10")
+            train = [b["id"] for b in p["brackets"] for t in b["tasks"]["elowen"] if t["text"] == "Train Alchemy"][0]
+            first = [b["id"] for b in p["brackets"] for t in b["tasks"]["elowen"] if t["text"] == "Alchemy to 150"][0]
+            self.assertEqual(train, first, start)
+
+    def test_dropped_before_later_target(self):
+        p = self.plan(40, until=50)
+        texts = [t["text"] for b in p["brackets"] for t in b["tasks"]["elowen"]]
+        self.assertIn("Alchemy to 225", texts)
+        self.assertNotIn("Alchemy to 300", texts)
+
+    def test_projection_not_early(self):
+        base = self.plan(1)["coverage"]["projection"]
+        late = self.plan(40)["coverage"]["projection"]
+        self.assertEqual(late[4]["at"], "26-32")
+        self.assertEqual(late[4]["points"], base[4]["points"] - 2)  # Alchemy 150/225 not before 40
+        self.assertEqual(late[5]["points"], base[5]["points"] - 2)  # 32-40 still before training
+        self.assertEqual(late[6]["points"], base[6]["points"])      # 40-45 trained and caught up
+
+    def test_early_and_60_unchanged(self):
+        self.assertEqual(mc.craft_due(25, 1), 25)
+        self.assertEqual(mc.craft_due(25, 52), 52)
+        self.assertEqual(mc.craft_due(52, 60), 60)
+
+
+class RosterStructure(unittest.TestCase):
+    # #53: malformed but parseable rosters give errors, not tracebacks
+    def cases(self):
+        def ch(f):
+            c = copy.deepcopy(mc.load_json(mc.EXAMPLE)); f(c); return c
+        return [
+            ch(lambda c: c["characters"][0]["professions"][0].__setitem__("from", "later")),
+            ch(lambda c: c["characters"][0]["professions"].append({})),
+            ch(lambda c: c["characters"].append("oops")),
+            ch(lambda c: c.__setitem__("characters", {"a": 1})),
+            ch(lambda c: c["characters"][0].__setitem__("professions", "Mining")),
+            [],
+        ]
+
+    def test_errors_not_exceptions(self):
+        for raw in self.cases():
+            e, _, _ = mc.validate(mc.normalize(raw), G)
+            self.assertTrue(e, raw if not isinstance(raw, dict) else "")
+
+    def test_cli_exits_cleanly(self):
+        for raw in self.cases():
+            with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+                json.dump(raw, f)
+            r = subprocess.run([sys.executable, os.path.join(mc.ROOT, "scripts", "mc.py"), "validate", "--config", f.name], capture_output=True, text=True)
+            os.unlink(f.name)
+            self.assertNotEqual(r.returncode, 0)
+            self.assertNotIn("Traceback", r.stderr)
+
+
 class LegacyTracking(unittest.TestCase):
     def test_account_reaches_full_total(self):
         p = mc.build_plan(EX, G)

@@ -12,7 +12,7 @@ Your roster lives in `config/roster.json`. The JSON Schema is [config/roster.sch
 | `faction` | yes | `Alliance`, `Horde` | All characters must match |
 | `ruleset` | yes | `Normal`, `PvP`, `Roleplay`, `Hardcore` | Hardcore characters still earn Legacy points |
 | `launch` | no | date | Default `2026-11-04` |
-| `characters` | yes | exactly 4 | See below |
+| `characters` | yes | 1 to 10 (4 recommended) | See below |
 
 ## Characters
 

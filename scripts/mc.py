@@ -93,13 +93,61 @@ def config_path(arg=None):
     return CONFIG if os.path.exists(CONFIG) else EXAMPLE
 
 
+def rel(path, start=ROOT):
+    """Relative path for messages; falls back to the absolute path (e.g. another drive on Windows)."""
+    try:
+        return os.path.relpath(path, start)
+    except ValueError:
+        return os.path.abspath(path)
+
+
 def load_config(path):
-    cfg = normalize(load_json(path))
+    raw = load_json(path)
+    bad = structure_errors(raw)
+    if bad:
+        raise SystemExit(f"{rel(path, ROOT)}: invalid roster structure:\n  " + "\n  ".join(bad))
+    cfg = normalize(raw)
     cfg["_path"] = path
     return cfg
 
 
+def structure_errors(cfg):
+    """Shape problems that would stop normalize/validate from reading the roster at all."""
+    if not isinstance(cfg, dict):
+        return [f"roster must be a JSON object, got {type(cfg).__name__}"]
+    chars = cfg.get("characters")
+    if chars is None:
+        return []
+    if not isinstance(chars, list):
+        return [f"roster.characters must be an array, got {type(chars).__name__}"]
+    out = []
+    for i, ch in enumerate(chars):
+        where = f"roster.characters[{i}]"
+        if not isinstance(ch, dict):
+            out.append(f"{where} must be an object, got {ch!r}")
+            continue
+        profs = ch.get("professions")
+        if profs is None:
+            continue
+        if not isinstance(profs, list):
+            out.append(f"{where}.professions must be an array, got {type(profs).__name__}")
+            continue
+        for j, p in enumerate(profs):
+            pw = f"{where}.professions[{j}]"
+            if not isinstance(p, dict):
+                out.append(f"{pw} must be an object, got {p!r}")
+                continue
+            if not isinstance(p.get("name"), str) or not p.get("name"):
+                out.append(f"{pw}.name is required (a profession name)")
+            for k in ("from", "until"):
+                if k in p and (isinstance(p[k], bool) or not isinstance(p[k], int)):
+                    out.append(f"{pw}.{k} must be a whole number, got {p[k]!r}")
+    return out
+
+
 def normalize(cfg):
+    if structure_errors(cfg):
+        return cfg
     for i, ch in enumerate(cfg.get("characters") or []):
         ch.setdefault("id", slug(ch.get("name", f"c{i + 1}")))
         for p in ch.get("professions") or []:
@@ -150,6 +198,9 @@ def prof_spans(ch):
 def validate(cfg, g):
     """Return (errors, warnings, info). Pure function; no I/O."""
     E, W, I = [], [], []
+    bad = structure_errors(cfg)
+    if bad:
+        return bad, W, I
     if os.path.exists(SCHEMA_PATH):
         E += schema_errors(cfg, load_json(SCHEMA_PATH))
     fac = cfg.get("faction")
@@ -235,8 +286,8 @@ def validate(cfg, g):
 
 # ---------------------------------------------------------------- plan
 def craft_due(lvl, start):
-    """Level by which a craft target is due: the usual target level, or the level it's trained if that's 52+."""
-    return max(lvl, start if start >= 52 else lvl)
+    """Level by which a craft target is due: the usual target level, never before the craft is trained."""
+    return max(lvl, start)
 
 
 def overlaps(lo, hi, a, b):
@@ -295,7 +346,9 @@ def build_plan(cfg, g, progress=None):
                 if n in CRAFTS:
                     for skill, lvl in CRAFT_TARGET.items():
                         due = craft_due(lvl, a)
-                        if (lo < due <= hi or (lo == 1 and due == 1)) and a < b and due < b:
+                        # due at the training level: same bracket as "Train"; otherwise the bracket it ends in
+                        here = (lo <= due < hi or (hi == 60 and due == 60)) if due == a else (lo < due <= hi or (lo == 1 and due == 1))
+                        if here and a < b and due < b:
                             add(f"{slug(n)}-{skill}", f"{n} to {skill}", "Legacy")
             for m in ch["milestones"]:
                 if lo <= m["level"] < hi or (hi == 60 and m["level"] == 60):
@@ -344,13 +397,14 @@ def build_plan(cfg, g, progress=None):
     due_at = {}
     for c in CRAFTS:
         for sk, lvl in CRAFT_TARGET.items():
-            ds = [craft_due(lvl, a) for src in cfg["characters"] for n, a, b in prof_spans(src) if n == c and craft_due(lvl, a) < b]
+            # (due, trained that level): a target due the level it's trained counts from that level's bracket
+            ds = [(craft_due(lvl, a), craft_due(lvl, a) == a and a > lvl) for src in cfg["characters"] for n, a, b in prof_spans(src) if n == c and craft_due(lvl, a) < b]
             if ds:
                 due_at[(c, sk)] = min(ds)
     proj = []
     for lo, hi in BRACKETS:
         pts = sum(1 for lv in (25, 45, 60) if lv <= hi) * distinct
-        pts += sum(1 for d in due_at.values() if d <= hi)
+        pts += sum(1 for d, at_train in due_at.values() if ((d < hi or hi == 60) if at_train else d <= hi))
         proj.append({"at": f"{lo}-{hi}", "points": pts})
     errs, warns, info = validate(cfg, g)
     links = {}
@@ -368,7 +422,7 @@ def build_plan(cfg, g, progress=None):
         links[n] = {"url": url, "direct": direct}
     prog = progress or empty_progress(cfg)
     return {
-        "schema": SCHEMA_VERSION, "generated_from": os.path.relpath(cfg.get("_path", CONFIG), ROOT).replace(os.sep, "/"),
+        "schema": SCHEMA_VERSION, "generated_from": rel(cfg.get("_path", CONFIG), ROOT).replace(os.sep, "/"),
         "roster": {"name": cfg.get("roster_name", "Legacy Mission Control"), "faction": fac, "ruleset": cfg["ruleset"],
                    "launch": cfg.get("launch", LAUNCH), "key": roster_key(cfg)},
         "characters": chars, "brackets": brackets, "account": account,
@@ -775,13 +829,13 @@ def doctor():
     for path, text in example_files().items():
         cur = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
         if cur != text:
-            problems.append(f"{os.path.relpath(path, ROOT)} is out of date: run ./mc generate")
+            problems.append(f"{rel(path, ROOT)} is out of date: run ./mc generate")
     if os.path.exists(CONFIG):
         files, plan = outputs(CONFIG)
         for path in (WEB_PLAN, CANVAS_OUT):
             cur = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
             if cur != files[path]:
-                problems.append(f"{os.path.relpath(path, ROOT)} is out of date: run ./mc generate")
+                problems.append(f"{rel(path, ROOT)} is out of date: run ./mc generate")
         src = files[CANVAS_OUT]
     else:
         files, plan = outputs(EXAMPLE, personal=False)
@@ -846,7 +900,7 @@ def main(argv=None):
         E, W, I = validate(normalize(json.loads(json.dumps(cfg))), g)
         dest = DRAFT if E else CONFIG
         write_json(dest, cfg)
-        print(f"wrote {os.path.relpath(dest, ROOT)}" + (" (not config/roster.json: fix the errors below, then rename it)" if E else ""))
+        print(f"wrote {rel(dest, ROOT)}" + (" (not config/roster.json: fix the errors below, then rename it)" if E else ""))
         for x in E: print("error:", x)
         for x in W: print("warning:", x)
         for x in I: print("note:", x)
@@ -854,7 +908,7 @@ def main(argv=None):
     if a.cmd == "validate":
         path = config_path(a.config)
         E, W, I = validate(load_config(path), Game())
-        print(f"{os.path.relpath(path, ROOT)}: {len(E)} error(s), {len(W)} warning(s)")
+        print(f"{rel(path, ROOT)}: {len(E)} error(s), {len(W)} warning(s)")
         for x in E: print("error:", x)
         for x in W: print("warning:", x)
         for x in I: print("note:", x)
@@ -867,7 +921,7 @@ def main(argv=None):
         files.update(example_files())
         for path, text in files.items():
             write_text(path, text)
-            print("wrote", os.path.relpath(path, ROOT))
+            print("wrote", rel(path, ROOT))
         if not os.path.exists(CONFIG) and not a.config:
             print("no config/roster.json yet: the page shows the example roster (./mc init to make yours)")
         for x in plan["validation"]["warnings"]: print("warning:", x)
@@ -959,7 +1013,7 @@ def main(argv=None):
             if a.dry_run:
                 return 0
             bk = backup_progress()
-            if bk: print("backup:", os.path.relpath(bk, ROOT))
+            if bk: print("backup:", rel(bk, ROOT))
         elif a.cmd == "import-addon":
             p, lines = import_addon(cfg, p, open(a.savedvars, encoding="utf-8", errors="replace").read(), a.force, a.db)
             print("\n".join(lines))
