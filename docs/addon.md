@@ -5,8 +5,10 @@ LegacyTracker is a tiny addon that silently records, for every character you log
 - level, plus the time each level was reached
 - XP, XP to next level, and rested XP
 - profession skill for every profession
-- zone, time played, resting state, gold
+- zone and resting state
 - class, race, faction, realm, last seen
+
+It does **not** record gold or time played unless you turn that on with `/ltrack extras on` (`/ltrack extras off` turns it off again and erases what was recorded). Nothing Mission Control does needs them.
 
 It has no window, no minimap button and no chat messages. Type `/ltrack` to print a one-line summary per character. It works with any character names, on any realm, and needs no setup. Data stays on your computer in a SavedVariables file until you import it.
 
@@ -59,6 +61,16 @@ It has no window, no minimap button and no chat messages. Type `/ltrack` to prin
      `make import SV="<path>"` does the same.
 5. If your group plays on several accounts, each player imports their own file. Imports merge: the higher level wins and profession skills keep the highest value.
 
+### Sharing with your group
+
+`LegacyTracker.lua` holds data for **every character on your account**, not only the roster ones. Don't send the raw file. Send a scrubbed copy instead:
+
+```sh
+./mc scrub-addon "<path>\LegacyTracker.lua"     # writes progress-share-YYYY-MM-DD.json
+```
+
+It contains only the roster characters' level, rested state, zone and profession skill. The keeper merges it with `./mc progress merge progress-share-YYYY-MM-DD.json`; it never changes anyone's ticked checklist items. No Python? Import the file on the page and use **Export progress**: the page keeps only roster characters, so its export is just as clean.
+
 ### Rules the import follows
 
 - Characters are matched by in-game name. Characters not on the roster are skipped and listed.
@@ -66,7 +78,7 @@ It has no window, no minimap button and no chat messages. Type `/ltrack` to prin
 - An import never lowers a level and skips data that isn't newer than the last import. `--force` overrides both.
 - Rested state: **Full** at 1.5 levels of rested XP (the cap), **Partial** above zero, **Empty** otherwise.
 - A renamed copy of the addon (different SavedVariables table name) imports with `--db <TableName>`, for example `./mc import-addon OldTracker.lua --db OldTrackerDB`.
-- Gold, time played and other extra fields are recorded by the addon but not imported.
+- Gold and time played are never imported, even with `/ltrack extras on`.
 
 ## With an agent
 

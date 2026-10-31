@@ -1,6 +1,6 @@
 # LegacyTracker
 
-Silent WoW Forever addon (Interface 16001) that records level, XP, rested XP, profession skill, zone and time played for every character on the account, for [WoW Forever Legacy Mission Control](../README.md). No UI, no chat output except `/ltrack`.
+Silent WoW Forever addon (Interface 16001) that records level, XP, rested XP, profession skill and zone for every character on the account (gold and time played only after `/ltrack extras on`), for [WoW Forever Legacy Mission Control](../README.md). No UI, no chat output except `/ltrack`.
 
 Install: copy the `LegacyTracker` folder into `World of Warcraft\_forever_\Interface\AddOns\`.
 

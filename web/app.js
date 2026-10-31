@@ -406,7 +406,6 @@
     var json = JSON.stringify(S, null, 2);
     var a = h("a", { href: URL.createObjectURL(new Blob([json], { type: "application/json" })), download: "progress-" + today() + ".json" });
     document.body.appendChild(a); a.click(); a.remove();
-    try { navigator.clipboard.writeText(json); } catch (e) { /* download is enough */ }
   }
   // LegacyTracker SavedVariables (WTF\Account\<ACCOUNT>\SavedVariables\LegacyTracker.lua) -> progress.
   function parseLua(src) {

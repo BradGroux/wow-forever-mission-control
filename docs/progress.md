@@ -63,6 +63,6 @@ Run `./mc generate` after CLI changes, then commit `progress/progress.json`, `we
 
 ## Group workflow
 
-One person (or their agent) keeps the repo. Others click **Export progress** on the page and send the JSON, or send their `LegacyTracker.lua`. The keeper merges or imports, runs `./mc generate`, commits and pushes. If the page is hosted, everyone sees the update on the next load.
+One person (or their agent) keeps the repo. Others click **Export progress** on the page and send the JSON, or run `./mc scrub-addon` on their `LegacyTracker.lua` and send that (the raw file covers every character on their account). The keeper merges or imports, runs `./mc generate`, commits and pushes. If the page is hosted, everyone sees the update on the next load.
 
 `./mc progress show` prints the current state; `./mc progress reset` clears it (asks no questions, so commit first).

@@ -11,7 +11,6 @@ LegacyTrackerDB = {
 			["levels"] = {
 				[12] = 1762301800,
 			},
-			["money"] = 12345,
 			["name"] = "Aldric",
 			["pctToNext"] = 11.3,
 			["professions"] = {
@@ -36,8 +35,6 @@ LegacyTrackerDB = {
 			["restedPctOfLevel"] = 75,
 			["resting"] = true,
 			["subzone"] = "Goldshire",
-			["timePlayed"] = 3600,
-			["timePlayedLevel"] = 600,
 			["xp"] = 900,
 			["xpMax"] = 8000,
 			["zone"] = "Elwynn Forest",
@@ -51,7 +48,6 @@ LegacyTrackerDB = {
 			["level"] = 10,
 			["levels"] = {
 			},
-			["money"] = 12345,
 			["name"] = "Elowen",
 			["pctToNext"] = 87.5,
 			["professions"] = {
@@ -80,6 +76,9 @@ LegacyTrackerDB = {
 			["xpMax"] = 8000,
 			["zone"] = "Elwynn Forest",
 		},
+	},
+	["settings"] = {
+		["extras"] = false,
 	},
 	["version"] = 1,
 }
