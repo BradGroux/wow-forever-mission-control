@@ -216,6 +216,12 @@ class LegacyTracking(unittest.TestCase):
         md = mc.plan_markdown(p)
         self.assertIn(G.legacy["claim_at"]["coords"], md)
 
+    def test_spelunker_criteria(self):
+        acct = {a["id"]: a for a in mc.build_plan(EX, G)["account"]}
+        self.assertTrue(acct["acct-spelunker-novice"]["detail"].startswith("All 6: "))
+        self.assertIn("Scarlet Monastery: Cathedral", acct["acct-spelunker-experienced"]["detail"])
+        self.assertTrue(acct["acct-spelunker-master"]["detail"].startswith("All 17: "))
+
     def test_unknown_quest_counts_rank_last(self):
         p = mc.build_plan(EX, G)
         unknown = {z["name"] for z in G.world["zones"] if z["quests"].get("Alliance") is None}

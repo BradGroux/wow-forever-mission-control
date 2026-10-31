@@ -324,7 +324,9 @@ def build_plan(cfg, g, progress=None):
         if d.get("spelunker"):
             sp.setdefault(d["spelunker"], []).append(d["name"])
     for tier in ("Novice", "Experienced", "Master"):
-        account.append({"id": f"acct-spelunker-{tier.lower()}", "text": f"{tier} Spelunker", "tag": "Legacy", "detail": ", ".join(sp.get(tier, []))})
+        crit = ((g.legacy["challenges"]["dungeon"].get("tiers") or {}).get(tier) or {}).get("criteria")
+        detail = f"All {len(crit)}: " + ", ".join(crit) if crit else ", ".join(sp.get(tier, []))
+        account.append({"id": f"acct-spelunker-{tier.lower()}", "text": f"{tier} Spelunker", "tag": "Legacy", "detail": detail})
     for k in ("raid", "adventure"):
         for it in g.legacy["challenges"][k]["items"]:
             account.append({"id": f"acct-{slug(it)}", "text": it, "tag": "Legacy"})
