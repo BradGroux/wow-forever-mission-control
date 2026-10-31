@@ -63,6 +63,16 @@ assert.strictEqual(kept.notes, "");
 const fresh = merge(reloaded, { updated: "2026-11-09", levels: { aldric: { level: 30, updated: "2026-11-09" } } });
 assert.strictEqual(fresh.levels.aldric.level, 30);
 
+// realm-qualified mapping beats bare name; same name on two realms is ambiguous (#51)
+const two = 'LegacyTrackerDB = { chars = { ["OtherRealm-Aldric"] = {name="Aldric", level=50, lastSeen=1800000000} } }';
+S = { map: { "OtherRealm-Aldric": "brannoc" }, levels: {} };
+r = fromAddon(two);
+assert.strictEqual(r.extra.levels.brannoc.level, 50); assert.ok(!r.extra.levels.aldric);
+S = { levels: {} };
+r = fromAddon('LegacyTrackerDB = { chars = { ["A-Aldric"] = {name="Aldric", level=50, lastSeen=2}, ["B-Aldric"] = {name="Aldric", level=20, lastSeen=1} } }');
+assert.strictEqual(r.ambiguous.length, 1); assert.ok(!r.extra.levels.aldric);
+S = {};
+
 // map survives and is exported (#19)
 const m = merge(merge(blank(), { map: { Aldricthebold: "aldric" } }), { map: { SomeAlt: "elowen" } });
 assert.deepStrictEqual(m.map, { Aldricthebold: "aldric", SomeAlt: "elowen" });
