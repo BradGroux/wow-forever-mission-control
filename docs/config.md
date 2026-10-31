@@ -4,10 +4,12 @@ Your roster lives in `config/roster.json`. The JSON Schema is [config/roster.sch
 
 ## Top level
 
+`characters` holds 1 to 10 entries. Four is the default and the recommended goal.
+
 | Field | Required | Values | Notes |
 | --- | --- | --- | --- |
 | `roster_name` | no | text | Page title |
-| `faction` | yes | `Alliance`, `Horde` | All four characters must match |
+| `faction` | yes | `Alliance`, `Horde` | All characters must match |
 | `ruleset` | yes | `Normal`, `PvP`, `Roleplay`, `Hardcore` | Hardcore characters still earn Legacy points |
 | `launch` | no | date | Default `2026-11-04` |
 | `characters` | yes | exactly 4 | See below |

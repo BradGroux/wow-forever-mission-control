@@ -4,7 +4,7 @@
 No. Four characters is the design (class and craft Legacy challenges reward spreading out), but one player with four alts works the same way.
 
 **Can I use fewer or more than four characters?**
-Not yet. `./mc validate` requires exactly four. A flexible roster size is a welcome contribution.
+Yes. A roster can have 1 to 10 characters. Four stays the default and the recommended goal: `./mc validate` prints a note (not a warning) for other sizes. With one or two characters, missing crafts are notes too, since two primary professions each can't reach all six crafts. The page, canvas, timeline and addon import all follow the roster size, and checklist ids stay keyed by character id, so adding or removing a character later keeps everyone else's progress.
 
 **Why four characters and all six crafts?**
 Crafting Legacy challenges pay at 150, 225 and 300 skill in each of the six crafting professions (18 points). With two primary professions per character, four characters can cover all six if they plan it. Class challenges (27 points) also reward leveling different classes.

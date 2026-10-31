@@ -538,7 +538,7 @@
     document.title = P.roster.name + " · Legacy Mission Control";
     top.replaceChildren(
       h("h1", null, P.roster.name),
-      h("p", { class: "sub" }, wl(P.roster.faction), " · " + P.roster.ruleset + " · " + CHARS.length + " characters"),
+      h("p", { class: "sub" }, wl(P.roster.faction), " · " + P.roster.ruleset + " · " + CHARS.length + (CHARS.length === 1 ? " character" : " characters")),
       rosterCards());
     if (!TABS.some(function (t) { return t[0] === UI.tab; })) UI.tab = "today";
     nav.replaceChildren.apply(nav, TABS.map(function (t) {

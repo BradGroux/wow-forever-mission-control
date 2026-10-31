@@ -4,7 +4,7 @@
 
 ## Prompts that work everywhere
 
-- "Set up WoW Forever Legacy Mission Control for our group. Interview me for our four characters, validate, and generate the page."
+- "Set up WoW Forever Legacy Mission Control for our group. Interview me for our characters, validate, and generate the page."
 - "Make sure our professions cover all six crafts and suggest swaps if not."
 - "Aldric hit 23 with full rested; Elowen has 150 Alchemy; we cleared Deadmines. Update progress."
 - "Here's my LegacyTracker.lua. Import it and show me what changed."

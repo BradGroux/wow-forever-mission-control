@@ -2,7 +2,7 @@
 """WoW Forever Legacy Mission Control: one CLI for people and agents.
 
   ./mc init [--answers FILE] [--force]  setup interview, writes config/roster.json
-  ./mc validate [--config F] [--strict]  check the roster (combos, four characters, craft coverage)
+  ./mc validate [--config F] [--strict]  check the roster (combos, 1-10 characters, craft coverage)
   ./mc generate [--config F]             write web/data/plan.js, build/plan.json, build/PLAN.md, canvas adapter
   ./mc plan [--config F]                 print the personalized plan (Markdown)
   ./mc level CHAR LEVEL [--rested R]     record a level by hand (CHAR = id or name)
@@ -39,6 +39,7 @@ GATHER = ["Herbalism", "Mining", "Skinning"]
 SECONDARY = ["Cooking", "First Aid", "Fishing"]
 RESTED = ["Empty", "Partial", "Full"]
 BRACKETS = [(1, 10), (10, 16), (16, 22), (22, 26), (26, 32), (32, 40), (40, 45), (45, 52), (52, 60)]
+MIN_CHARS, MAX_CHARS, RECOMMENDED_CHARS = 1, 10, 4
 CRAFT_TARGET = {150: 25, 225: 32, 300: 52}  # skill -> level by which to reach it
 WOWHEAD = "https://www.wowhead.com/forever"
 
@@ -157,8 +158,10 @@ def validate(cfg, g):
     if cfg.get("ruleset") not in g.world["rulesets"]:
         E.append(f"ruleset must be one of {', '.join(g.world['rulesets'])}, got {cfg.get('ruleset')!r}")
     chars = cfg.get("characters") or []
-    if len(chars) != 4:
-        E.append(f"the plan levels exactly four characters; found {len(chars)}")
+    if not MIN_CHARS <= len(chars) <= MAX_CHARS:
+        E.append(f"a roster has {MIN_CHARS} to {MAX_CHARS} characters; found {len(chars)}")
+    elif len(chars) != RECOMMENDED_CHARS:
+        I.append(f"{len(chars)} character{'' if len(chars) == 1 else 's'}: the plan works for any size, but four is the recommended goal (more classes and crafts covered for Legacy points)")
     seen_ids, seen_names = {}, {}
     for ch in chars:
         who = ch.get("name") or ch.get("id") or "?"
@@ -212,15 +215,16 @@ def validate(cfg, g):
     # coverage
     crafts = {c: [ch["name"] for ch in chars if c in [n for n, _, _ in prof_spans(ch)]] for c in CRAFTS}
     gaps = [c for c, who in crafts.items() if not who]
+    small = len(chars) < 3  # two characters have at most four primary slots at once; six crafts can't all fit
     for c in gaps:
-        W.append(f"gap: no character takes {c}; that is 3 Legacy points left on the table")
+        (I if small else W).append(f"gap: no character takes {c}; that is 3 Legacy points left on the table")
     for c, who in crafts.items():
         if len(who) > 1:
             W.append(f"duplicate: {c} on {', '.join(who)}; Legacy pays each craft once per account")
     classes = [ch["class"] for ch in chars]
     for c in sorted(set(classes)):
         if classes.count(c) > 1:
-            W.append(f"duplicate class: {classes.count(c)} {c}s; class Legacy points pay once per class")
+            (I if len(chars) > len(g.classes) else W).append(f"duplicate class: {classes.count(c)} {c}s; class Legacy points pay once per class")
     all_profs = {n for ch in chars for n, _, _ in prof_spans(ch)}
     for c, info in g.profs["crafting"].items():
         need = [u for u in info.get("uses", []) if u in GATHER]
@@ -692,7 +696,12 @@ def interview(answers=None):
         cfg[k] = ask(k, q, d)
     fac = cfg["faction"]
     chars = []
-    for i in range(4):
+    try:
+        n = int(ask("count", f"How many characters ({MIN_CHARS}-{MAX_CHARS}; {RECOMMENDED_CHARS} recommended)", str(RECOMMENDED_CHARS)))
+    except ValueError:
+        n = RECOMMENDED_CHARS
+    n = max(MIN_CHARS, min(MAX_CHARS, n))
+    for i in range(n):
         pre = f"c{i + 1}."
         races = [r for r, v in g.races.items() if v["faction"] == fac]
         name = ask(pre + "name", f"Character {i + 1} name", f"Hero{i + 1}")

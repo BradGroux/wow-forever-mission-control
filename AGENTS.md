@@ -4,7 +4,7 @@ Instructions for any AI agent working in this repository (Grok Bot, Muse, ChatGP
 
 ## What this is
 
-WoW Forever Legacy Mission Control plans and tracks four characters leveling together in World of Warcraft: Forever (launch 2026-11-04) to earn the most Legacy points. One config (`config/roster.json`) drives everything. All work goes through one CLI, `./mc` (Python 3.9+, standard library only; on Windows use `python mc ...`). Never hand-edit generated files.
+WoW Forever Legacy Mission Control plans and tracks a roster of characters (1 to 10; four recommended) leveling together in World of Warcraft: Forever (launch 2026-11-04) to earn the most Legacy points. One config (`config/roster.json`) drives everything. All work goes through one CLI, `./mc` (Python 3.9+, standard library only; on Windows use `python mc ...`). Never hand-edit generated files.
 
 ## Two kinds of repository
 
@@ -43,17 +43,17 @@ git remote -v
 
 ### Setup interview
 
-Ask the user for: a roster name, faction (Alliance or Horde), ruleset (Normal, PvP, Roleplay, Hardcore), and for each of four characters: name, race, class, leveling spec, endgame spec, and professions. Offer `config/examples/*.json` as a starting point. Allowed values are in `config/roster.schema.json` and [docs/config.md](docs/config.md). The answers file format:
+Ask the user for: a roster name, faction (Alliance or Horde), ruleset (Normal, PvP, Roleplay, Hardcore), how many characters (1 to 10; four is the default and recommended), and for each character: name, race, class, leveling spec, endgame spec, and professions. Offer `config/examples/*.json` as a starting point. Allowed values are in `config/roster.schema.json` and [docs/config.md](docs/config.md). The answers file format:
 
 ```json
-{"roster_name": "Our Group", "faction": "Alliance", "ruleset": "Normal",
+{"roster_name": "Our Group", "faction": "Alliance", "ruleset": "Normal", "count": 4,
  "c1.name": "Aldric", "c1.race": "Human", "c1.class": "Warrior", "c1.leveling_spec": "Arms", "c1.endgame_spec": "Protection",
  "c1.professions": "Mining, Blacksmithing, Engineering 60-"}
 ```
 
-A profession entry may carry a level window: `Engineering 60-` starts at 60, `Mining 1-60` drops it at 60. Repeat `c2.*` to `c4.*`. Spec keys are optional (class defaults are used).
+A profession entry may carry a level window: `Engineering 60-` starts at 60, `Mining 1-60` drops it at 60. Repeat `c2.*` up to `c<count>.*`; `count` defaults to 4. Spec keys are optional (class defaults are used).
 
-Help the user cover all six crafts (Alchemy, Blacksmithing, Enchanting, Engineering, Leatherworking, Tailoring) across the four characters, with at most two primary professions per character at any level. `./mc validate` reports gaps.
+Help the user cover all six crafts (Alchemy, Blacksmithing, Enchanting, Engineering, Leatherworking, Tailoring) across the roster, with at most two primary professions per character at any level. `./mc validate` reports gaps.
 
 ### Progress updates
 

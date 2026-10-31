@@ -1,8 +1,8 @@
 # WoW Forever Legacy Mission Control
 
-A planner and progress tracker for four players (or one player with four characters) leveling together in **World of Warcraft: Forever** from launch on **November 4, 2026**, built to earn as many **Legacy points** as possible on the way to 60.
+A planner and progress tracker for a group of players (four is the sweet spot, or one player with several characters; 1 to 10 work) leveling together in **World of Warcraft: Forever** from launch on **November 4, 2026**, built to earn as many **Legacy points** as possible on the way to 60.
 
-You describe your four characters in one config file. Mission Control checks that the roster is legal, that the four characters' professions cover all six crafting professions, and then writes a personal plan:
+You describe your characters in one config file. Mission Control checks that the roster is legal, that the characters' professions cover all six crafting professions, and then writes a personal plan:
 
 - a level-by-level road to 60 for each character, with class quests, spell and talent milestones, dungeons, and zones for your faction
 - profession targets (150 by 25, 225 by 32, 300 by 52) so the craft Legacy challenges land on time
@@ -51,7 +51,7 @@ You need Python 3.9 or newer and nothing else. No packages, no build step.
 2. **Describe your roster.**
    ```sh
    ./mc init          # answers a few questions, writes config/roster.json
-   ./mc validate      # legal race/class combos, four characters, craft coverage
+   ./mc validate      # legal race/class combos, roster size, craft coverage
    ./mc generate      # writes web/data/plan.js, build/PLAN.md and the Grok Bot canvas
    ```
    On Windows, run `python mc init` and so on.
@@ -66,7 +66,7 @@ The repo is written so any coding or personal agent can run it: Grok Bot, Muse, 
 
 Ask your agent something like:
 
-> Set up WoW Forever Legacy Mission Control for my group. Interview me for our four characters, validate the roster, and generate the page.
+> Set up WoW Forever Legacy Mission Control for my group. Interview me for our characters, validate the roster, and generate the page.
 
 Later:
 
