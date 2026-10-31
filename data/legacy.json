@@ -60,7 +60,57 @@
     "Novice Spelunker",
     "Experienced Spelunker",
     "Master Spelunker"
-   ]
+   ],
+   "tiers": {
+    "Novice": {
+     "criteria": [
+      "Ragefire Chasm or The Hall of Thanes",
+      "Ruins of Lordaeron",
+      "Wailing Caverns",
+      "The Deadmines",
+      "Shadowfang Keep",
+      "Excavation Site: Wetlands"
+     ]
+    },
+    "Experienced": {
+     "criteria": [
+      "City of Dalaran",
+      "Blackfathom Deeps",
+      "Gnomeregan",
+      "The Drowned City",
+      "Scarlet Monastery: Graveyard",
+      "Scarlet Monastery: Library",
+      "Scarlet Monastery: Armory",
+      "Scarlet Monastery: Cathedral",
+      "Razorfen Kraul",
+      "Krol'dok Stronghold"
+     ]
+    },
+    "Master": {
+     "criteria": [
+      "Razorfen Downs",
+      "Uldaman",
+      "Zul'Farrak",
+      "Maraudon",
+      "Alcaz Prison",
+      "The Temple of Atal'Hakkar",
+      "Blackrock Depths",
+      "Blackmaw Hold",
+      "Lower Blackrock Spire",
+      "Upper Blackrock Spire",
+      "Scholomance",
+      "Stratholme: Live",
+      "Stratholme: Dead",
+      "Dire Maul: East",
+      "Dire Maul: North",
+      "Dire Maul: West",
+      "The Shaper's Terrace"
+     ]
+    }
+   },
+   "tiers_note": "Every listed dungeon is required (no partial count). Scarlet Monastery's four wings, Stratholme's two sides and Dire Maul's three wings are separate criteria. Criteria from Wowhead's Legacy overview (beta data, updated 2026-10-24); wow-forever.gg and wowhandbook.com (client build 1.60.1.70685) list the same.",
+   "status": "beta",
+   "source": "wh-legacy"
   },
   "raid": {
    "total": 3,
