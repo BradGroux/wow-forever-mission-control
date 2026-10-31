@@ -29,7 +29,8 @@ git remote -v
 | Record a profession skill | `./mc skill <char> <profession> <skill>` |
 | Find checklist ids | `./mc ids [text] [--open]` |
 | Tick or untick items | `./mc check <id> [<id> ...] [--off]` |
-| Merge a page export | `./mc progress merge <file.json>` (or `-` for stdin) |
+| Merge a page export | `./mc progress merge <file.json> --dry-run` first, then without `--dry-run` (or `-` for stdin) |
+| Clear all progress | `./mc progress reset --force` (only when the user asks; a backup is written) |
 | Import addon data | `./mc import-addon <path/to/LegacyTracker.lua> [--dry-run] [--force]` |
 | Make a shareable copy of addon data | `./mc scrub-addon <path/to/LegacyTracker.lua> [-o file.json]` (roster characters only; no gold or time played) |
 | Map an in-game name | `./mc map <char> <InGameName>` |

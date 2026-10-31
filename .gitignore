@@ -9,3 +9,4 @@ node_modules/
 # never commit raw game files
 WTF/
 SavedVariables/
+progress/backups/

@@ -77,7 +77,7 @@ It contains only the roster characters' level, rested state, zone and profession
 - A renamed character, or one whose in-game name differs from the roster: `./mc map <roster-id> <InGameName>`, then import again.
 - An import never lowers a level and skips data that isn't newer than the last import. `--force` overrides both.
 - Rested state: **Full** at 1.5 levels of rested XP (the cap), **Partial** above zero, **Empty** otherwise.
-- A renamed copy of the addon (different SavedVariables table name) imports with `--db <TableName>`, for example `./mc import-addon OldTracker.lua --db OldTrackerDB`.
+- A renamed copy of the addon (different SavedVariables table name) imports with `--db <TableName>`, for example `./mc import-addon OldTracker.lua --db OldTrackerDB`. The page's **Import progress** finds the table on its own.
 - Gold and time played are never imported, even with `/ltrack extras on`.
 
 ## With an agent

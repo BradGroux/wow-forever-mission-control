@@ -55,14 +55,22 @@ Run `./mc generate` after CLI changes, then commit `progress/progress.json`, `we
 
 ## Merge rules
 
-- Checks: `./mc progress merge` treats an export as the full set of ticks and replaces the checks; the page's **Import progress** sets or clears each id in the file and keeps ids it doesn't mention.
-- Levels: the higher level wins; equal levels take the newer data.
-- Skills: the higher value wins.
-- Notes: replaced when the incoming file has notes.
+- **Page edits stick.** Every tick, untick, level, rested or skill change on the page is time-stamped (the `stamp` field). A stamped edit beats older data from `progress/progress.json`, so unticking a baked-in item or correcting a level downward survives a reload. A newer bake (a later `updated` date, or newer addon data) beats an older page edit.
+- Checks: `./mc progress merge` treats an export as the full set of ticks and replaces the checks; the page's **Import progress** sets or clears each id in the file and keeps ids it doesn't mention. A file with no `checks` key (for example `./mc scrub-addon` output) leaves ticks alone.
+- Levels and skills without a stamp: the higher value wins; equal levels take the newer data. Addon data that isn't newer than what's saved is skipped, on the page and in the CLI.
+- Notes: replaced when the incoming file has notes (or a newer stamped edit, even an empty one).
+- Name mappings (`map`, from `./mc map`): merged, the incoming file wins on a conflict. Page exports include them.
 - Other top-level keys (added by other tools) are kept.
+
+### Safety nets
+
+- `./mc progress merge <file> --dry-run` and `./mc import-addon <file> --dry-run` print what would change and save nothing.
+- `./mc progress merge` refuses a file that would untick five or more items and more than half of your ticks (usually a partial export); add `--force` if that's what you want.
+- `./mc progress reset` needs `--force` (`--dry-run` shows what would go).
+- Before `merge` and `reset`, the old file is copied to `progress/backups/progress-YYYYMMDD-HHMMSS.json` (git-ignored). Copy one back over `progress/progress.json` to undo.
 
 ## Group workflow
 
 One person (or their agent) keeps the repo. Others click **Export progress** on the page and send the JSON, or run `./mc scrub-addon` on their `LegacyTracker.lua` and send that (the raw file covers every character on their account). The keeper merges or imports, runs `./mc generate`, commits and pushes. If the page is hosted, everyone sees the update on the next load.
 
-`./mc progress show` prints the current state; `./mc progress reset` clears it (asks no questions, so commit first).
+`./mc progress show` prints the current state; `./mc progress reset --force` clears it after writing a backup.

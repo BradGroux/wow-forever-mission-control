@@ -18,7 +18,7 @@
   ./mc doctor                            CI checks: examples valid, outputs up to date, progress blocks intact
 Every command is plain Python 3.9+, standard library only.
 """
-import argparse, datetime, html, json, os, re, sys, unicodedata, urllib.parse
+import argparse, copy, datetime, html, json, os, re, sys, unicodedata, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
@@ -364,25 +364,84 @@ def find_char(cfg, who):
     sys.exit(f"no character {who!r}; roster has {', '.join(c['name'] for c in cfg['characters'])}")
 
 
+def _rec_time(rec):
+    """ms timestamp of a level record: addon lastSeenEpoch, else its updated date."""
+    if rec.get("lastSeenEpoch"):
+        return int(rec["lastSeenEpoch"]) * 1000
+    try:
+        return int(datetime.datetime.strptime(rec.get("updated") or "", "%Y-%m-%d").timestamp() * 1000)
+    except ValueError:
+        return 0
+
+
 def merge_progress(p, new):
-    """Merge an exported progress blob into p. Checks: the export is the full state. Levels and skills: keep the higher."""
+    """Merge an exported progress blob into p.
+    Checks: the export is the full state. Levels and skills: keep the higher, unless the export carries a
+    page edit stamp (stamp["l:char"], stamp["s:char:prof"]) newer than what p has, so corrections stick.
+    Name mappings are unioned (the export wins on a conflict)."""
+    st, mine_st = new.get("stamp") or {}, p.setdefault("stamp", {})
+
+    def wins(key, t=0):
+        return key in st and st[key] >= max(mine_st.get(key, 0), t)
+
     if "checks" in new:
         p["checks"] = {k: True for k, v in new["checks"].items() if v}
     for cid, lv in (new.get("levels") or {}).items():
         old = p["levels"].setdefault(cid, {})
-        if (lv.get("level") or 0) >= (old.get("level") or 0):
+        if f"l:{cid}" in st:
+            if wins(f"l:{cid}", _rec_time(old)):
+                old.update(lv)
+        elif (lv.get("level") or 0) >= (old.get("level") or 0):
             old.update(lv)
     for cid, sk in (new.get("skills") or {}).items():
         mine = p["skills"].setdefault(cid, {})
         for prof, v in sk.items():
-            mine[prof] = max(int(v or 0), int(mine.get(prof) or 0))
-    if new.get("notes"):
-        p["notes"] = new["notes"]
+            k = f"s:{cid}:{prof}"
+            if k in st:
+                if wins(k):
+                    mine[prof] = int(v or 0)
+            else:
+                mine[prof] = max(int(v or 0), int(mine.get(prof) or 0))
+    if ("n" in st and wins("n")) or ("n" not in st and new.get("notes")):
+        p["notes"] = new.get("notes") or ""
+    p.setdefault("map", {}).update(new.get("map") or {})
+    for k, v in st.items():
+        mine_st[k] = max(v, mine_st.get(k, 0))
     for k, v in new.items():  # keep keys added by other tools or newer versions
-        if k not in ("version", "roster", "updated", "checks", "levels", "skills", "map", "notes"):
+        if k not in ("version", "roster", "updated", "checks", "levels", "skills", "map", "notes", "stamp"):
             p[k] = v
     p["updated"] = new.get("updated") or today()
     return p
+
+
+def progress_diff(old, new):
+    """Human summary of what changed between two progress dicts."""
+    out = []
+    add = sorted(k for k in new["checks"] if new["checks"][k] and not old["checks"].get(k))
+    rem = sorted(k for k in old["checks"] if old["checks"][k] and not new["checks"].get(k))
+    if add: out.append(f"+{len(add)} check(s): " + ", ".join(add[:8]) + (" ..." if len(add) > 8 else ""))
+    if rem: out.append(f"-{len(rem)} check(s): " + ", ".join(rem[:8]) + (" ..." if len(rem) > 8 else ""))
+    for cid in sorted(set(old["levels"]) | set(new["levels"])):
+        a, b = (old["levels"].get(cid) or {}), (new["levels"].get(cid) or {})
+        if (a.get("level"), a.get("rested")) != (b.get("level"), b.get("rested")):
+            out.append(f"{cid}: level {a.get('level')} -> {b.get('level')}, rested {a.get('rested')} -> {b.get('rested')}")
+    for cid in sorted(set(old["skills"]) | set(new["skills"])):
+        for prof in sorted(set(old["skills"].get(cid, {})) | set(new["skills"].get(cid, {}))):
+            x, y = old["skills"].get(cid, {}).get(prof), new["skills"].get(cid, {}).get(prof)
+            if x != y: out.append(f"{cid}: {prof} {x} -> {y}")
+    for k in sorted(set(new.get("map") or {}) - set(old.get("map") or {})):
+        out.append(f"map {k} -> {new['map'][k]}")
+    return out or ["no changes"]
+
+
+def backup_progress(path=PROGRESS):
+    """Copy progress.json to progress/backups/ before a destructive change. Returns the backup path or None."""
+    if not os.path.exists(path):
+        return None
+    dest = os.path.join(os.path.dirname(path), "backups", "progress-" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + ".json")
+    with open(path, encoding="utf-8") as fh:
+        write_text(dest, fh.read())
+    return dest
 
 
 def rested_label(rested, xp_max):
@@ -661,7 +720,7 @@ def main(argv=None):
     s = sub.add_parser("level"); s.add_argument("char"); s.add_argument("level", type=int); s.add_argument("--rested", choices=RESTED); s.add_argument("--config")
     s = sub.add_parser("skill"); s.add_argument("char"); s.add_argument("profession"); s.add_argument("skill", type=int); s.add_argument("--config")
     s = sub.add_parser("check"); s.add_argument("ids", nargs="+"); s.add_argument("--off", action="store_true"); s.add_argument("--config")
-    s = sub.add_parser("progress"); s.add_argument("action", choices=["merge", "show", "reset"]); s.add_argument("file", nargs="?"); s.add_argument("--config")
+    s = sub.add_parser("progress"); s.add_argument("action", choices=["merge", "show", "reset"]); s.add_argument("file", nargs="?"); s.add_argument("--dry-run", action="store_true"); s.add_argument("--force", action="store_true"); s.add_argument("--config")
     s = sub.add_parser("import-addon"); s.add_argument("savedvars"); s.add_argument("--force", action="store_true"); s.add_argument("--dry-run", action="store_true"); s.add_argument("--db", default="LegacyTrackerDB", help="SavedVariables table name (for a renamed copy of the addon)"); s.add_argument("--config")
     s = sub.add_parser("scrub-addon", help="write a shareable progress JSON from LegacyTracker.lua (roster characters only, no gold or time played)")
     s.add_argument("savedvars"); s.add_argument("-o", "--out"); s.add_argument("--db", default="LegacyTrackerDB"); s.add_argument("--config")
@@ -766,7 +825,10 @@ def main(argv=None):
         elif a.cmd == "progress":
             if a.action == "show":
                 print(json.dumps(p, indent=2, ensure_ascii=False)); return 0
+            before = copy.deepcopy(p)
             if a.action == "reset":
+                if not a.force and not a.dry_run:
+                    sys.exit("progress reset clears every level, skill, tick and mapping. Run with --dry-run to see what goes, or --force to do it (a backup is written to progress/backups/).")
                 p = empty_progress(cfg)
             else:
                 raw = sys.stdin.read() if a.file in (None, "-") else open(a.file, encoding="utf-8").read()
@@ -776,7 +838,14 @@ def main(argv=None):
                 if new.get("roster") and new["roster"] != p["roster"]:
                     print(f"warning: export is for roster {new['roster']!r}, this roster is {p['roster']!r}")
                 p = merge_progress(p, new)
-                print(f"merged: {sum(1 for v in p['checks'].values() if v)} checks, levels " + ", ".join(f"{k} {v.get('level')}" for k, v in p["levels"].items()))
+                had, now = sum(1 for v in before["checks"].values() if v), sum(1 for v in p["checks"].values() if v)
+                if not a.force and not a.dry_run and had - now >= 5 and now < had / 2:
+                    sys.exit(f"this file would untick {had - now} of {had} checks (a partial export?). Run with --dry-run to see the changes, or --force to merge anyway.")
+            for line in progress_diff(before, p): print(("would: " if a.dry_run else "") + line)
+            if a.dry_run:
+                return 0
+            bk = backup_progress()
+            if bk: print("backup:", os.path.relpath(bk, ROOT))
         elif a.cmd == "import-addon":
             p, lines = import_addon(cfg, p, open(a.savedvars, encoding="utf-8", errors="replace").read(), a.force, a.db)
             print("\n".join(lines))
