@@ -41,10 +41,11 @@ Run `./mc generate` after CLI changes, then commit `progress/progress.json`, `we
 
 ## Merge rules
 
-- Checks: each id in the incoming file is set or cleared as given; ids not mentioned are kept.
+- Checks: `./mc progress merge` treats an export as the full set of ticks and replaces the checks; the page's **Import progress** sets or clears each id in the file and keeps ids it doesn't mention.
 - Levels: the higher level wins; equal levels take the newer data.
 - Skills: the higher value wins.
 - Notes: replaced when the incoming file has notes.
+- Other top-level keys (added by other tools) are kept.
 
 ## Group workflow
 
