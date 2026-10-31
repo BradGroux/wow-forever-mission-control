@@ -16,6 +16,7 @@
 ### ChatGPT and Codex (OpenAI)
 - **Codex** (cloud, CLI, IDE) reads `AGENTS.md` automatically. Point it at your copy of the repo and use the prompts above.
 - **ChatGPT** without repo access: upload `config/roster.json` (or ask it to interview you and produce one), plus `data/*.json` if you want answers about the game. Ask it to give you the `./mc` commands to run, then paste the output back. ChatGPT with a code environment can run `./mc` itself on an uploaded ZIP of the repo.
+- **ChatGPT Sites** can host the page: see [hosting.md](../hosting.md#chatgpt-sites).
 
 ### Claude and Claude Code (Anthropic)
 - **Claude Code** reads `CLAUDE.md`, which points to `AGENTS.md`. Run it in the repo folder.
