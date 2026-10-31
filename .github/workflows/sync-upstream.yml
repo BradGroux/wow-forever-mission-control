@@ -1,0 +1,88 @@
+name: Sync from upstream template
+
+# Pulls new data, fixes and features from the upstream template into your copy
+# and opens a pull request for you to review. It does nothing in the upstream
+# repository itself. Your personal files (config/roster.json, progress/,
+# web/data/plan.js, adapters/grokbot/mission-control.canvas.tsx) never exist
+# upstream, so they are never overwritten. See docs/updating.md.
+#
+# One-time setup in your copy: Settings > Actions > General > Workflow
+# permissions > "Allow GitHub Actions to create and approve pull requests".
+
+on:
+  schedule:
+    - cron: "17 13 * * 1"   # Mondays 13:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  UPSTREAM: ${{ vars.MC_UPSTREAM || 'https://github.com/BradGroux/wow-forever-mission-control.git' }}
+  BRANCH: sync/upstream
+
+jobs:
+  sync:
+    if: github.repository != 'BradGroux/wow-forever-mission-control'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          # Optional: a fine-grained token with Contents + Workflows write lets
+          # the sync update files under .github/workflows too.
+          token: ${{ secrets.MC_SYNC_TOKEN || github.token }}
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Fetch upstream
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream "$UPSTREAM"
+          git fetch --no-tags upstream main
+      - name: Anything new?
+        id: check
+        run: |
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "Already up to date with upstream."
+            echo "new=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "new=true" >> "$GITHUB_OUTPUT"
+            git log --oneline HEAD..upstream/main | head -50 > /tmp/changes.txt
+          fi
+      - name: Merge and regenerate
+        if: steps.check.outputs.new == 'true'
+        id: merge
+        run: |
+          git checkout -B "$BRANCH"
+          if ! git merge upstream/main --allow-unrelated-histories --no-edit -m "Sync from upstream template"; then
+            git merge --abort || true
+            echo "conflict=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          ./mc generate > /dev/null
+          git add -A web/data docs/examples adapters/grokbot
+          git diff --cached --quiet || git commit -m "Regenerate after upstream sync"
+          ./mc validate || echo "::warning::Your roster has validation errors after the sync; see ./mc validate"
+      - name: Push branch and open pull request
+        if: steps.check.outputs.new == 'true' && steps.merge.outputs.conflict != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.MC_SYNC_TOKEN || github.token }}
+        run: |
+          if ! git push --force origin "$BRANCH"; then
+            echo "::error::Push failed. Upstream probably changed a workflow file, which the default token cannot push. Run 'make sync' (or the git commands in docs/updating.md) on your computer, or add an MC_SYNC_TOKEN secret."
+            exit 1
+          fi
+          body=$(printf 'New upstream changes:\n\n```\n%s\n```\n\nReview, then merge. Your roster and progress files are untouched. After merging, your page redeploys if hosting is set up.' "$(cat /tmp/changes.txt)")
+          if gh pr view "$BRANCH" --json state -q .state 2>/dev/null | grep -q OPEN; then
+            gh pr edit "$BRANCH" --body "$body"
+          else
+            gh pr create --head "$BRANCH" --base "${{ github.event.repository.default_branch }}" --title "Sync from upstream template" --body "$body"
+          fi
+      - name: Report a merge conflict
+        if: steps.merge.outputs.conflict == 'true'
+        run: |
+          echo "::error::Upstream changes conflict with edits in your copy (usually a shared file you changed, such as README.md). Merge by hand: see docs/updating.md."
+          exit 1

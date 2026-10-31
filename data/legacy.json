@@ -1,0 +1,210 @@
+{
+ "spend_cap": 16,
+ "spend_cap_note": "At launch",
+ "claim_at": {
+  "npc": "Innkeeper Wiley",
+  "zone": "Ratchet",
+  "coords": "62.0, 39.4"
+ },
+ "challenges": {
+  "class": {
+   "levels": [
+    25,
+    45,
+    60
+   ],
+   "names": [
+    "Novice",
+    "Experienced",
+    "Master"
+   ],
+   "per_class": 3,
+   "classes": 9,
+   "total": 27
+  },
+  "craft": {
+   "skills": [
+    150,
+    225,
+    300
+   ],
+   "names": [
+    "Journeyman",
+    "Expert",
+    "Artisan"
+   ],
+   "per_craft": 3,
+   "crafts": 6,
+   "total": 18
+  },
+  "pvp": {
+   "total": 12,
+   "items": [
+    "Rank 3",
+    "Rank 7",
+    "Rank 10",
+    "Rank 13",
+    "Rank 14",
+    "Master of Alterac Valley",
+    "Master of Arathi Basin",
+    "Master of Darkspear Islands",
+    "Master of Warsong Gulch",
+    "Field of Honor: Week 4",
+    "Field of Honor: Week 7",
+    "Field of Honor: Week 10"
+   ]
+  },
+  "dungeon": {
+   "total": 3,
+   "items": [
+    "Novice Spelunker",
+    "Experienced Spelunker",
+    "Master Spelunker"
+   ]
+  },
+  "raid": {
+   "total": 3,
+   "items": [
+    "Conqueror of the Deeps",
+    "Conqueror of the Wilds",
+    "Conqueror of the Lair"
+   ]
+  },
+  "adventure": {
+   "total": 2,
+   "items": [
+    "Explorer",
+    "Lord Valthalak Laid to Rest"
+   ]
+  }
+ },
+ "rewards": [
+  {
+   "points": 15,
+   "name": "Replica Ironforge Air Rifle"
+  },
+  {
+   "points": 25,
+   "name": "Spectral Bear Cub"
+  },
+  {
+   "points": 40,
+   "name": "Spectral Bear Tabard"
+  },
+  {
+   "points": 55,
+   "name": "Spectral Bear Mount"
+  }
+ ],
+ "trees": {
+  "Professions": [
+   [
+    "Working Overtime",
+    5,
+    "+4% skill-up chance per rank"
+   ],
+   [
+    "Bountiful Harvest",
+    5,
+    "+20% Scarce materials per rank"
+   ],
+   [
+    "Performance Bonus",
+    5,
+    "5% chance of double Merchant's Favor"
+   ],
+   [
+    "Luremaster",
+    5,
+    "25% chance of an extra fish with a lure"
+   ],
+   [
+    "Master Chef",
+    5,
+    "10% chance of an extra cooked item"
+   ],
+   [
+    "Dedicated Study",
+    1,
+    "+1 to the lowest tradeskill, 23 h cooldown"
+   ]
+  ],
+  "Adventure": [
+   [
+    "Well Rested",
+    5,
+    "Rested XP accrues 4% faster and cap +4% per rank"
+   ],
+   [
+    "Talented",
+    5,
+    "Talent points from level 9"
+   ],
+   [
+    "High Alert",
+    2,
+    "Stealth detection +1 level per rank"
+   ],
+   [
+    "Thrill of Adventure",
+    5,
+    "1% Health and Mana per killing blow"
+   ],
+   [
+    "Field Guide",
+    3,
+    "Camp feature cooldown -8% per rank"
+   ],
+   [
+    "Frequent Flier",
+    1,
+    "Flights 50% cheaper and 20% faster"
+   ],
+   [
+    "Field Medicine",
+    2,
+    "Recently Bandaged -5 s per rank"
+   ]
+  ],
+  "Resourcefulness": [
+   [
+    "The Quick and the Dead",
+    2,
+    "Faster ghost; free spells after a res"
+   ],
+   [
+    "Reinforce",
+    5,
+    "Less durability loss on death"
+   ],
+   [
+    "Diplomat",
+    5,
+    "+2% reputation per rank"
+   ],
+   [
+    "For Great Honor",
+    5,
+    "+2% honor per rank"
+   ],
+   [
+    "Permanence",
+    2,
+    "Group buffs and camp rest last 50% longer"
+   ],
+   [
+    "Gourmand",
+    3,
+    "Food buffs last 33% longer"
+   ],
+   [
+    "Reagent Economy",
+    1,
+    "No vendor reagents for class spells"
+   ]
+  ]
+ },
+ "hardcore": "Hardcore points can be spent on other rulesets; points from Normal, PvP and Roleplay cannot be spent in Hardcore",
+ "status": "beta",
+ "source": "wh-legacy"
+}

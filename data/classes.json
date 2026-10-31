@@ -1,0 +1,615 @@
+{
+ "_about": "Nine classes. leveling = best solo leveling spec per the cited tier list. milestones = class quests and trainer unlocks by level. Every class also gets data.common_milestones.",
+ "classes": {
+  "Warrior": {
+   "color": "#C69B6D",
+   "specs": [
+    "Arms",
+    "Fury",
+    "Protection"
+   ],
+   "roles": [
+    "Tank",
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_warrior.jpg",
+   "leveling": {
+    "spec": "Arms",
+    "tier": "C",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Protection",
+    "Fury"
+   ],
+   "milestones": [
+    {
+     "level": 10,
+     "name": "Defensive Stance",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 30,
+     "name": "Berserker Stance",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 30,
+     "name": "Whirlwind Weapon",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    }
+   ]
+  },
+  "Paladin": {
+   "color": "#F48CBA",
+   "specs": [
+    "Holy",
+    "Protection",
+    "Retribution"
+   ],
+   "roles": [
+    "Tank",
+    "Healer",
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_paladin.jpg",
+   "leveling": {
+    "spec": "Retribution",
+    "tier": "A",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Protection",
+    "Holy",
+    "Retribution"
+   ],
+   "milestones": [
+    {
+     "level": 1,
+     "name": "A Forsaken Paladin's First Lessons",
+     "kind": "class quest",
+     "faction": "Horde",
+     "status": "beta",
+     "source": "wcalc-classq",
+     "races": [
+      "Undead"
+     ]
+    },
+    {
+     "level": 8,
+     "name": "Bandarion Keep",
+     "kind": "class hub",
+     "faction": "Horde",
+     "status": "beta",
+     "source": "wcalc-classq",
+     "races": [
+      "Undead"
+     ]
+    },
+    {
+     "level": 12,
+     "name": "Redemption",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq",
+     "note": "The Tome of Divinity chain on Alliance"
+    },
+    {
+     "level": 18,
+     "name": "Moonsilver Blade",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 20,
+     "name": "Verigan's Fist",
+     "kind": "class quest",
+     "faction": "Alliance",
+     "status": "classic",
+     "source": "wcalc-classq",
+     "note": "The Test of Righteousness chain"
+    },
+    {
+     "level": 20,
+     "name": "The Tome of Valor",
+     "kind": "class quest",
+     "faction": "Alliance",
+     "status": "classic",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 40,
+     "name": "Warhorse",
+     "kind": "mount",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 60,
+     "name": "Charger",
+     "kind": "mount",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    }
+   ]
+  },
+  "Hunter": {
+   "color": "#AAD372",
+   "specs": [
+    "Beast Mastery",
+    "Marksmanship",
+    "Survival"
+   ],
+   "roles": [
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_hunter.jpg",
+   "leveling": {
+    "spec": "Beast Mastery",
+    "tier": "S",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Beast Mastery",
+    "Marksmanship",
+    "Survival"
+   ],
+   "milestones": [
+    {
+     "level": 10,
+     "name": "Taming the Beast",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq",
+     "note": "Tame Beast and Call Pet at 10"
+    },
+    {
+     "level": 60,
+     "name": "Rhok'delar",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    }
+   ]
+  },
+  "Rogue": {
+   "color": "#FFF468",
+   "specs": [
+    "Assassination",
+    "Combat",
+    "Subtlety"
+   ],
+   "roles": [
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_rogue.jpg",
+   "leveling": {
+    "spec": "Combat",
+    "tier": "B",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Assassination",
+    "Combat",
+    "Subtlety"
+   ],
+   "milestones": [
+    {
+     "level": 1,
+     "name": "C's Dead Drop",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 16,
+     "name": "Lockpicking",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 20,
+     "name": "Poisons",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 24,
+     "name": "Ravenholdt",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    }
+   ]
+  },
+  "Priest": {
+   "color": "#FFFFFF",
+   "specs": [
+    "Discipline",
+    "Holy",
+    "Shadow"
+   ],
+   "roles": [
+    "Healer",
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_priest.jpg",
+   "leveling": {
+    "spec": "Shadow",
+    "tier": "B",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Holy",
+    "Discipline"
+   ],
+   "milestones": [
+    {
+     "level": 10,
+     "name": "Desperate Prayer",
+     "kind": "race spell",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 10,
+     "name": "Confounding Flash",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 10,
+     "name": "Divine Grace",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 20,
+     "name": "Contingency Plan",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 20,
+     "name": "Dark Sacrifice",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    }
+   ]
+  },
+  "Shaman": {
+   "color": "#0070DD",
+   "specs": [
+    "Elemental",
+    "Enhancement",
+    "Restoration"
+   ],
+   "roles": [
+    "Healer",
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_shaman.jpg",
+   "leveling": {
+    "spec": "Enhancement",
+    "tier": "A",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Elemental",
+    "Enhancement",
+    "Restoration"
+   ],
+   "milestones": [
+    {
+     "level": 3,
+     "name": "Earth Totem",
+     "kind": "totem quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq",
+     "note": "Dwarf version: Call of Earth"
+    },
+    {
+     "level": 10,
+     "name": "Fire Totem",
+     "kind": "totem quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq",
+     "note": "Dwarf version: Call of Fire"
+    },
+    {
+     "level": 20,
+     "name": "Water Totem",
+     "kind": "totem quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq",
+     "note": "Dwarf version: Call of Water"
+    },
+    {
+     "level": 30,
+     "name": "Air Totem",
+     "kind": "totem quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq",
+     "note": "Dwarf version: Call of Air"
+    },
+    {
+     "level": 30,
+     "name": "The Tempest's Weapons",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    }
+   ]
+  },
+  "Mage": {
+   "color": "#3FC7EB",
+   "specs": [
+    "Arcane",
+    "Fire",
+    "Frost"
+   ],
+   "roles": [
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_mage.jpg",
+   "leveling": {
+    "spec": "Frost",
+    "tier": "S",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Arcane",
+    "Fire",
+    "Frost"
+   ],
+   "milestones": [
+    {
+     "level": 10,
+     "name": "Windbough Wand",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 20,
+     "name": "Teleport",
+     "kind": "trainer",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq",
+     "note": "City teleports need Rune of Teleportation"
+    },
+    {
+     "level": 30,
+     "name": "Mage's Wand",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 40,
+     "name": "Portals",
+     "kind": "trainer",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq",
+     "note": "Rune of Portals"
+    }
+   ]
+  },
+  "Warlock": {
+   "color": "#8788EE",
+   "specs": [
+    "Affliction",
+    "Demonology",
+    "Destruction"
+   ],
+   "roles": [
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_warlock.jpg",
+   "leveling": {
+    "spec": "Affliction",
+    "tier": "S",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Affliction",
+    "Demonology",
+    "Destruction"
+   ],
+   "milestones": [
+    {
+     "level": 1,
+     "name": "Summon Imp",
+     "kind": "trainer",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-wl"
+    },
+    {
+     "level": 10,
+     "name": "The Binding",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-wl",
+     "note": "Summon Voidwalker"
+    },
+    {
+     "level": 20,
+     "name": "Summon Succubus",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-wl"
+    },
+    {
+     "level": 30,
+     "name": "Summon Felhunter",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-wl"
+    },
+    {
+     "level": 40,
+     "name": "Summon Felsteed",
+     "kind": "mount",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-wl"
+    },
+    {
+     "level": 50,
+     "name": "Inferno",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-wl"
+    },
+    {
+     "level": 60,
+     "name": "Summon Dreadsteed",
+     "kind": "mount",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-wl"
+    }
+   ]
+  },
+  "Druid": {
+   "color": "#FF7C0A",
+   "specs": [
+    "Balance",
+    "Feral",
+    "Restoration"
+   ],
+   "roles": [
+    "Tank",
+    "Healer",
+    "Damage"
+   ],
+   "icon": "https://wow.zamimg.com/images/wow/icons/medium/classicon_druid.jpg",
+   "leveling": {
+    "spec": "Feral",
+    "tier": "A",
+    "source": "of-tier",
+    "status": "beta"
+   },
+   "endgame": [
+    "Restoration",
+    "Feral"
+   ],
+   "milestones": [
+    {
+     "level": 10,
+     "name": "Bear Form",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-dr",
+     "note": "Also Growl and Maul"
+    },
+    {
+     "level": 14,
+     "name": "Cure Poison",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-dr"
+    },
+    {
+     "level": 16,
+     "name": "Aquatic Form",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "codex-dr"
+    },
+    {
+     "level": 20,
+     "name": "Cat Form",
+     "kind": "class quest",
+     "faction": "both",
+     "status": "beta",
+     "source": "wcalc-classq"
+    },
+    {
+     "level": 30,
+     "name": "Travel Form",
+     "kind": "trainer",
+     "faction": "both",
+     "status": "classic",
+     "source": "wcalc-classq"
+    }
+   ]
+  }
+ },
+ "common_milestones": [
+  {
+   "level": 40,
+   "name": "Riding",
+   "kind": "trainer",
+   "faction": "both",
+   "status": "unverified",
+   "source": "bz-starter",
+   "note": "Cost not published"
+  },
+  {
+   "level": 40,
+   "name": "Dual Specialization",
+   "kind": "trainer",
+   "faction": "both",
+   "status": "unverified",
+   "source": "wh-legacy",
+   "note": "Level and cost unconfirmed"
+  }
+ ]
+}

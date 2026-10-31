@@ -1,0 +1,33 @@
+{
+  "$schema": "../roster.schema.json",
+  "roster_name": "Example Horde Roster",
+  "faction": "Horde",
+  "ruleset": "PvP",
+  "launch": "2026-11-04",
+  "characters": [
+    {
+      "id": "grukk", "name": "Grukk", "race": "Orc", "class": "Warrior",
+      "leveling_spec": "Arms", "endgame_spec": "Protection", "role": "Tank",
+      "professions": [
+        { "name": "Mining", "from": 1, "until": 60 },
+        { "name": "Blacksmithing", "from": 1 },
+        { "name": "Engineering", "from": 60 }
+      ]
+    },
+    {
+      "id": "thalwen", "name": "Thalwen", "race": "Tauren", "class": "Druid",
+      "leveling_spec": "Feral", "endgame_spec": "Restoration", "role": "Healer",
+      "professions": [ { "name": "Herbalism" }, { "name": "Alchemy" } ]
+    },
+    {
+      "id": "morvane", "name": "Morvane", "race": "Undead", "class": "Paladin",
+      "leveling_spec": "Retribution", "endgame_spec": "Holy", "role": "Healer",
+      "professions": [ { "name": "Skinning" }, { "name": "Leatherworking" } ]
+    },
+    {
+      "id": "zalaji", "name": "Zalaji", "race": "Troll", "class": "Mage",
+      "leveling_spec": "Frost", "endgame_spec": "Frost", "role": "Damage",
+      "professions": [ { "name": "Tailoring" }, { "name": "Enchanting" } ]
+    }
+  ]
+}

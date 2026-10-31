@@ -1,0 +1,51 @@
+name: Data correction
+description: Something in the plan is wrong, missing, or now confirmed in game
+title: "[Data] "
+labels: ["data"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks! A Wowhead link or screenshot is the most useful thing you can add. Please don't paste your account name.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Class quest or milestone
+        - Race or racial
+        - Zone or level range
+        - Dungeon or raid
+        - Flight path, boat, zeppelin or tram
+        - Profession
+        - Legacy points or rewards
+        - Wowhead link
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: faction
+    attributes:
+      label: Faction
+      options: [Both, Alliance, Horde]
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What the plan says now
+      placeholder: "e.g. Paladin: Verigan's Fist at 12"
+    validations:
+      required: true
+  - type: textarea
+    id: right
+    attributes:
+      label: What it should say
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: Wowhead Forever link, Blizzard post, or "seen in game on <date>" with a screenshot.
+    validations:
+      required: true

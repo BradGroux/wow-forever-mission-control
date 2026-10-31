@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "roster.schema.json",
+  "title": "WoW Forever Legacy Mission Control roster",
+  "description": "Four characters, one faction. ./mc validate checks the rules JSON Schema can't express (race/class combos, faction match, craft coverage, two primary professions at a time).",
+  "type": "object",
+  "required": [
+    "faction",
+    "ruleset",
+    "characters"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "roster_name": {
+      "type": "string",
+      "description": "Page title"
+    },
+    "faction": {
+      "enum": [
+        "Alliance",
+        "Horde"
+      ]
+    },
+    "ruleset": {
+      "enum": [
+        "Normal",
+        "PvP",
+        "Roleplay",
+        "Hardcore"
+      ]
+    },
+    "launch": {
+      "type": "string",
+      "format": "date",
+      "default": "2026-11-04"
+    },
+    "characters": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "race",
+          "class"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]{1,24}$",
+            "description": "Stable key for saved progress. Never change it after you start ticking boxes."
+          },
+          "name": {
+            "type": "string",
+            "description": "In-game name, 2-12 letters"
+          },
+          "display": {
+            "type": "string",
+            "description": "Optional longer label for the page"
+          },
+          "race": {
+            "enum": [
+              "Dwarf",
+              "Gnome",
+              "High Order Skyborne",
+              "Human",
+              "Night Elf",
+              "Orc",
+              "Tauren",
+              "Troll",
+              "Undead",
+              "Windshaper Skyborne"
+            ]
+          },
+          "class": {
+            "enum": [
+              "Druid",
+              "Hunter",
+              "Mage",
+              "Paladin",
+              "Priest",
+              "Rogue",
+              "Shaman",
+              "Warlock",
+              "Warrior"
+            ]
+          },
+          "leveling_spec": {
+            "enum": [
+              "Affliction",
+              "Arcane",
+              "Arms",
+              "Assassination",
+              "Balance",
+              "Beast Mastery",
+              "Combat",
+              "Demonology",
+              "Destruction",
+              "Discipline",
+              "Elemental",
+              "Enhancement",
+              "Feral",
+              "Fire",
+              "Frost",
+              "Fury",
+              "Holy",
+              "Marksmanship",
+              "Protection",
+              "Restoration",
+              "Retribution",
+              "Shadow",
+              "Subtlety",
+              "Survival"
+            ]
+          },
+          "endgame_spec": {
+            "enum": [
+              "Affliction",
+              "Arcane",
+              "Arms",
+              "Assassination",
+              "Balance",
+              "Beast Mastery",
+              "Combat",
+              "Demonology",
+              "Destruction",
+              "Discipline",
+              "Elemental",
+              "Enhancement",
+              "Feral",
+              "Fire",
+              "Frost",
+              "Fury",
+              "Holy",
+              "Marksmanship",
+              "Protection",
+              "Restoration",
+              "Retribution",
+              "Shadow",
+              "Subtlety",
+              "Survival"
+            ]
+          },
+          "role": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "professions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "enum": [
+                    "Alchemy",
+                    "Blacksmithing",
+                    "Enchanting",
+                    "Engineering",
+                    "Leatherworking",
+                    "Tailoring",
+                    "Herbalism",
+                    "Mining",
+                    "Skinning"
+                  ]
+                },
+                "from": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 60,
+                  "default": 1,
+                  "description": "Level you train it"
+                },
+                "until": {
+                  "type": "integer",
+                  "minimum": 2,
+                  "maximum": 60,
+                  "description": "Level you drop it (omit to keep it)"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

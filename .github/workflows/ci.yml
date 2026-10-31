@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Validator, generator, tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Validate example rosters (strict)
+        run: |
+          ./mc validate --strict --config config/examples/alliance.json
+          ./mc validate --strict --config config/examples/horde.json
+      - name: Validate your roster
+        if: hashFiles('config/roster.json') != ''
+        run: ./mc validate
+      - name: Doctor (outputs up to date, SAVED block intact, ids unique, sources known)
+        run: ./mc doctor
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Generated files are committed
+        run: |
+          ./mc generate > /dev/null
+          git diff --exit-code -- web/data docs/examples adapters/grokbot || (echo "::error::Run ./mc generate and commit the result" && exit 1)
+      - name: No personal files in upstream pull requests
+        if: github.event_name == 'pull_request' && github.repository == 'BradGroux/wow-forever-mission-control'
+        run: ./mc leakcheck
+
+  web:
+    name: Web page and canvas syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: ./mc generate > /dev/null
+      - name: JavaScript parses
+        run: |
+          node --check web/app.js
+          for f in web/data/*.js; do node --check "$f"; done
+      - name: Page imports LegacyTracker.lua
+        run: node tests/web_import.test.js
+      - name: Grok Bot canvas adapter parses
+        run: npx --yes esbuild@0.24.0 build/mission-control.canvas.tsx --loader:.tsx=tsx --log-level=warning > /dev/null
+
+  addon:
+    name: LegacyTracker addon
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install Lua 5.1
+        run: sudo apt-get update -q && sudo apt-get install -y -q lua5.1
+      - name: Syntax (luac5.1 -p)
+        run: luac5.1 -p addon/LegacyTracker/LegacyTracker.lua
+      - name: Interface version is 16001
+        run: |
+          grep -qx '## Interface: 16001' addon/LegacyTracker/LegacyTracker.toc
+      - name: Harness (silent, records levels, skills, played time)
+        run: |
+          lua5.1 addon/test/harness.lua addon/LegacyTracker/LegacyTracker.lua > /tmp/sv.lua
+          diff -u addon/test/SavedVariables.sample.lua /tmp/sv.lua
+      - name: Import harness output into progress
+        run: ./mc import-addon /tmp/sv.lua --dry-run --config config/examples/alliance.json

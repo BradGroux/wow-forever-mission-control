@@ -1,0 +1,1745 @@
+{
+ "_about": "Name -> Wowhead Forever entity. Every id here was checked against nether.wowhead.com/forever/tooltip/<type>/<id> returning the same name. Names not listed link to a Wowhead Forever search. Add ids with tools/wowhead_lookup.py.",
+ "ids": {
+  "A Dynamite Plan": {
+   "id": 92749,
+   "type": "quest"
+  },
+  "A Fine Mess": {
+   "id": 2904,
+   "type": "quest"
+  },
+  "A Host of Evil": {
+   "id": 6626,
+   "type": "quest"
+  },
+  "A Sign of Hope": {
+   "id": 720,
+   "type": "quest"
+  },
+  "Advisor Belgrum": {
+   "id": 2918,
+   "type": "npc"
+  },
+  "Afadra Dunwall": {
+   "id": 264943,
+   "type": "npc"
+  },
+  "Aimed Shot": {
+   "id": 19434,
+   "type": "spell"
+  },
+  "Air Totem": {
+   "type": "item",
+   "id": 5178
+  },
+  "Alba Fairmoon": {
+   "id": 253092,
+   "type": "npc"
+  },
+  "Alchemy": {
+   "type": "skill",
+   "id": 171
+  },
+  "Alterac": {
+   "id": 36,
+   "type": "zone"
+  },
+  "Alterac Mountains": {
+   "type": "zone",
+   "id": 36
+  },
+  "An Alarming Request": {
+   "id": 92432,
+   "type": "quest"
+  },
+  "An Ancient Grudge": {
+   "id": 96395,
+   "type": "quest"
+  },
+  "An Unsent Letter": {
+   "id": 2874,
+   "type": "item"
+  },
+  "Aquatic Form": {
+   "type": "quest",
+   "id": 5061
+  },
+  "Arathi": {
+   "id": 45,
+   "type": "zone"
+  },
+  "Arathi Highlands": {
+   "type": "zone",
+   "id": 45
+  },
+  "Archbishop Benedictus": {
+   "id": 1284,
+   "type": "npc"
+  },
+  "Archmage Tervosh": {
+   "id": 4967,
+   "type": "npc"
+  },
+  "Archmage Xylem": {
+   "id": 8379,
+   "type": "npc"
+  },
+  "Argent Guard Manados": {
+   "id": 4784,
+   "type": "npc"
+  },
+  "Ashenvale": {
+   "id": 331,
+   "type": "zone"
+  },
+  "Ayanna Everstride": {
+   "id": 3596,
+   "type": "npc"
+  },
+  "Azshara": {
+   "id": 16,
+   "type": "zone"
+  },
+  "Badlands": {
+   "id": 3,
+   "type": "zone"
+  },
+  "Bandarion Keep": {
+   "type": "quest",
+   "id": 96899
+  },
+  "Baros Alexston": {
+   "id": 1646,
+   "type": "npc"
+  },
+  "Bartering": {
+   "id": 1225459,
+   "type": "spell"
+  },
+  "Basic Campfire": {
+   "id": 1229737,
+   "type": "spell"
+  },
+  "Battle Chicken": {
+   "id": 10725,
+   "type": "item"
+  },
+  "Bear Form": {
+   "type": "spell",
+   "id": 5487
+  },
+  "Beast Slaying": {
+   "type": "spell",
+   "id": 20557
+  },
+  "Berserker Stance": {
+   "type": "spell",
+   "id": 2458
+  },
+  "Berserking": {
+   "type": "spell",
+   "id": 20554
+  },
+  "Big Game Hunter": {
+   "type": "spell",
+   "id": 1259721
+  },
+  "Blackfathom Deeps": {
+   "id": 719,
+   "type": "zone"
+  },
+  "Blackfathom Villainy": {
+   "id": 1200,
+   "type": "quest"
+  },
+  "Blackrock Depths": {
+   "id": 1584,
+   "type": "zone"
+  },
+  "Blackrock Spire": {
+   "id": 1583,
+   "type": "zone"
+  },
+  "Blacksmithing": {
+   "type": "skill",
+   "id": 164
+  },
+  "Blasted Lands": {
+   "type": "zone",
+   "id": 4
+  },
+  "Blood Fury": {
+   "type": "spell",
+   "id": 20572
+  },
+  "Blueleaf Tubers": {
+   "id": 1221,
+   "type": "quest"
+  },
+  "Bountiful Harvest": {
+   "id": 1225435,
+   "type": "spell"
+  },
+  "Bring the Light": {
+   "id": 3636,
+   "type": "quest"
+  },
+  "Brohann Caskbelly": {
+   "id": 5384,
+   "type": "npc"
+  },
+  "Brother Anton": {
+   "id": 1182,
+   "type": "npc"
+  },
+  "Brother Sammuel": {
+   "id": 925,
+   "type": "npc"
+  },
+  "Burning Steppes": {
+   "id": 46,
+   "type": "zone"
+  },
+  "Call of Air": {
+   "id": 94789,
+   "type": "quest"
+  },
+  "Call of Earth": {
+   "id": 94373,
+   "type": "quest"
+  },
+  "Call of Fire": {
+   "id": 94449,
+   "type": "quest"
+  },
+  "Call of Water": {
+   "id": 94494,
+   "type": "quest"
+  },
+  "Camp Mojache": {
+   "type": "quest",
+   "id": 7492
+  },
+  "Camp Tent": {
+   "id": 279978,
+   "type": "item"
+  },
+  "Cannibalize": {
+   "type": "spell",
+   "id": 20577
+  },
+  "Cat Form": {
+   "type": "spell",
+   "id": 768
+  },
+  "Cavindra": {
+   "id": 13697,
+   "type": "npc"
+  },
+  "Chausses of Westfall": {
+   "id": 6087,
+   "type": "item"
+  },
+  "City of Dalaran": {
+   "type": "zone",
+   "id": 16544
+  },
+  "Collecting Memories": {
+   "id": 168,
+   "type": "quest"
+  },
+  "Coming of Age": {
+   "id": 92460,
+   "type": "quest"
+  },
+  "Confounding Flash": {
+   "type": "spell",
+   "id": 1277455
+  },
+  "Confront Lorthuna": {
+   "id": 92646,
+   "type": "quest"
+  },
+  "Consecrated Letter": {
+   "id": 3101,
+   "type": "quest"
+  },
+  "Consecration": {
+   "id": 20116,
+   "type": "spell"
+  },
+  "Conservator Ilthalaine": {
+   "id": 2079,
+   "type": "npc"
+  },
+  "Contingency Plan": {
+   "type": "spell",
+   "id": 1277462
+  },
+  "Cooking": {
+   "type": "skill",
+   "id": 185
+  },
+  "Corruption of Earth and Seed": {
+   "id": 7065,
+   "type": "quest"
+  },
+  "Councilman Millstipe": {
+   "id": 270,
+   "type": "npc"
+  },
+  "Cozy Sleeping Bag": {
+   "id": 211527,
+   "type": "item"
+  },
+  "Crime and Punishment": {
+   "id": 377,
+   "type": "quest"
+  },
+  "Cultivation": {
+   "type": "spell",
+   "id": 20552
+  },
+  "Cure Poison": {
+   "type": "spell",
+   "id": 8946
+  },
+  "Daphne Stilwell": {
+   "id": 6182,
+   "type": "npc"
+  },
+  "Dark Sacrifice": {
+   "type": "spell",
+   "id": 1277328
+  },
+  "Darkshore": {
+   "id": 148,
+   "type": "zone"
+  },
+  "Darnassus": {
+   "id": 1657,
+   "type": "zone"
+  },
+  "Data Rescue": {
+   "id": 2930,
+   "type": "quest"
+  },
+  "Dazalar": {
+   "id": 3601,
+   "type": "npc"
+  },
+  "Deadmines": {
+   "id": 1581,
+   "type": "zone"
+  },
+  "Dedicated Study": {
+   "id": 1225469,
+   "type": "spell"
+  },
+  "Defensive Stance": {
+   "type": "spell",
+   "id": 71
+  },
+  "Desolace": {
+   "id": 405,
+   "type": "zone"
+  },
+  "Desperate Prayer": {
+   "type": "spell",
+   "id": 13908
+  },
+  "Destruction in Deadmines": {
+   "id": 92753,
+   "type": "quest"
+  },
+  "Deviate Eradication": {
+   "id": 1487,
+   "type": "quest"
+  },
+  "Deviate Hides": {
+   "id": 1486,
+   "type": "quest"
+  },
+  "Diplomat": {
+   "id": 1225485,
+   "type": "spell"
+  },
+  "Dire Maul": {
+   "type": "zone",
+   "id": 2557
+  },
+  "Dismiss Pet": {
+   "id": 2641,
+   "type": "spell"
+  },
+  "Divine Grace": {
+   "type": "spell",
+   "id": 1277370
+  },
+  "Divino-matic Rod": {
+   "id": 2768,
+   "type": "quest"
+  },
+  "Druid": {
+   "type": "class",
+   "id": 11
+  },
+  "Dun Morogh": {
+   "id": 1,
+   "type": "zone"
+  },
+  "Durotar": {
+   "type": "zone",
+   "id": 14
+  },
+  "Duskwood": {
+   "id": 10,
+   "type": "zone"
+  },
+  "Dustwallow Marsh": {
+   "type": "zone",
+   "id": 15
+  },
+  "Duthorian Rall": {
+   "id": 6171,
+   "type": "npc"
+  },
+  "Dwarf": {
+   "type": "race",
+   "id": 3
+  },
+  "Eagle's Fist": {
+   "type": "quest",
+   "id": 79975
+  },
+  "Earth Totem": {
+   "type": "item",
+   "id": 5175
+  },
+  "Earthseer Farsen": {
+   "id": 264936,
+   "type": "npc"
+  },
+  "Eastern Plaguelands": {
+   "type": "zone",
+   "id": 139
+  },
+  "Ebru": {
+   "id": 5768,
+   "type": "npc"
+  },
+  "Edwin VanCleef": {
+   "id": 639,
+   "type": "npc"
+  },
+  "Elemental Mastery": {
+   "id": 16166,
+   "type": "spell"
+  },
+  "Elune's Light": {
+   "type": "spell",
+   "id": 1259799
+  },
+  "Elwynn Forest": {
+   "id": 12,
+   "type": "zone"
+  },
+  "Emissary Jacques": {
+   "id": 247264,
+   "type": "npc"
+  },
+  "Enchanting": {
+   "type": "skill",
+   "id": 333
+  },
+  "Endurance": {
+   "type": "spell",
+   "id": 20550
+  },
+  "Engineering": {
+   "type": "skill",
+   "id": 202
+  },
+  "Engineering Specialization": {
+   "type": "spell",
+   "id": 20593
+  },
+  "Escape Artist": {
+   "type": "spell",
+   "id": 20589
+  },
+  "Essential Artificials": {
+   "id": 2924,
+   "type": "quest"
+  },
+  "Etched Sigil": {
+   "id": 3117,
+   "type": "quest"
+  },
+  "Eureka!": {
+   "type": "spell",
+   "id": 1259823
+  },
+  "Excavation Site: Wetlands": {
+   "type": "zone",
+   "id": 16732
+  },
+  "Expansive Mind": {
+   "type": "spell",
+   "id": 20591
+  },
+  "Extinguishing the Idol": {
+   "id": 3525,
+   "type": "quest"
+  },
+  "Faction Banner": {
+   "id": 1263425,
+   "type": "spell"
+  },
+  "Falfindel Waywarder": {
+   "id": 4048,
+   "type": "npc"
+  },
+  "Feathermoon Stronghold": {
+   "type": "quest",
+   "id": 7494
+  },
+  "Felwood": {
+   "type": "zone",
+   "id": 361
+  },
+  "Feralas": {
+   "id": 357,
+   "type": "zone"
+  },
+  "Field Guide": {
+   "id": 1225479,
+   "type": "spell"
+  },
+  "Field Medicine": {
+   "id": 1225475,
+   "type": "spell"
+  },
+  "Find Treasure": {
+   "type": "spell",
+   "id": 2481
+  },
+  "Fingers of Frost": {
+   "id": 400647,
+   "type": "spell"
+  },
+  "Fire Tar": {
+   "id": 5026,
+   "type": "item"
+  },
+  "Fire Totem": {
+   "type": "item",
+   "id": 5176
+  },
+  "First Aid": {
+   "type": "skill",
+   "id": 129
+  },
+  "Fishing": {
+   "type": "skill",
+   "id": 356
+  },
+  "For Great Honor": {
+   "id": 1225501,
+   "type": "spell"
+  },
+  "Foreman Thistlenettle": {
+   "id": 626,
+   "type": "npc"
+  },
+  "Frequent Flier": {
+   "id": 1225490,
+   "type": "spell"
+  },
+  "Frostfire Bolt": {
+   "id": 401502,
+   "type": "spell"
+  },
+  "Gadgetzan": {
+   "type": "spell",
+   "id": 1303872
+  },
+  "Gahz'rilla": {
+   "id": 2770,
+   "type": "quest"
+  },
+  "Gazin Tenorm": {
+   "id": 6173,
+   "type": "npc"
+  },
+  "General Marcus Jonathan": {
+   "id": 466,
+   "type": "npc"
+  },
+  "Gilnid": {
+   "id": 1763,
+   "type": "npc"
+  },
+  "Gnogaine": {
+   "id": 2926,
+   "type": "quest"
+  },
+  "Gnome": {
+   "type": "race",
+   "id": 7
+  },
+  "Gnomeregan": {
+   "id": 721,
+   "type": "zone"
+  },
+  "Gourmand": {
+   "id": 1225499,
+   "type": "spell"
+  },
+  "Gryan Stoutmantle": {
+   "id": 234,
+   "type": "npc"
+  },
+  "Guard Berton": {
+   "id": 859,
+   "type": "npc"
+  },
+  "Gyrodrillmatic Excavationators": {
+   "id": 2928,
+   "type": "quest"
+  },
+  "Hammerfall": {
+   "type": "quest",
+   "id": 655
+  },
+  "Hardiness": {
+   "type": "spell",
+   "id": 20573
+  },
+  "Healing Stream": {
+   "id": 5394,
+   "type": "spell"
+  },
+  "Helene Peltskinner": {
+   "id": 6306,
+   "type": "npc"
+  },
+  "Herbalism": {
+   "type": "skill",
+   "id": 182
+  },
+  "High Alert": {
+   "id": 1225477,
+   "type": "spell"
+  },
+  "High Order Skyborne": {
+   "type": "race",
+   "id": 95
+  },
+  "High Tinker Mekkatorque": {
+   "id": 7937,
+   "type": "npc"
+  },
+  "Hillsbrad Foothills": {
+   "type": "zone",
+   "id": 267
+  },
+  "Hinterlands": {
+   "id": 47,
+   "type": "zone"
+  },
+  "Holy Strike": {
+   "id": 678,
+   "type": "spell"
+  },
+  "Human": {
+   "type": "race",
+   "id": 1
+  },
+  "Hunter": {
+   "type": "class",
+   "id": 3
+  },
+  "Hurley Blackbreath": {
+   "id": 4126,
+   "type": "quest"
+  },
+  "Ice Lance": {
+   "id": 1312002,
+   "type": "spell"
+  },
+  "Important Heirlooms": {
+   "id": 96403,
+   "type": "quest"
+  },
+  "In Search of Thaelrid": {
+   "id": 1198,
+   "type": "quest"
+  },
+  "In Search of The Temple": {
+   "id": 1448,
+   "type": "quest"
+  },
+  "In the Name of the Light": {
+   "id": 1053,
+   "type": "quest"
+  },
+  "Incendius!": {
+   "id": 4263,
+   "type": "quest"
+  },
+  "Inferno": {
+   "type": "spell",
+   "id": 1122
+  },
+  "Into The Temple of Atal'Hakkar": {
+   "id": 1475,
+   "type": "quest"
+  },
+  "Ironband Wants You!": {
+   "id": 707,
+   "type": "quest"
+  },
+  "Ironforge": {
+   "id": 1537,
+   "type": "zone"
+  },
+  "Jail Break!": {
+   "id": 4322,
+   "type": "quest"
+  },
+  "Jocaste": {
+   "id": 4146,
+   "type": "npc"
+  },
+  "Jordan Stilwell": {
+   "id": 6181,
+   "type": "npc"
+  },
+  "Jordan's Refined Ore Shipment": {
+   "id": 6993,
+   "type": "item"
+  },
+  "Jordan's Smithing Hammer": {
+   "id": 6895,
+   "type": "item"
+  },
+  "Journey to the Marsh": {
+   "id": 1947,
+   "type": "quest"
+  },
+  "Judgement": {
+   "id": 20271,
+   "type": "spell"
+  },
+  "Keeper Marandis": {
+   "id": 13698,
+   "type": "npc"
+  },
+  "Kharan Mighthammer": {
+   "id": 4341,
+   "type": "quest"
+  },
+  "Klockmort Spannerspan": {
+   "id": 6169,
+   "type": "npc"
+  },
+  "Knowledge in the Deeps": {
+   "id": 971,
+   "type": "quest"
+  },
+  "Leatherworking": {
+   "type": "skill",
+   "id": 165
+  },
+  "Legends of Maraudon": {
+   "id": 7044,
+   "type": "quest"
+  },
+  "Light's Hope Chapel": {
+   "type": "quest",
+   "id": 9154
+  },
+  "Linen Cloth": {
+   "id": 2589,
+   "type": "item"
+  },
+  "Loch Modan": {
+   "id": 38,
+   "type": "zone"
+  },
+  "Lockpicking": {
+   "type": "skill",
+   "id": 633
+  },
+  "Lonebrow's Journal": {
+   "id": 1100,
+   "type": "quest"
+  },
+  "Lower Blackrock Spire": {
+   "id": 1583,
+   "type": "zone"
+  },
+  "Luremaster": {
+   "id": 1225455,
+   "type": "spell"
+  },
+  "Mage": {
+   "type": "class",
+   "id": 8
+  },
+  "Mage's Wand": {
+   "type": "quest",
+   "id": 1952
+  },
+  "Magni": {
+   "id": 2784,
+   "type": "npc"
+  },
+  "Magus Tirth": {
+   "id": 6548,
+   "type": "npc"
+  },
+  "Mallet of Zul'Farrak": {
+   "id": 9240,
+   "type": "item"
+  },
+  "Mana Well": {
+   "id": 279956,
+   "type": "item"
+  },
+  "Maraudon": {
+   "id": 2100,
+   "type": "zone"
+  },
+  "Marshal Maxwell": {
+   "id": 9560,
+   "type": "npc"
+  },
+  "Marshal McBride": {
+   "id": 197,
+   "type": "npc"
+  },
+  "Marshal Windsor": {
+   "id": 4241,
+   "type": "quest"
+  },
+  "Master Chef": {
+   "id": 1225457,
+   "type": "spell"
+  },
+  "Mebok Mizzyrix": {
+   "id": 3446,
+   "type": "npc"
+  },
+  "Mind Control Cap": {
+   "id": 10726,
+   "type": "item"
+  },
+  "Mining": {
+   "type": "skill",
+   "id": 186
+  },
+  "Moonsilver Blade": {
+   "type": "item",
+   "id": 268484
+  },
+  "Mortality Wanes": {
+   "id": 1142,
+   "type": "quest"
+  },
+  "Motley Garmason": {
+   "id": 1074,
+   "type": "npc"
+  },
+  "Mount Hyjal": {
+   "id": 616,
+   "type": "zone"
+  },
+  "Mulgore": {
+   "type": "zone",
+   "id": 215
+  },
+  "Mutanus": {
+   "id": 3654,
+   "type": "npc"
+  },
+  "Mythology of the Titans": {
+   "id": 1050,
+   "type": "quest"
+  },
+  "Nalpak": {
+   "id": 5767,
+   "type": "npc"
+  },
+  "Nature's Guidance": {
+   "id": 16180,
+   "type": "spell"
+  },
+  "Nekrum's Medallion": {
+   "id": 2991,
+   "type": "quest"
+  },
+  "Net-o-Matic": {
+   "id": 10720,
+   "type": "item"
+  },
+  "Night Elf": {
+   "type": "race",
+   "id": 4
+  },
+  "Nikova Raskol": {
+   "id": 1721,
+   "type": "npc"
+  },
+  "Oh Brother...": {
+   "id": 167,
+   "type": "quest"
+  },
+  "Old Ironforge Incursion": {
+   "id": 96393,
+   "type": "quest"
+  },
+  "Onyxia": {
+   "id": 2159,
+   "type": "zone"
+  },
+  "Orc": {
+   "type": "race",
+   "id": 2
+  },
+  "Orgrimmar": {
+   "type": "zone",
+   "id": 1637
+  },
+  "Overmaster Pyron": {
+   "id": 4262,
+   "type": "quest"
+  },
+  "Ozzie Togglevolt": {
+   "id": 1268,
+   "type": "npc"
+  },
+  "Paladin": {
+   "type": "class",
+   "id": 2
+  },
+  "Perception": {
+   "type": "spell",
+   "id": 20600
+  },
+  "Performance Bonus": {
+   "id": 1225456,
+   "type": "spell"
+  },
+  "Permanence": {
+   "id": 1225502,
+   "type": "spell"
+  },
+  "Plainsrunning": {
+   "type": "spell",
+   "id": 1259918
+  },
+  "Poisons": {
+   "type": "spell",
+   "id": 2842
+  },
+  "Polymorph": {
+   "id": 118,
+   "type": "spell"
+  },
+  "Portal Darnassus": {
+   "id": 11419,
+   "type": "spell"
+  },
+  "Power Stones": {
+   "id": 2418,
+   "type": "quest"
+  },
+  "Priest": {
+   "type": "class",
+   "id": 5
+  },
+  "Prospector Ironband": {
+   "id": 1344,
+   "type": "npc"
+  },
+  "Prospector Stormpike": {
+   "id": 1356,
+   "type": "npc"
+  },
+  "Prospector Whelgar": {
+   "id": 1077,
+   "type": "npc"
+  },
+  "Quell the Uprising": {
+   "id": 387,
+   "type": "quest"
+  },
+  "Quick and the Dead": {
+   "id": 1225500,
+   "type": "spell"
+  },
+  "Quickness": {
+   "type": "spell",
+   "id": 20582
+  },
+  "Ragefire Chasm": {
+   "type": "zone",
+   "id": 2437
+  },
+  "Ragnar Thunderbrew": {
+   "id": 1267,
+   "type": "npc"
+  },
+  "Raleigh the Devout": {
+   "id": 3980,
+   "type": "npc"
+  },
+  "Rapid Regeneration": {
+   "type": "spell",
+   "id": 1260270
+  },
+  "Raptor Horns": {
+   "id": 865,
+   "type": "quest"
+  },
+  "Razorfen Downs": {
+   "id": 722,
+   "type": "zone"
+  },
+  "Razorfen Kraul": {
+   "id": 491,
+   "type": "zone"
+  },
+  "Read Ley Line": {
+   "id": 1259705,
+   "type": "spell"
+  },
+  "Reagent Bot": {
+   "id": 279950,
+   "type": "item"
+  },
+  "Reagent Economy": {
+   "id": 1225503,
+   "type": "spell"
+  },
+  "Reagent Pouch": {
+   "id": 6652,
+   "type": "item"
+  },
+  "Reclaimed Treasures": {
+   "id": 1360,
+   "type": "quest"
+  },
+  "Red Silk Bandanas": {
+   "id": 214,
+   "type": "quest"
+  },
+  "Redemption": {
+   "id": 7328,
+   "type": "spell"
+  },
+  "Redridge Mountains": {
+   "type": "zone",
+   "id": 44
+  },
+  "Regeneration": {
+   "type": "spell",
+   "id": 20555
+  },
+  "Reinforce": {
+   "id": 1225497,
+   "type": "spell"
+  },
+  "Repair Bot": {
+   "id": 279949,
+   "type": "item"
+  },
+  "Replica Ironforge Air Rifle": {
+   "type": "item",
+   "id": 281060
+  },
+  "Researching the Corruption": {
+   "id": 1275,
+   "type": "quest"
+  },
+  "Revive Pet": {
+   "id": 982,
+   "type": "spell"
+  },
+  "Riding": {
+   "type": "skill",
+   "id": 762
+  },
+  "Riverglades": {
+   "type": "zone",
+   "id": 16591
+  },
+  "Rocket Boots": {
+   "id": 10724,
+   "type": "item"
+  },
+  "Rocket Helmet": {
+   "id": 10588,
+   "type": "item"
+  },
+  "Rogue": {
+   "type": "class",
+   "id": 4
+  },
+  "Rough Dynamite": {
+   "id": 4358,
+   "type": "item"
+  },
+  "Ruins of Lordaeron": {
+   "id": 16611,
+   "type": "zone"
+  },
+  "Rune of Portals": {
+   "id": 17032,
+   "type": "item"
+  },
+  "Rune of Teleportation": {
+   "id": 17031,
+   "type": "item"
+  },
+  "Ruthless": {
+   "type": "spell",
+   "id": 20597
+  },
+  "Save Techbot's Brain!": {
+   "id": 2922,
+   "type": "quest"
+  },
+  "Scarab Shells": {
+   "id": 2865,
+   "type": "quest"
+  },
+  "Scarlet Key": {
+   "id": 7146,
+   "type": "item"
+  },
+  "Scarlet Monastery": {
+   "id": 796,
+   "type": "zone"
+  },
+  "Scholomance": {
+   "type": "zone",
+   "id": 2057
+  },
+  "Scout Riell": {
+   "id": 820,
+   "type": "npc"
+  },
+  "Scramble": {
+   "id": 79980,
+   "type": "quest"
+  },
+  "Seal of Ascension": {
+   "id": 4743,
+   "type": "quest"
+  },
+  "Seal of Fury": {
+   "id": 20163,
+   "type": "spell"
+  },
+  "Searing Gorge": {
+   "type": "zone",
+   "id": 51
+  },
+  "Searing Totem": {
+   "id": 3599,
+   "type": "spell"
+  },
+  "Sense Undead": {
+   "id": 5502,
+   "type": "spell"
+  },
+  "Shadowfang Keep": {
+   "id": 209,
+   "type": "zone"
+  },
+  "Shadowforge Key": {
+   "id": 11000,
+   "type": "item"
+  },
+  "Shadowmeld": {
+   "type": "spell",
+   "id": 20580
+  },
+  "Shadowshard Fragments": {
+   "id": 7070,
+   "type": "quest"
+  },
+  "Shaman": {
+   "type": "class",
+   "id": 7
+  },
+  "Sharpening Wheel": {
+   "id": 1230171,
+   "type": "spell"
+  },
+  "Shatter Curse": {
+   "type": "spell",
+   "id": 1299026
+  },
+  "Shoni the Shilent": {
+   "id": 6579,
+   "type": "npc"
+  },
+  "Silithus": {
+   "type": "zone",
+   "id": 1377
+  },
+  "Silverpine Forest": {
+   "type": "zone",
+   "id": 130
+  },
+  "Skinning": {
+   "type": "skill",
+   "id": 393
+  },
+  "Skysight": {
+   "id": 1259686,
+   "type": "spell"
+  },
+  "Smart Drinks": {
+   "id": 1491,
+   "type": "quest"
+  },
+  "Sneed's Shredder": {
+   "id": 642,
+   "type": "npc"
+  },
+  "Solution to Doom": {
+   "id": 709,
+   "type": "quest"
+  },
+  "Southshore": {
+   "type": "quest",
+   "id": 538
+  },
+  "Spectral Bear Cub": {
+   "id": 277714,
+   "type": "item"
+  },
+  "Spectral Bear Tabard": {
+   "type": "item",
+   "id": 277717
+  },
+  "Stephanie Turner": {
+   "id": 6174,
+   "type": "npc"
+  },
+  "Stepping Stones": {
+   "id": 79192,
+   "type": "quest"
+  },
+  "Stockade": {
+   "id": 717,
+   "type": "zone"
+  },
+  "Stoneform": {
+   "type": "spell",
+   "id": 20594
+  },
+  "Stoneskin Totem": {
+   "id": 8071,
+   "type": "spell"
+  },
+  "Stonetalon Mountains": {
+   "type": "zone",
+   "id": 406
+  },
+  "Stormwind": {
+   "id": 1519,
+   "type": "zone"
+  },
+  "Stormwind City": {
+   "id": 1519,
+   "type": "zone"
+  },
+  "Stranglethorn Vale": {
+   "type": "zone",
+   "id": 33
+  },
+  "Stratholme": {
+   "type": "zone",
+   "id": 2017
+  },
+  "Strength of Earth": {
+   "id": 8075,
+   "type": "spell"
+  },
+  "Summon Dreadsteed": {
+   "type": "spell",
+   "id": 23161
+  },
+  "Summon Felhunter": {
+   "type": "spell",
+   "id": 691
+  },
+  "Summon Felsteed": {
+   "type": "spell",
+   "id": 5784
+  },
+  "Summon Imp": {
+   "type": "spell",
+   "id": 688
+  },
+  "Summon Succubus": {
+   "type": "spell",
+   "id": 712
+  },
+  "Sunken Temple": {
+   "id": 1477,
+   "type": "zone"
+  },
+  "Swamp of Sorrows": {
+   "id": 8,
+   "type": "zone"
+  },
+  "Tabetha": {
+   "id": 6546,
+   "type": "npc"
+  },
+  "Tailoring": {
+   "type": "skill",
+   "id": 197
+  },
+  "Talendria": {
+   "id": 11715,
+   "type": "npc"
+  },
+  "Talented": {
+   "id": 1225474,
+   "type": "spell"
+  },
+  "Tame Beast": {
+   "id": 1515,
+   "type": "spell"
+  },
+  "Taming the Beast": {
+   "id": 6102,
+   "type": "quest"
+  },
+  "Tanaris": {
+   "id": 440,
+   "type": "zone"
+  },
+  "Tanning Rack": {
+   "id": 279941,
+   "type": "item"
+  },
+  "Tauren": {
+   "type": "race",
+   "id": 6
+  },
+  "Teldrassil": {
+   "id": 141,
+   "type": "zone"
+  },
+  "Teleport Darnassus": {
+   "id": 3565,
+   "type": "spell"
+  },
+  "Teleport: Stormwind": {
+   "id": 3561,
+   "type": "spell"
+  },
+  "Temple of Atal'Hakkar": {
+   "id": 1477,
+   "type": "zone"
+  },
+  "Testing the Wells": {
+   "id": 92742,
+   "type": "quest"
+  },
+  "Thadius Grimshade": {
+   "id": 8022,
+   "type": "npc"
+  },
+  "The Barrens": {
+   "type": "zone",
+   "id": 17
+  },
+  "The Binding": {
+   "type": "quest",
+   "id": 1689
+  },
+  "The Color of Blood": {
+   "id": 388,
+   "type": "quest"
+  },
+  "The Crone of the Kraul": {
+   "id": 1101,
+   "type": "quest"
+  },
+  "The Deadmines": {
+   "id": 1581,
+   "type": "zone"
+  },
+  "The Defias Brotherhood": {
+   "id": 166,
+   "type": "quest"
+  },
+  "The Drowned City": {
+   "type": "quest",
+   "id": 95775
+  },
+  "The Fate of Zephras": {
+   "id": 94369,
+   "type": "quest"
+  },
+  "The Fury Runs Deep": {
+   "id": 378,
+   "type": "quest"
+  },
+  "The Glowing Shard": {
+   "id": 6981,
+   "type": "quest"
+  },
+  "The Grand Betrayal": {
+   "id": 2929,
+   "type": "quest"
+  },
+  "The Great Outdoors": {
+   "id": 96101,
+   "type": "quest"
+  },
+  "The Hall of Thanes": {
+   "type": "zone",
+   "id": 16919
+  },
+  "The Hidden Chamber": {
+   "id": 2240,
+   "type": "quest"
+  },
+  "The Hinterlands": {
+   "type": "zone",
+   "id": 47
+  },
+  "The Human Spirit": {
+   "type": "spell",
+   "id": 20598
+  },
+  "The Hunter's Path": {
+   "id": 6071,
+   "type": "quest"
+  },
+  "The Lost Dwarves": {
+   "id": 2398,
+   "type": "quest"
+  },
+  "The Lost Tablets of Will": {
+   "id": 1139,
+   "type": "quest"
+  },
+  "The Magical City of Dalaran": {
+   "id": 94946,
+   "type": "quest"
+  },
+  "The Only Cure is More Green Glow": {
+   "id": 2962,
+   "type": "quest"
+  },
+  "The Quick and the Dead": {
+   "id": 1225500,
+   "type": "spell"
+  },
+  "The Restless Dead": {
+   "id": 96394,
+   "type": "quest"
+  },
+  "The Scarlet Key": {
+   "id": 7146,
+   "type": "item"
+  },
+  "The Scepter of Celebras": {
+   "id": 7046,
+   "type": "quest"
+  },
+  "The Sparklematic 5200!": {
+   "id": 2951,
+   "type": "quest"
+  },
+  "The Stockade": {
+   "id": 717,
+   "type": "zone"
+  },
+  "The Stockade Riots": {
+   "id": 391,
+   "type": "quest"
+  },
+  "The Tempest's Weapons": {
+   "type": "quest",
+   "id": 96016
+  },
+  "The Test of Righteousness": {
+   "id": 1654,
+   "type": "quest"
+  },
+  "The Tome of Divinity": {
+   "id": 1785,
+   "type": "quest"
+  },
+  "The Tome of Nobility": {
+   "id": 1661,
+   "type": "quest"
+  },
+  "The Tome of Valor": {
+   "id": 1651,
+   "type": "quest"
+  },
+  "The Unsent Letter": {
+   "id": 373,
+   "type": "quest"
+  },
+  "This Must Be The Place": {
+   "type": "quest",
+   "id": 79976
+  },
+  "Thom Filch": {
+   "id": 265003,
+   "type": "npc"
+  },
+  "Thousand Needles": {
+   "id": 400,
+   "type": "zone"
+  },
+  "Thrill of Adventure": {
+   "id": 1225472,
+   "type": "spell"
+  },
+  "Thunder Bluff": {
+   "type": "zone",
+   "id": 1638
+  },
+  "Tiara of the Deep": {
+   "id": 2846,
+   "type": "quest"
+  },
+  "Tinkmaster Overspark": {
+   "id": 7944,
+   "type": "npc"
+  },
+  "Tirisfal Glades": {
+   "id": 85,
+   "type": "zone"
+  },
+  "Totemic Projection": {
+   "id": 437009,
+   "type": "spell"
+  },
+  "Totemic Recall": {
+   "id": 36936,
+   "type": "spell"
+  },
+  "Touch of the Grave": {
+   "type": "spell",
+   "id": 1260201
+  },
+  "Training the Beast": {
+   "id": 6103,
+   "type": "quest"
+  },
+  "Travel Form": {
+   "type": "spell",
+   "id": 783
+  },
+  "Treaty of Understanding": {
+   "id": 281030,
+   "type": "item"
+  },
+  "Troll": {
+   "type": "race",
+   "id": 8
+  },
+  "Troll Temper": {
+   "id": 3042,
+   "type": "quest"
+  },
+  "Trouble at the Docks": {
+   "id": 959,
+   "type": "quest"
+  },
+  "Tunic of Westfall": {
+   "id": 2041,
+   "type": "item"
+  },
+  "Twilight Falls": {
+   "id": 1199,
+   "type": "quest"
+  },
+  "Uldaman": {
+   "id": 1337,
+   "type": "zone"
+  },
+  "Un'Goro Crater": {
+   "type": "zone",
+   "id": 490
+  },
+  "Undead": {
+   "type": "race",
+   "id": 5
+  },
+  "Undercity": {
+   "id": 1497,
+   "type": "zone"
+  },
+  "Underground Assault": {
+   "id": 2040,
+   "type": "quest"
+  },
+  "Underground Map": {
+   "id": 96391,
+   "type": "quest"
+  },
+  "Underwater Breathing": {
+   "type": "spell",
+   "id": 5227
+  },
+  "Upper Blackrock Spire": {
+   "id": 1583,
+   "type": "zone"
+  },
+  "Verigan's Fist": {
+   "id": 6953,
+   "type": "item"
+  },
+  "Vyletongue Corruption": {
+   "id": 7041,
+   "type": "quest"
+  },
+  "Wailing Caverns": {
+   "id": 718,
+   "type": "zone"
+  },
+  "Walk on Air": {
+   "id": 1259416,
+   "type": "spell"
+  },
+  "War Stomp": {
+   "type": "spell",
+   "id": 20549
+  },
+  "Warden Thelwater": {
+   "id": 1719,
+   "type": "npc"
+  },
+  "Warlock": {
+   "type": "class",
+   "id": 9
+  },
+  "Warrior": {
+   "type": "class",
+   "id": 1
+  },
+  "Water Totem": {
+   "type": "item",
+   "id": 5177
+  },
+  "Welcome to Azeroth": {
+   "id": 94947,
+   "type": "quest"
+  },
+  "Well Fed": {
+   "id": 1248420,
+   "type": "spell"
+  },
+  "Well Rested": {
+   "id": 1225478,
+   "type": "spell"
+  },
+  "Western Plaguelands": {
+   "type": "zone",
+   "id": 28
+  },
+  "Westfall": {
+   "id": 40,
+   "type": "zone"
+  },
+  "Wet Job": {
+   "id": 79974,
+   "type": "quest"
+  },
+  "Wetlands": {
+   "id": 11,
+   "type": "zone"
+  },
+  "What Comes Around...": {
+   "id": 386,
+   "type": "quest"
+  },
+  "What Comes Next": {
+   "id": 93089,
+   "type": "quest"
+  },
+  "Whirlwind Weapon": {
+   "type": "quest",
+   "id": 1792
+  },
+  "Whitestone Oak Lumber": {
+   "id": 6994,
+   "type": "item"
+  },
+  "Wilder Thistlenettle": {
+   "id": 656,
+   "type": "npc"
+  },
+  "Will of the Forsaken": {
+   "type": "spell",
+   "id": 7744
+  },
+  "Will to Survive": {
+   "type": "spell",
+   "id": 1259718
+  },
+  "Willix the Importer": {
+   "id": 1144,
+   "type": "quest"
+  },
+  "Windbough Wand": {
+   "type": "item",
+   "id": 263430
+  },
+  "Windshaper Skyborne": {
+   "type": "race",
+   "id": 96
+  },
+  "Winterspring": {
+   "id": 618,
+   "type": "zone"
+  },
+  "Wisp Spirit": {
+   "type": "spell",
+   "id": 20585
+  },
+  "Witherbark Cages": {
+   "id": 2988,
+   "type": "quest"
+  },
+  "Working Overtime": {
+   "id": 1225451,
+   "type": "spell"
+  },
+  "Workshop Key": {
+   "id": 6893,
+   "type": "item"
+  },
+  "Young Crocolisk Skins": {
+   "id": 484,
+   "type": "quest"
+  },
+  "Zephras Isle": {
+   "type": "zone",
+   "id": 16593
+  },
+  "Zul'Farrak": {
+   "id": 1176,
+   "type": "zone"
+  }
+ }
+}

@@ -1,0 +1,81 @@
+{
+ "gathering": {
+  "Mining": {
+   "feeds": [
+    "Blacksmithing",
+    "Engineering"
+   ]
+  },
+  "Herbalism": {
+   "feeds": [
+    "Alchemy"
+   ]
+  },
+  "Skinning": {
+   "feeds": [
+    "Leatherworking"
+   ]
+  }
+ },
+ "crafting": {
+  "Alchemy": {
+   "uses": [
+    "Herbalism"
+   ]
+  },
+  "Blacksmithing": {
+   "uses": [
+    "Mining"
+   ]
+  },
+  "Enchanting": {
+   "uses": [
+    "Tailoring"
+   ],
+   "note": "Disenchants crafted greens; pairs with Tailoring"
+  },
+  "Engineering": {
+   "uses": [
+    "Mining"
+   ],
+   "note": "Gnome racial Engineering Specialization"
+  },
+  "Leatherworking": {
+   "uses": [
+    "Skinning"
+   ]
+  },
+  "Tailoring": {
+   "uses": [
+    "cloth drops"
+   ],
+   "note": "No gathering needed"
+  }
+ },
+ "secondary": [
+  "Cooking",
+  "First Aid",
+  "Fishing"
+ ],
+ "max_primary": 2,
+ "skill_cap": 300,
+ "legacy_thresholds": [
+  150,
+  225,
+  300
+ ],
+ "notes": [
+  "No new professions in Forever; Mage Research is a Mage-only system",
+  "Every profession crafts a camp feature; first one at skill 20",
+  "Waylaid Supplies return: turn in crates for Merchant's Favor",
+  "Gathering professions earn no Legacy points"
+ ],
+ "status": "blizzard",
+ "source": "bz-camp",
+ "sources": [
+  "bz-camp",
+  "wh-profs",
+  "wh-legacy",
+  "wh-pairings"
+ ]
+}

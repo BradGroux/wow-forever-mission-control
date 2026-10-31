@@ -1,0 +1,287 @@
+{
+ "_about": "Race to faction, playable classes (56 combos, 28 per faction), start zone and racials. Class lists are from Blizzard's announcement checked against the beta client. Racial names changed several times in beta, so racials are marked unverified.",
+ "races": {
+  "Human": {
+   "faction": "Alliance",
+   "classes": [
+    "Warrior",
+    "Paladin",
+    "Hunter",
+    "Rogue",
+    "Priest",
+    "Mage",
+    "Warlock"
+   ],
+   "start_zone": "Elwynn Forest",
+   "start_area": "Northshire",
+   "first_hub": "Goldshire",
+   "capital": "Stormwind City",
+   "racials": [
+    "Will to Survive",
+    "Perception",
+    "Ruthless",
+    "The Human Spirit"
+   ],
+   "notes": [
+    "Human Hunter is new in Forever"
+   ],
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "Dwarf": {
+   "faction": "Alliance",
+   "classes": [
+    "Warrior",
+    "Paladin",
+    "Hunter",
+    "Rogue",
+    "Priest",
+    "Shaman"
+   ],
+   "start_zone": "Dun Morogh",
+   "start_area": "Coldridge Valley",
+   "first_hub": "Kharanos",
+   "capital": "Ironforge",
+   "racials": [
+    "Find Treasure",
+    "Big Game Hunter",
+    "Artisan's Precision",
+    "Stoneform"
+   ],
+   "notes": [
+    "Dwarf Shaman is the only Alliance Shaman",
+    "Dwarf Shaman totem quests are Call of Earth, Fire, Water and Air"
+   ],
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "Night Elf": {
+   "faction": "Alliance",
+   "classes": [
+    "Warrior",
+    "Hunter",
+    "Rogue",
+    "Priest",
+    "Druid"
+   ],
+   "start_zone": "Teldrassil",
+   "start_area": "Shadowglen",
+   "first_hub": "Dolanaar",
+   "capital": "Darnassus",
+   "racials": [
+    "Elune's Light",
+    "Wisp Spirit",
+    "Quickness",
+    "Shadowmeld"
+   ],
+   "notes": [],
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "Gnome": {
+   "faction": "Alliance",
+   "classes": [
+    "Warrior",
+    "Rogue",
+    "Priest",
+    "Mage",
+    "Warlock"
+   ],
+   "start_zone": "Dun Morogh",
+   "start_area": "Coldridge Valley",
+   "first_hub": "Kharanos",
+   "capital": "Ironforge",
+   "racials": [
+    "Eureka!",
+    "Expansive Mind",
+    "Engineering Specialization",
+    "Escape Artist"
+   ],
+   "notes": [
+    "Gnome Priest is new in Forever",
+    "Engineering Specialization favors Engineering"
+   ],
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "High Order Skyborne": {
+   "faction": "Alliance",
+   "classes": [
+    "Warrior",
+    "Hunter",
+    "Rogue",
+    "Mage",
+    "Druid"
+   ],
+   "start_zone": "Zephras Isle",
+   "start_area": "Thendal Village",
+   "first_hub": "Valanaar",
+   "capital": "Stormwind City",
+   "racials": [
+    "Walk on Air",
+    "Read Ley Line",
+    "Wind Blessed",
+    "Elemental Insight"
+   ],
+   "notes": [
+    "Needs the Skyborne Heroic Pack or higher",
+    "Zephras Isle covers levels 1-12"
+   ],
+   "capital_note": "No Skyborne capital; Valanaar is the hub",
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "Orc": {
+   "faction": "Horde",
+   "classes": [
+    "Warrior",
+    "Hunter",
+    "Rogue",
+    "Shaman",
+    "Mage",
+    "Warlock"
+   ],
+   "start_zone": "Durotar",
+   "start_area": "Valley of Trials",
+   "first_hub": "Razor Hill",
+   "capital": "Orgrimmar",
+   "racials": [
+    "Savage",
+    "Blood Fury",
+    "Shatter Curse",
+    "Hardiness"
+   ],
+   "notes": [
+    "Orc Mage is new in Forever"
+   ],
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "Undead": {
+   "faction": "Horde",
+   "classes": [
+    "Warrior",
+    "Paladin",
+    "Rogue",
+    "Priest",
+    "Mage",
+    "Warlock"
+   ],
+   "start_zone": "Tirisfal Glades",
+   "start_area": "Deathknell",
+   "first_hub": "Brill",
+   "capital": "Undercity",
+   "racials": [
+    "Cannibalize",
+    "Touch of the Grave",
+    "Underwater Breathing",
+    "Will of the Forsaken"
+   ],
+   "notes": [
+    "Undead Paladin is the only Horde Paladin; class hub at Bandarion Keep"
+   ],
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "Tauren": {
+   "faction": "Horde",
+   "classes": [
+    "Warrior",
+    "Hunter",
+    "Shaman",
+    "Druid"
+   ],
+   "start_zone": "Mulgore",
+   "start_area": "Camp Narache",
+   "first_hub": "Bloodhoof Village",
+   "capital": "Thunder Bluff",
+   "racials": [
+    "Cultivation",
+    "Endurance",
+    "Plainsrunning",
+    "War Stomp"
+   ],
+   "notes": [
+    "Cultivation grows herbs without Herbalism"
+   ],
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "Troll": {
+   "faction": "Horde",
+   "classes": [
+    "Warrior",
+    "Hunter",
+    "Rogue",
+    "Priest",
+    "Shaman",
+    "Mage",
+    "Warlock"
+   ],
+   "start_zone": "Durotar",
+   "start_area": "Valley of Trials",
+   "first_hub": "Razor Hill",
+   "capital": "Orgrimmar",
+   "racials": [
+    "Beast Slaying",
+    "Berserking",
+    "Regeneration",
+    "Rapid Regeneration"
+   ],
+   "notes": [
+    "Troll Warlock is new in Forever",
+    "Seven classes, the widest Horde choice"
+   ],
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  },
+  "Windshaper Skyborne": {
+   "faction": "Horde",
+   "classes": [
+    "Warrior",
+    "Hunter",
+    "Rogue",
+    "Shaman",
+    "Druid"
+   ],
+   "start_zone": "Zephras Isle",
+   "start_area": "Thendal Village",
+   "first_hub": "Valanaar",
+   "capital": "Orgrimmar",
+   "racials": [
+    "Walk on Air",
+    "Skysight",
+    "Wind Blessed",
+    "Elemental Insight"
+   ],
+   "notes": [
+    "Needs the Skyborne Heroic Pack or higher",
+    "Zephras Isle covers levels 1-12",
+    "Leaves Zephras by skyship to Skywatcher Plateau in Mulgore"
+   ],
+   "capital_note": "No Skyborne capital; Valanaar is the hub",
+   "status": "beta",
+   "source": "egt-combos",
+   "racials_status": "unverified",
+   "racials_source": "wh-races"
+  }
+ }
+}

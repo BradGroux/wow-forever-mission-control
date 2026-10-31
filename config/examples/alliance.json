@@ -1,0 +1,33 @@
+{
+  "$schema": "../roster.schema.json",
+  "roster_name": "Example Alliance Roster",
+  "faction": "Alliance",
+  "ruleset": "Normal",
+  "launch": "2026-11-04",
+  "characters": [
+    {
+      "id": "aldric", "name": "Aldric", "race": "Human", "class": "Warrior",
+      "leveling_spec": "Arms", "endgame_spec": "Protection", "role": "Tank",
+      "professions": [
+        { "name": "Mining", "from": 1, "until": 60 },
+        { "name": "Blacksmithing", "from": 1 },
+        { "name": "Engineering", "from": 60 }
+      ]
+    },
+    {
+      "id": "elowen", "name": "Elowen", "race": "Night Elf", "class": "Druid",
+      "leveling_spec": "Feral", "endgame_spec": "Restoration", "role": "Healer",
+      "professions": [ { "name": "Herbalism" }, { "name": "Alchemy" } ]
+    },
+    {
+      "id": "brannoc", "name": "Brannoc", "race": "Dwarf", "class": "Hunter",
+      "leveling_spec": "Beast Mastery", "endgame_spec": "Marksmanship", "role": "Damage",
+      "professions": [ { "name": "Skinning" }, { "name": "Leatherworking" } ]
+    },
+    {
+      "id": "fizzwick", "name": "Fizzwick", "race": "Gnome", "class": "Warlock",
+      "leveling_spec": "Affliction", "endgame_spec": "Destruction", "role": "Damage",
+      "professions": [ { "name": "Tailoring" }, { "name": "Enchanting" } ]
+    }
+  ]
+}

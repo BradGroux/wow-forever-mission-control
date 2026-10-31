@@ -1,0 +1,6 @@
+---
+description: WoW Forever Legacy Mission Control repository instructions
+alwaysApply: true
+---
+
+Read and follow AGENTS.md at the repository root. It is the single source of instructions: the `./mc` CLI for every workflow (init, validate, generate, level, skill, check, import-addon, doctor, leakcheck), how to sync with upstream, and how to prepare an upstream pull request without leaking personal data. Never hand-edit generated files (`web/data/*.js`, `docs/examples/*`, `adapters/grokbot/mission-control.canvas.tsx`).

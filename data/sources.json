@@ -1,0 +1,110 @@
+{
+ "_about": "Sources cited by status/source fields across data/. Status values: blizzard = Blizzard post; beta = seen in the Forever beta or a Forever database; classic = Classic Era data not yet confirmed for Forever; unverified = conflicting or thin sources.",
+ "sources": {
+  "bz-starter": {
+   "title": "New Player's Starter Guide: Welcome to World of Warcraft: Forever",
+   "site": "news.blizzard.com",
+   "url": "https://news.blizzard.com/en-us/article/24315280/new-players-starter-guide-welcome-to-world-of-warcraft-forever"
+  },
+  "bz-dungeons": {
+   "title": "Explore the New Dungeons of World of Warcraft: Forever",
+   "site": "news.blizzard.com",
+   "url": "https://news.blizzard.com/en-us/article/24301455/explore-the-new-dungeons-of-world-of-warcraft-forever"
+  },
+  "bz-camp": {
+   "title": "Gather Around the Campfire in World of Warcraft: Forever",
+   "site": "news.blizzard.com",
+   "url": "https://news.blizzard.com/en-us/article/24301516/gather-around-the-campfire-in-world-of-warcraft-forever"
+  },
+  "wh-legacy": {
+   "title": "Legacy System Overview for Forever",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever/guide/legacy-system-overview-rewards"
+  },
+  "wh-races": {
+   "title": "All Racials and Available Class-Race Combinations",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever/guide/new-race-class-combinations"
+  },
+  "wh-dungeons": {
+   "title": "Dungeons Overview for Forever",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever/guide/dungeons-overview-locations-details"
+  },
+  "wh-bag": {
+   "title": "Cozy Sleeping Bag: Quests, Locations and Rewards",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever/guide/cozy-sleeping-bag-locations-rewards"
+  },
+  "wh-profs": {
+   "title": "Changes & Additions to Professions in WoW: Forever",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever/news/changes-and-additions-to-professions-in-world-of-warcraft-forever-382924"
+  },
+  "wh-pairings": {
+   "title": "WoW: Forever Profession Pairings by Class",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever/guide/wow-forever-profession-pairings-by-class-35082"
+  },
+  "wh-classq": {
+   "title": "Forever Class Quests",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever/quests/classes"
+  },
+  "egt-combos": {
+   "title": "WoW Forever race and class combinations: the full list",
+   "site": "endgametools.com",
+   "url": "https://endgametools.com/en/wow-forever/news/wow-forever-race-class-combinations"
+  },
+  "wft-zones": {
+   "title": "WoW Forever Starting Zones: Every Race",
+   "site": "wowforevertierlist.com",
+   "url": "https://wowforevertierlist.com/zones/starting-zones"
+  },
+  "bof-zones": {
+   "title": "WoW Forever Leveling Zones 1-60",
+   "site": "bindonforever.com",
+   "url": "https://bindonforever.com/leveling"
+  },
+  "mmo-newzones": {
+   "title": "WoW Forever New Zones",
+   "site": "mmonster.co",
+   "url": "https://mmonster.co/wow-forever/guides/leveling/new-zones"
+  },
+  "fm-dungeons": {
+   "title": "WoW Forever Dungeons by Level",
+   "site": "forevermastery.com",
+   "url": "https://forevermastery.com/en/dungeons"
+  },
+  "wcalc-classq": {
+   "title": "Class Quests — WoW Forever",
+   "site": "wowcalc.net",
+   "url": "https://wowcalc.net/en/forever/guides/class-quests"
+  },
+  "of-tier": {
+   "title": "Best Leveling Class in WoW Forever: Tier List 1-60",
+   "site": "onlyfarms.gg",
+   "url": "https://onlyfarms.gg/guides/wow-forever-best-leveling-classes/"
+  },
+  "codex-wl": {
+   "title": "Warlock Class Quests in WoW Forever",
+   "site": "wowforevercodex.com",
+   "url": "https://wowforevercodex.com/classes/warlock/quests"
+  },
+  "codex-dr": {
+   "title": "Druid Class Quests in WoW Forever",
+   "site": "wowforevercodex.com",
+   "url": "https://wowforevercodex.com/classes/druid/quests"
+  },
+  "wfw-rfc": {
+   "title": "Ragefire Chasm",
+   "site": "warcraftforever.wiki",
+   "url": "https://www.warcraftforever.wiki/wiki/Ragefire_Chasm"
+  },
+  "wft-horde": {
+   "title": "WoW Forever Horde Races",
+   "site": "wowforevertierlist.com",
+   "url": "https://wowforevertierlist.com/races/horde"
+  }
+ }
+}

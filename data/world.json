@@ -1,0 +1,1065 @@
+{
+ "_about": "Zones (Group Finder ranges, quest counts per faction), dungeons, transport and flight paths. Zone and Classic dungeon ranges are from beta data; the nine new dungeons are Blizzard's. Flight path lists are Classic data plus Forever's Riverglades hubs.",
+ "factions": {
+  "Alliance": {
+   "capitals": [
+    "Stormwind City",
+    "Ironforge",
+    "Darnassus"
+   ],
+   "supply_faction": "Azeroth Commerce Authority",
+   "starter_dungeon": "The Hall of Thanes",
+   "sleeping_bag_start": {
+    "zone": "Westfall",
+    "where": "Alexston Farmstead (37, 50)"
+   },
+   "battleground_reps": [
+    "Stormpike Guard",
+    "League of Arathor",
+    "Silverwing Sentinels",
+    "Theramore Expeditionary Force"
+   ]
+  },
+  "Horde": {
+   "capitals": [
+    "Orgrimmar",
+    "Undercity",
+    "Thunder Bluff"
+   ],
+   "supply_faction": "Durotar Supply and Logistics",
+   "starter_dungeon": "Ragefire Chasm",
+   "sleeping_bag_start": {
+    "zone": "The Barrens",
+    "where": "burnt tower south of Camp Taurajo (46, 74)"
+   },
+   "battleground_reps": [
+    "Frostwolf Clan",
+    "Defilers",
+    "Warsong Outriders",
+    "Darkspear Raiders"
+   ]
+  }
+ },
+ "zones": [
+  {
+   "name": "Mulgore",
+   "min": 1,
+   "max": 12,
+   "owner": "Horde",
+   "quests": {
+    "Alliance": null,
+    "Horde": 48
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Teldrassil",
+   "min": 1,
+   "max": 12,
+   "owner": "Alliance",
+   "quests": {
+    "Alliance": 48,
+    "Horde": null
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Dun Morogh",
+   "min": 1,
+   "max": 13,
+   "owner": "Alliance",
+   "quests": {
+    "Alliance": 45,
+    "Horde": null
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Tirisfal Glades",
+   "min": 1,
+   "max": 13,
+   "owner": "Horde",
+   "quests": {
+    "Alliance": null,
+    "Horde": 51
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Durotar",
+   "min": 1,
+   "max": 13,
+   "owner": "Horde",
+   "quests": {
+    "Alliance": null,
+    "Horde": 45
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Zephras Isle",
+   "min": 1,
+   "max": 13,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 87,
+    "Horde": 89
+   },
+   "new": true,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Elwynn Forest",
+   "min": 1,
+   "max": 14,
+   "owner": "Alliance",
+   "quests": {
+    "Alliance": 58,
+    "Horde": null
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "The Barrens",
+   "min": 10,
+   "max": 30,
+   "owner": "Horde",
+   "quests": {
+    "Alliance": null,
+    "Horde": 107
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Loch Modan",
+   "min": 11,
+   "max": 18,
+   "owner": "Alliance",
+   "quests": {
+    "Alliance": 46,
+    "Horde": null
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Darkshore",
+   "min": 12,
+   "max": 20,
+   "owner": "Alliance",
+   "quests": {
+    "Alliance": 77,
+    "Horde": null
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Westfall",
+   "min": 12,
+   "max": 21,
+   "owner": "Alliance",
+   "quests": {
+    "Alliance": 52,
+    "Horde": null
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Silverpine Forest",
+   "min": 12,
+   "max": 25,
+   "owner": "Horde",
+   "quests": {
+    "Alliance": null,
+    "Horde": 50
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Stonetalon Mountains",
+   "min": 13,
+   "max": 32,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 26,
+    "Horde": 33
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Redridge Mountains",
+   "min": 17,
+   "max": 27,
+   "owner": "Alliance",
+   "quests": {
+    "Alliance": 42,
+    "Horde": 2
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Duskwood",
+   "min": 18,
+   "max": 34,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 74,
+    "Horde": 6
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Hillsbrad Foothills",
+   "min": 18,
+   "max": 34,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 16,
+    "Horde": 39
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Wetlands",
+   "min": 18,
+   "max": 34,
+   "owner": "Alliance",
+   "quests": {
+    "Alliance": 63,
+    "Horde": null
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Ashenvale",
+   "min": 18,
+   "max": 34,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 48,
+    "Horde": 19
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Thousand Needles",
+   "min": 23,
+   "max": 40,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 36,
+    "Horde": 60
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Alterac Mountains",
+   "min": 28,
+   "max": 44,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 17,
+    "Horde": 5
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Arathi Highlands",
+   "min": 28,
+   "max": 44,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 30,
+    "Horde": 42
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Desolace",
+   "min": 28,
+   "max": 44,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 54,
+    "Horde": 52
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Stranglethorn Vale",
+   "min": 28,
+   "max": 50,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 94,
+    "Horde": 89
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Badlands",
+   "min": 33,
+   "max": 50,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 31,
+    "Horde": 23
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Swamp of Sorrows",
+   "min": 33,
+   "max": 50,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 15,
+    "Horde": 23
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Dustwallow Marsh",
+   "min": 33,
+   "max": 50,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 23,
+    "Horde": 35
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Riverglades",
+   "min": 36,
+   "max": 44,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": null,
+    "Horde": null
+   },
+   "new": true,
+   "status": "beta",
+   "source": "mmo-newzones",
+   "hubs": {
+    "Alliance": "Farholde Keep",
+    "Horde": "Rog'mar"
+   },
+   "note": "Group Finder lists 33-54; area levels 36-44"
+  },
+  {
+   "name": "The Hinterlands",
+   "min": 38,
+   "max": 54,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 15,
+    "Horde": 32
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Feralas",
+   "min": 38,
+   "max": 54,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 42,
+    "Horde": 34
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Tanaris",
+   "min": 38,
+   "max": 54,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 73,
+    "Horde": 75
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Blasted Lands",
+   "min": 43,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 17,
+    "Horde": 18
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Searing Gorge",
+   "min": 43,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 27,
+    "Horde": 20
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Azshara",
+   "min": 43,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 21,
+    "Horde": 30
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Un'Goro Crater",
+   "min": 45,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 41,
+    "Horde": 41
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Felwood",
+   "min": 46,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 28,
+    "Horde": 27
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Burning Steppes",
+   "min": 48,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 17,
+    "Horde": 8
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Western Plaguelands",
+   "min": 48,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 52,
+    "Horde": 52
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Eastern Plaguelands",
+   "min": 53,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 53,
+    "Horde": 58
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Silithus",
+   "min": 53,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 55,
+    "Horde": 55
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Winterspring",
+   "min": 53,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": 35,
+    "Horde": 32
+   },
+   "new": false,
+   "status": "beta",
+   "source": "bof-zones"
+  },
+  {
+   "name": "Mount Hyjal",
+   "min": 55,
+   "max": 60,
+   "owner": "Contested",
+   "quests": {
+    "Alliance": null,
+    "Horde": null
+   },
+   "new": true,
+   "status": "beta",
+   "source": "mmo-newzones",
+   "note": "Enter through Darkwhisper Gorge in Winterspring"
+  }
+ ],
+ "dungeons": [
+  {
+   "name": "Ragefire Chasm",
+   "min": 13,
+   "max": 18,
+   "zone": "Orgrimmar",
+   "new": false,
+   "access": "Horde",
+   "spelunker": "Novice",
+   "status": "beta",
+   "source": "wfw-rfc",
+   "note": "Novice Spelunker takes Ragefire Chasm or The Hall of Thanes"
+  },
+  {
+   "name": "The Hall of Thanes",
+   "min": 13,
+   "max": 18,
+   "zone": "Ironforge",
+   "new": true,
+   "access": "Alliance",
+   "spelunker": "Novice",
+   "status": "blizzard",
+   "source": "bz-dungeons",
+   "note": "Beneath Ironforge; Horde must travel into Alliance territory"
+  },
+  {
+   "name": "Ruins of Lordaeron",
+   "min": 15,
+   "max": 20,
+   "zone": "Tirisfal Glades",
+   "new": true,
+   "access": "Horde",
+   "spelunker": "Novice",
+   "status": "blizzard",
+   "source": "bz-dungeons",
+   "note": "Above the Undercity; Alliance must travel into Horde territory"
+  },
+  {
+   "name": "Wailing Caverns",
+   "min": 15,
+   "max": 24,
+   "zone": "The Barrens",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Novice",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "The Deadmines",
+   "min": 17,
+   "max": 26,
+   "zone": "Westfall",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Novice",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Shadowfang Keep",
+   "min": 20,
+   "max": 30,
+   "zone": "Silverpine Forest",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Novice",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Excavation Site: Wetlands",
+   "min": 24,
+   "max": 29,
+   "zone": "Wetlands",
+   "new": true,
+   "access": "Both",
+   "spelunker": "Novice",
+   "status": "blizzard",
+   "source": "bz-dungeons"
+  },
+  {
+   "name": "Blackfathom Deeps",
+   "min": 24,
+   "max": 32,
+   "zone": "Ashenvale",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Experienced",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "The Stockade",
+   "min": 24,
+   "max": 32,
+   "zone": "Stormwind City",
+   "new": false,
+   "access": "Alliance",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "City of Dalaran",
+   "min": 28,
+   "max": 33,
+   "zone": "Alterac Mountains",
+   "new": true,
+   "access": "Both",
+   "spelunker": "Experienced",
+   "status": "blizzard",
+   "source": "bz-dungeons"
+  },
+  {
+   "name": "Gnomeregan",
+   "min": 29,
+   "max": 38,
+   "zone": "Dun Morogh",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Experienced",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Razorfen Kraul",
+   "min": 29,
+   "max": 38,
+   "zone": "The Barrens",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Experienced",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Scarlet Monastery",
+   "min": 30,
+   "max": 46,
+   "zone": "Tirisfal Glades",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Experienced",
+   "status": "beta",
+   "source": "fm-dungeons",
+   "note": "Graveyard, Library, Armory and Cathedral each count for Experienced Spelunker"
+  },
+  {
+   "name": "The Drowned City",
+   "min": 35,
+   "max": 40,
+   "zone": "Stranglethorn Vale",
+   "new": true,
+   "access": "Both",
+   "spelunker": "Experienced",
+   "status": "blizzard",
+   "source": "bz-dungeons",
+   "note": "Not playable in beta"
+  },
+  {
+   "name": "Razorfen Downs",
+   "min": 37,
+   "max": 46,
+   "zone": "The Barrens",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Krol'dok Stronghold",
+   "min": 40,
+   "max": 45,
+   "zone": "Riverglades",
+   "new": true,
+   "access": "Both",
+   "spelunker": "Experienced",
+   "status": "blizzard",
+   "source": "bz-dungeons",
+   "note": "Not playable in beta"
+  },
+  {
+   "name": "Uldaman",
+   "min": 41,
+   "max": 51,
+   "zone": "Badlands",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Zul'Farrak",
+   "min": 44,
+   "max": 54,
+   "zone": "Tanaris",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Maraudon",
+   "min": 46,
+   "max": 55,
+   "zone": "Desolace",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Alcaz Prison",
+   "min": 48,
+   "max": 53,
+   "zone": "Dustwallow Marsh",
+   "new": true,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "blizzard",
+   "source": "bz-dungeons",
+   "note": "Not playable in beta"
+  },
+  {
+   "name": "Sunken Temple",
+   "min": 50,
+   "max": 60,
+   "zone": "Swamp of Sorrows",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Blackrock Depths",
+   "min": 52,
+   "max": 60,
+   "zone": "Burning Steppes",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Dire Maul",
+   "min": 54,
+   "max": 60,
+   "zone": "Feralas",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Blackmaw Hold",
+   "min": 55,
+   "max": 60,
+   "zone": "Azshara",
+   "new": true,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "blizzard",
+   "source": "bz-dungeons",
+   "note": "Not playable in beta"
+  },
+  {
+   "name": "Lower Blackrock Spire",
+   "min": 55,
+   "max": 60,
+   "zone": "Burning Steppes",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Upper Blackrock Spire",
+   "min": 55,
+   "max": 60,
+   "zone": "Burning Steppes",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Scholomance",
+   "min": 58,
+   "max": 60,
+   "zone": "Western Plaguelands",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Stratholme",
+   "min": 58,
+   "max": 60,
+   "zone": "Eastern Plaguelands",
+   "new": false,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "beta",
+   "source": "fm-dungeons"
+  },
+  {
+   "name": "Shaper's Terrace",
+   "min": 58,
+   "max": 60,
+   "zone": "Un'Goro Crater",
+   "new": true,
+   "access": "Both",
+   "spelunker": "Master",
+   "status": "blizzard",
+   "source": "bz-dungeons",
+   "note": "Not playable in beta"
+  }
+ ],
+ "transport": [
+  {
+   "kind": "tram",
+   "from": "Stormwind City",
+   "to": "Ironforge",
+   "faction": "Alliance",
+   "status": "classic",
+   "note": "Deeprun Tram"
+  },
+  {
+   "kind": "boat",
+   "from": "Menethil Harbor",
+   "to": "Auberdine",
+   "faction": "Alliance",
+   "status": "classic"
+  },
+  {
+   "kind": "boat",
+   "from": "Menethil Harbor",
+   "to": "Theramore Isle",
+   "faction": "Alliance",
+   "status": "classic"
+  },
+  {
+   "kind": "boat",
+   "from": "Auberdine",
+   "to": "Rut'theran Village",
+   "faction": "Alliance",
+   "status": "classic"
+  },
+  {
+   "kind": "zeppelin",
+   "from": "Orgrimmar",
+   "to": "Undercity",
+   "faction": "Horde",
+   "status": "classic"
+  },
+  {
+   "kind": "zeppelin",
+   "from": "Orgrimmar",
+   "to": "Grom'gol Base Camp",
+   "faction": "Horde",
+   "status": "classic"
+  },
+  {
+   "kind": "zeppelin",
+   "from": "Undercity",
+   "to": "Grom'gol Base Camp",
+   "faction": "Horde",
+   "status": "classic"
+  },
+  {
+   "kind": "boat",
+   "from": "Booty Bay",
+   "to": "Ratchet",
+   "faction": "Both",
+   "status": "classic"
+  },
+  {
+   "kind": "boat",
+   "from": "Steamwheedle Port",
+   "to": "Powderfuse Port",
+   "faction": "Both",
+   "status": "beta",
+   "note": "Tanaris to Riverglades"
+  },
+  {
+   "kind": "skyship",
+   "from": "Valanaar",
+   "to": "Skywatcher Plateau",
+   "faction": "Horde",
+   "status": "unverified",
+   "note": "Windshaper Skyborne leave Zephras Isle for Mulgore; beta report"
+  },
+  {
+   "kind": "boat",
+   "from": "Menethil Harbor",
+   "to": "Southshore",
+   "faction": "Alliance",
+   "status": "unverified",
+   "note": "Reported by beta players; not in Classic"
+  }
+ ],
+ "flight_paths": {
+  "Alliance": [
+   "Stormwind City",
+   "Ironforge",
+   "Darnassus",
+   "Rut'theran Village",
+   "Thelsamar",
+   "Sentinel Hill",
+   "Lakeshire",
+   "Darkshire",
+   "Menethil Harbor",
+   "Southshore",
+   "Refuge Pointe",
+   "Aerie Peak",
+   "Auberdine",
+   "Astranaar",
+   "Stonetalon Peak",
+   "Nijel's Point",
+   "Theramore Isle",
+   "Thalanaar",
+   "Feathermoon Stronghold",
+   "Talrendis Point",
+   "Chillwind Camp",
+   "Morgan's Vigil",
+   "Nethergarde Keep",
+   "Farholde Keep"
+  ],
+  "Horde": [
+   "Orgrimmar",
+   "Thunder Bluff",
+   "Undercity",
+   "The Crossroads",
+   "The Sepulcher",
+   "Tarren Mill",
+   "Hammerfall",
+   "Kargath",
+   "Grom'gol Base Camp",
+   "Stonard",
+   "Splintertree Post",
+   "Zoram'gar Outpost",
+   "Sun Rock Retreat",
+   "Freewind Post",
+   "Shadowprey Village",
+   "Brackenwall Village",
+   "Camp Mojache",
+   "Valormok",
+   "Bloodvenom Post",
+   "Revantusk Village",
+   "Flame Crest",
+   "Rog'mar"
+  ],
+  "Both": [
+   "Booty Bay",
+   "Ratchet",
+   "Gadgetzan",
+   "Everlook",
+   "Cenarion Hold",
+   "Marshal's Refuge",
+   "Light's Hope Chapel",
+   "Thorium Point"
+  ]
+ },
+ "flight_paths_status": "classic",
+ "rulesets": [
+  "Normal",
+  "PvP",
+  "Roleplay",
+  "Hardcore"
+ ]
+}

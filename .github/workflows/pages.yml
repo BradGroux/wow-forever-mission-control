@@ -1,0 +1,41 @@
+name: Deploy page to GitHub Pages
+
+# Upstream deploys the example roster as a demo. In your copy, turn this on by
+# creating the repository variable MC_PAGES = true (Settings > Secrets and
+# variables > Actions > Variables) and setting Settings > Pages > Source to
+# "GitHub Actions". See docs/hosting.md.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.repository == 'BradGroux/wow-forever-mission-control' || vars.MC_PAGES == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Build (uses config/roster.json when present, else the example)
+        run: ./mc generate
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v5

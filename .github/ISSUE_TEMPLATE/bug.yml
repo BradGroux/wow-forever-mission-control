@@ -1,0 +1,31 @@
+name: Bug report
+description: The page, the mc CLI, or the addon misbehaves
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: part
+    attributes:
+      label: Part
+      options: [Web page, mc CLI, LegacyTracker addon, Workflows / CI, Grok Bot canvas, Docs]
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Include the command you ran and its full output, or the browser and steps.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "Windows 11, Python 3.12, Chrome 130"
+  - type: markdown
+    attributes:
+      value: Please remove character names or account details you don't want public before submitting.
