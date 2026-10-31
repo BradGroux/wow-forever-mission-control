@@ -495,15 +495,23 @@
   function fromAddon(text) {
     var all = parseLua(text), names = Object.keys(all).filter(function (k) { return all[k] && typeof all[k] === "object" && all[k].chars; });
     var dbName = names.indexOf("LegacyTrackerDB") >= 0 ? "LegacyTrackerDB" : names[0];
-    var db = all[dbName] || {}, chars = db.chars || {}, byName = {}, best = {}, extra = { levels: {}, skills: {} }, skipped = [], stale = [];
-    CHARS.forEach(function (c) { byName[c.name.toLowerCase()] = c.id; });
+    var db = all[dbName] || {}, chars = db.chars || {}, roster = {}, m = {}, cands = {}, best = {}, extra = { levels: {}, skills: {} }, skipped = [], stale = [], ambiguous = [];
+    CHARS.forEach(function (c) { roster[c.name.toLowerCase()] = c.id; });
     var map = Object.assign({}, (P.progress && P.progress.map) || {}, S.map || {}), have = S.levels || {};
-    Object.keys(map).forEach(function (k) { byName[k.toLowerCase()] = map[k]; });
+    Object.keys(map).forEach(function (k) { m[k.toLowerCase()] = map[k]; });
+    // precedence: explicit Realm-Name mapping, explicit bare-name mapping, roster name; same-rank duplicates are ambiguous
     Object.keys(chars).forEach(function (key) {
       var c = chars[key]; if (!c || typeof c !== "object") return;
-      var nm = String(c.name || key.split("-").pop()).toLowerCase(), id = byName[nm] || byName[key.toLowerCase()];
-      if (!id) { skipped.push(c.name || key); return; }
-      if (!best[id] || (c.lastSeen || 0) > (best[id].lastSeen || 0)) best[id] = c;
+      var k = key.toLowerCase(), nm = String(c.name || key.split("-").pop()).toLowerCase(), id, rank;
+      if (m[k]) { id = m[k]; rank = 0; } else if (m[nm]) { id = m[nm]; rank = 1; } else if (roster[nm]) { id = roster[nm]; rank = 2; }
+      else { skipped.push(c.name || key); return; }
+      (cands[id] = cands[id] || []).push({ rank: rank, key: key, c: c });
+    });
+    Object.keys(cands).forEach(function (id) {
+      var top = Math.min.apply(null, cands[id].map(function (x) { return x.rank; }));
+      var pick = cands[id].filter(function (x) { return x.rank === top; });
+      if (pick.length > 1) { ambiguous.push(id + " (" + pick.map(function (x) { return x.key; }).sort().join(", ") + ")"); return; }
+      best[id] = pick[0].c;
     });
     Object.keys(best).forEach(function (id) {
       var c = best[id], xm = c.xpMax || 0, rs = c.rested || 0;
@@ -516,7 +524,7 @@
       extra.skills[id] = {};
       Object.keys(c.professions || {}).forEach(function (p) { var v = c.professions[p]; if (v && v.rank != null) extra.skills[id][p] = v.rank; });
     });
-    return { extra: extra, db: dbName, matched: Object.keys(best).length, stale: stale, skipped: skipped };
+    return { extra: extra, db: dbName, matched: Object.keys(best).length, stale: stale, skipped: skipped, ambiguous: ambiguous };
   }
   function importJSON() {
     var ta = h("textarea", { "aria-label": "Progress JSON or LegacyTracker.lua" });
@@ -528,7 +536,8 @@
           try {
             if (/^\s*[A-Za-z_]\w*\s*=\s*\{/.test(ta.value) && /\[?"?chars"?\]?\s*=/.test(ta.value)) {
               var r = fromAddon(ta.value);
-              if (!r.matched) throw new Error("No roster characters in LegacyTracker.lua" + (r.skipped.length ? ": " + r.skipped.join(", ") : ""));
+              if (!r.matched) throw new Error("No roster characters in LegacyTracker.lua" + (r.skipped.length ? ": " + r.skipped.join(", ") : "") + (r.ambiguous.length ? "; ambiguous: " + r.ambiguous.join("; ") + " (map one Realm-Name with ./mc map)" : ""));
+              if (r.ambiguous.length) window.alert("LegacyTracker: skipped ambiguous " + r.ambiguous.join("; ") + ". Map one Realm-Name with ./mc map.");
               if (r.stale.length === r.matched) throw new Error("This LegacyTracker.lua is not newer than what is already saved");
               S = merge(S, r.extra);
             } else { var m = ta.value.match(/\{[\s\S]*\}/); S = merge(S, JSON.parse(m ? m[0] : ta.value)); }

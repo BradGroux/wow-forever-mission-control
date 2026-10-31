@@ -69,12 +69,13 @@ It has no window, no minimap button and no chat messages. Type `/ltrack` to prin
 ./mc scrub-addon "<path>\LegacyTracker.lua"     # writes progress-share-YYYY-MM-DD.json
 ```
 
-It contains only the roster characters' level, rested state, zone and profession skill. The keeper merges it with `./mc progress merge progress-share-YYYY-MM-DD.json`; it never changes anyone's ticked checklist items. No Python? Import the file on the page and use **Export progress**: the page keeps only roster characters, so its export is just as clean.
+It matches characters with your saved `./mc map` entries, the same way an import does, but leaves the mappings out of the file. It contains only the roster characters' level, rested state, zone and profession skill. The keeper merges it with `./mc progress merge progress-share-YYYY-MM-DD.json`; it never changes anyone's ticked checklist items. No Python? Import the file on the page and use **Export progress**: the page keeps only roster characters, so its export is just as clean.
 
 ### Rules the import follows
 
 - Characters are matched by in-game name. Characters not on the roster are skipped and listed.
 - A renamed character, or one whose in-game name differs from the roster: `./mc map <roster-id> <InGameName>`, then import again.
+- The same name on two realms: map the one you mean with its full key, `./mc map <roster-id> <Realm-Name>`. Until you do, both are skipped as ambiguous. A `Realm-Name` mapping wins over a bare-name mapping, which wins over the roster name.
 - An import never lowers a level and skips data that isn't newer than the last import. `--force` overrides both.
 - Rested state: **Full** at 1.5 levels of rested XP (the cap), **Partial** above zero, **Empty** otherwise.
 - A renamed copy of the addon (different SavedVariables table name) imports with `--db <TableName>`, for example `./mc import-addon OldTracker.lua --db OldTrackerDB`. The page's **Import progress** finds the table on its own.

@@ -582,6 +582,40 @@ def rested_label(rested, xp_max):
     return "Full" if rested / xp_max >= 1.495 else "Partial"
 
 
+def match_addon_chars(cfg, mapping, chars):
+    """Pick one addon record per roster character.
+    Precedence: an explicit Realm-Name mapping, then an explicit bare-name mapping, then the roster name.
+    Two records for one character at the same precedence (same name on two realms) are ambiguous and skipped."""
+    roster = {ch["name"].lower(): ch["id"] for ch in cfg["characters"]}
+    m = {str(k).lower(): v for k, v in mapping.items()}
+    cands, out = {}, []
+    for key, c in chars.items():
+        if not isinstance(c, dict):
+            continue
+        k = str(key).lower()
+        nm = str(c.get("name") or str(key).rsplit("-", 1)[-1]).lower()
+        if k in m:
+            cid, rank = m[k], 0
+        elif nm in m:
+            cid, rank = m[nm], 1
+        elif nm in roster:
+            cid, rank = roster[nm], 2
+        else:
+            out.append(f"skip {key}: not on the roster (./mc map CHAR {c.get('name', key)})")
+            continue
+        cands.setdefault(cid, []).append((rank, str(key), c))
+    best = {}
+    for cid, lst in cands.items():
+        top = min(r for r, _, _ in lst)
+        pick = [(key, c) for r, key, c in lst if r == top]
+        if len(pick) > 1:
+            keys = ", ".join(sorted(key for key, _ in pick))
+            out.append(f"skip {cid}: ambiguous, {keys} all match; map one with ./mc map {cid} Realm-Name")
+            continue
+        best[cid] = pick[0][1]
+    return best, out
+
+
 def import_addon(cfg, p, text, force=False, db_name="LegacyTrackerDB"):
     sv = __import__("savedvars").parse(text)
     if db_name not in sv:
@@ -589,19 +623,7 @@ def import_addon(cfg, p, text, force=False, db_name="LegacyTrackerDB"):
         raise SystemExit(f"{db_name} not found in the file (tables with characters: {found}); use --db NAME for a renamed copy of the addon")
     db = sv.get(db_name) or {}
     chars = db.get("chars") or {}
-    byname = {ch["name"].lower(): ch["id"] for ch in cfg["characters"]}
-    byname.update({k.lower(): v for k, v in (p.get("map") or {}).items()})
-    best, out = {}, []
-    for key, c in chars.items():
-        if not isinstance(c, dict):
-            continue
-        nm = str(c.get("name") or str(key).rsplit("-", 1)[-1]).lower()
-        cid = byname.get(nm) or byname.get(str(key).lower())
-        if not cid:
-            out.append(f"skip {key}: not on the roster (./mc map CHAR {c.get('name', key)})")
-            continue
-        if cid not in best or (c.get("lastSeen") or 0) > (best[cid].get("lastSeen") or 0):
-            best[cid] = c
+    best, out = match_addon_chars(cfg, p.get("map") or {}, chars)
     for cid, c in sorted(best.items()):
         old = p["levels"].setdefault(cid, {})
         seen = c.get("lastSeen") or 0
@@ -627,9 +649,11 @@ def import_addon(cfg, p, text, force=False, db_name="LegacyTrackerDB"):
     return p, out
 
 
-def scrub_addon(cfg, text, db_name="LegacyTrackerDB"):
+def scrub_addon(cfg, text, db_name="LegacyTrackerDB", mapping=None):
     """Roster characters' level, rested, zone and skills from a LegacyTracker file, nothing else (no gold, time played or other characters)."""
-    p, lines = import_addon(cfg, empty_progress(cfg), text, True, db_name)
+    base = empty_progress(cfg)
+    base["map"] = dict((load_progress(cfg).get("map") or {}) if mapping is None else mapping)
+    p, lines = import_addon(cfg, base, text, True, db_name)
     found = {l.split(":")[0] for l in lines if not l.startswith("skip ")}
     out = {"version": 1, "roster": p["roster"], "updated": today(),
            "levels": {k: v for k, v in p["levels"].items() if k in found},

@@ -471,6 +471,47 @@ class Safety(unittest.TestCase):
         self.assertNotIn("</script", tsx)
         self.assertNotIn("<!--", tsx)
 
+    def addon(self, *recs):
+        body = ",\n".join('["%s"] = {name="%s", level=%d, lastSeen=%d}' % r for r in recs)
+        return "LegacyTrackerDB = {\n chars = {\n" + body + "\n }\n}\n"
+
+    def test_realm_mapping_beats_bare_name(self):
+        # #51
+        p = mc.empty_progress(EX)
+        p["map"]["OtherRealm-Aldric"] = "brannoc"
+        mc.import_addon(EX, p, self.addon(("OtherRealm-Aldric", "Aldric", 50, 1800000000)))
+        self.assertEqual(p["levels"]["brannoc"]["level"], 50)
+        self.assertNotEqual(p["levels"]["aldric"].get("level"), 50)
+
+    def test_realm_mapping_and_home_realm(self):
+        p = mc.empty_progress(EX)
+        p["map"]["OtherRealm-Aldric"] = "brannoc"
+        mc.import_addon(EX, p, self.addon(("OtherRealm-Aldric", "Aldric", 50, 1800000000), ("Home-Aldric", "Aldric", 20, 1700000000)))
+        self.assertEqual((p["levels"]["brannoc"]["level"], p["levels"]["aldric"]["level"]), (50, 20))
+
+    def test_bare_alias_still_works(self):
+        p = mc.empty_progress(EX)
+        p["map"]["Renamed"] = "aldric"
+        mc.import_addon(EX, p, self.addon(("Realm-Renamed", "Renamed", 12, 1800000000)))
+        self.assertEqual(p["levels"]["aldric"]["level"], 12)
+
+    def test_same_name_two_realms_is_ambiguous(self):
+        p = mc.empty_progress(EX)
+        _, out = mc.import_addon(EX, p, self.addon(("A-Aldric", "Aldric", 50, 1800000000), ("B-Aldric", "Aldric", 20, 1700000000)))
+        self.assertTrue(any("ambiguous" in x for x in out))
+        self.assertNotIn(p["levels"]["aldric"].get("level"), (50, 20))
+
+    def test_scrub_uses_saved_mappings(self):
+        # #52: renamed and realm-qualified mappings select characters; nothing else leaks
+        text = self.addon(("Realm-Renamed", "Renamed", 12, 1800000000), ("Other-Elowen", "Elowen", 30, 1800000000), ("Realm-Stranger", "Stranger", 40, 1800000000))
+        out, lines = mc.scrub_addon(EX, text, mapping={"Renamed": "aldric", "Other-Elowen": "brannoc"})
+        self.assertEqual(out["levels"]["aldric"]["level"], 12)
+        self.assertEqual(out["levels"]["brannoc"]["level"], 30)
+        self.assertNotIn("elowen", out["levels"])
+        blob = json.dumps(out)
+        for bad in ("Stranger", "Realm", "Other-", "map", "checks", "notes"):
+            self.assertNotIn(bad, blob)
+
     def test_scrub_addon_keeps_only_roster_progress(self):
         sample = open(os.path.join(ROOT, "addon", "test", "SavedVariables.sample.lua"), encoding="utf-8").read()
         sample = sample.replace('["level"] = 12,', '["level"] = 12,\n\t\t\t["money"] = 999999,\n\t\t\t["timePlayed"] = 77777,', 1)
