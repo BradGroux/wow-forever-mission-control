@@ -10,7 +10,8 @@ import type { ReactNode, KeyboardEvent } from "grok/canvas";
 type Plan = any;
 type Rested = "Empty" | "Partial" | "Full";
 type Saved = { version: number; roster: string; updated: string; checks: Record<string, boolean>; levels: Record<string, { level: number; rested: Rested; updated: string }>; skills: Record<string, Record<string, number>>; map: Record<string, string>; notes: string };
-type Item = { id: string; text: string; tag?: string; detail?: string };
+type Item = { id: string; text: string; tag?: string; detail?: string; status?: string };
+const STATUS: Record<string, string> = { unverified: "Unverified", classic: "Classic data", beta: "Seen in beta" };
 
 // ROSTER-START
 // ROSTER-END
@@ -150,7 +151,7 @@ function Checklist({ items, color }: { items: Item[]; color: string }) {
             style={{ display: "flex", gap: 10, padding: "7px 0", borderTop: i > 0 ? `1px solid ${t.border.subtle}` : "none", cursor: "pointer" }}>
             <span style={{ width: 18, height: 18, borderRadius: 5, border: `1.5px solid ${on ? color : SV.b1}`, background: on ? color : "transparent", color: "#111", fontSize: 12, fontWeight: 700, textAlign: "center", lineHeight: "15px", flex: "0 0 auto" }}>{on ? "✓" : ""}</span>
             <span style={{ flex: 1, color: on ? SV.t3 : SV.t1, textDecorationLine: on ? "line-through" : "none" }}>{L(it.text)}{it.detail ? <div style={{ fontSize: 12, color: SV.t3 }}>{L(it.detail)}</div> : null}</span>
-            {it.tag ? <span style={{ fontSize: 11, color: SV.t2 }}>{it.tag}</span> : null}
+            {it.tag ? <span style={{ fontSize: 11, color: SV.t2 }}>{it.status && STATUS[it.status] ? `${it.tag} · ${STATUS[it.status]}` : it.tag}</span> : null}
           </div>
         );
       })}
@@ -208,6 +209,16 @@ function Timeline({ selected, onSelect }: { selected: string; onSelect: (id: str
 }
 
 type Tab = "today" | "levels" | "profs" | "legacy" | "reference";
+
+// unconfirmed class milestones and racial abilities, as short status labels (Reference tab)
+const openQuestions = (): string[][] => {
+  const out: string[][] = []; const races: Record<string, boolean> = {};
+  CHARS.forEach((c: any) => {
+    c.milestones.forEach((m: any) => { if (m.status === "unverified" || m.status === "classic") out.push([m.name, c.class, STATUS[m.status]]); });
+    if ((c.racials_status === "unverified" || c.racials_status === "classic") && !races[c.race]) { races[c.race] = true; out.push([`${c.race} racials: ${c.racials.join(", ")}`, c.race, STATUS[c.racials_status]]); }
+  });
+  return out;
+};
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("today");
@@ -284,6 +295,7 @@ export default function App() {
       )}
       {tab === "reference" && (
         <Fragment>
+          {openQuestions().length > 0 && <Section heading="Open questions"><Table columns={["Item", "Applies to", "Data"]} rows={openQuestions().map((q: string[]) => [L(q[0]), q[1], q[2]])} /></Section>}
           {PLAN.validation.warnings.length > 0 && <Section heading="Roster notes"><Table columns={["Note"]} rows={LT(PLAN.validation.warnings.map((w: string) => [w]))} /></Section>}
           <Section heading="Sources"><LinkCards links={Object.values(PLAN.sources).map((s: any) => ({ title: s.title, site: s.site, href: s.url }))} /></Section>
         </Fragment>

@@ -215,6 +215,7 @@
           onclick: function (e) { if (e.target.tagName !== "A") toggle(); }, onkeydown: function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(); } } },
           h("span", { class: "box", "aria-hidden": "true" }, on ? "✓" : ""),
           h("span", { class: "tx" }, L(it.text), it.detail ? h("span", { class: "dt" }, L(it.detail)) : null),
+          it.status ? statusTag(it.status) : null,
           it.tag ? h("span", { class: "tg" }, it.tag) : null);
       })));
   }
@@ -360,7 +361,7 @@
         [h("button", { type: "button", class: "ob", onclick: exportJSON }, "Export progress"), h("button", { type: "button", class: "ob", onclick: importJSON }, "Import progress")]),
       sec("Levels", levelRows(true)),
       h("div", { class: "grid2 gap-top" },
-        panel(charHead(c, "Next milestones"), next.length ? steps(next.map(function (m) { return { title: m.name, sub: "Level " + m.level + " · " + m.kind, tag: statusTag(m.status) }; })) : h("p", { class: "q" }, "All milestones reached")),
+        panel(charHead(c, "Next milestones"), next.length ? steps(next.map(function (m) { return { title: m.name, sub: "Level " + m.level + " · " + m.kind + (m.note ? " · " + m.note : ""), tag: statusTag(m.status) }; })) : h("p", { class: "q" }, "All milestones reached")),
         panel(charHead(c, b.from + "–" + b.to + " to-do"), checklist(b.tasks[c.id] || [], c.color))),
       sec("Road to 60", h("div", { class: "hscroll" }, timeline()))
     ];
@@ -388,8 +389,8 @@
   function vClasses() {
     return [h("div", { class: "grid2" }, CHARS.map(function (c) {
       return panel(charHead(c, c.race + " " + c["class"] + " · " + c.leveling_spec + " → " + c.endgame_spec),
-        steps(c.milestones.map(function (m) { return { title: m.name, sub: "Level " + m.level + " · " + m.kind, tag: statusTag(m.status) }; })),
-        c.racials && c.racials.length ? h("p", { class: "q" }, "Racials: ", c.racials.map(function (r, i) { return [i ? ", " : "", wl(r)]; })) : null);
+        steps(c.milestones.map(function (m) { return { title: m.name, sub: "Level " + m.level + " · " + m.kind + (m.note ? " · " + m.note : ""), tag: statusTag(m.status) }; })),
+        c.racials && c.racials.length ? h("p", { class: "q" }, "Racials: ", c.racials.map(function (r, i) { return [i ? ", " : "", wl(r)]; }), " ", statusTag(c.racials_status)) : null);
     }))];
   }
   function vProfs() {
@@ -462,9 +463,11 @@
   function vReference() {
     var v = P.validation, unv = [];
     CHARS.forEach(function (c) { c.milestones.forEach(function (m) { if (m.status === "unverified" || m.status === "classic") unv.push([m.name, c["class"], m.status]); }); });
+    var seenRace = {};
+    CHARS.forEach(function (c) { if ((c.racials_status === "unverified" || c.racials_status === "classic") && !seenRace[c.race]) { seenRace[c.race] = 1; unv.push([c.race + " racials", c.race, c.racials_status]); } });
     return [
       v.warnings.length || v.info.length ? sec("Roster notes", bullets(v.warnings.concat(v.info))) : null,
-      sec("Open questions", table(["Item", "Class", "Data"], unv.map(function (u) { return [u[0], u[1], statusTag(u[2])]; }))),
+      sec("Open questions", table(["Item", "Applies to", "Data"], unv.map(function (u) { return [u[0], u[1], statusTag(u[2])]; }))),
       sec("Sources", h("ul", { class: "bul" }, Object.keys(P.sources).map(function (k) {
         var x = P.sources[k]; return h("li", null, h("a", { href: x.url, target: "_blank", rel: "noopener noreferrer" }, x.title), h("span", { class: "q" }, " · " + x.site));
       })))

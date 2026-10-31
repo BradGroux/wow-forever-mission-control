@@ -11,6 +11,11 @@ Alliance · Normal · launch 2026-11-04
 | Brannoc | [Dwarf](https://www.wowhead.com/forever/race=3) | [Hunter](https://www.wowhead.com/forever/class=3) | Beast Mastery | Marksmanship | [Skinning](https://www.wowhead.com/forever/skill=393), [Leatherworking](https://www.wowhead.com/forever/skill=165) | [Dun Morogh](https://www.wowhead.com/forever/zone=1) |
 | Fizzwick | [Gnome](https://www.wowhead.com/forever/race=7) | [Warlock](https://www.wowhead.com/forever/class=9) | Affliction | Destruction | [Tailoring](https://www.wowhead.com/forever/skill=197), [Enchanting](https://www.wowhead.com/forever/skill=333) | [Dun Morogh](https://www.wowhead.com/forever/zone=1) |
 
+- Aldric ([Human](https://www.wowhead.com/forever/race=1)) racials: [Will to Survive](https://www.wowhead.com/forever/spell=1259718), [Perception](https://www.wowhead.com/forever/spell=20600), [Ruthless](https://www.wowhead.com/forever/spell=20597), [The Human Spirit](https://www.wowhead.com/forever/spell=20598) `Unverified`
+- Elowen ([Night Elf](https://www.wowhead.com/forever/race=4)) racials: [Elune's Light](https://www.wowhead.com/forever/spell=1259799), [Wisp Spirit](https://www.wowhead.com/forever/spell=20585), [Quickness](https://www.wowhead.com/forever/spell=20582), [Shadowmeld](https://www.wowhead.com/forever/spell=20580) `Unverified`
+- Brannoc ([Dwarf](https://www.wowhead.com/forever/race=3)) racials: [Find Treasure](https://www.wowhead.com/forever/spell=2481), [Big Game Hunter](https://www.wowhead.com/forever/spell=1259721), [Artisan's Precision](https://www.wowhead.com/forever/search?q=Artisan%27s%20Precision), [Stoneform](https://www.wowhead.com/forever/spell=20594) `Unverified`
+- Fizzwick ([Gnome](https://www.wowhead.com/forever/race=7)) racials: [Eureka!](https://www.wowhead.com/forever/spell=1259823), [Expansive Mind](https://www.wowhead.com/forever/spell=20591), [Engineering Specialization](https://www.wowhead.com/forever/spell=20593), [Escape Artist](https://www.wowhead.com/forever/spell=20589) `Unverified`
+
 ## Craft coverage
 
 | Craft | Characters |
@@ -60,16 +65,16 @@ Zones: [Darkshore](https://www.wowhead.com/forever/zone=148), [Westfall](https:/
 - [ ] Run [The Hall of Thanes](https://www.wowhead.com/forever/zone=16919) `Dungeon`
 
 **Elowen** (Night Elf Druid)
-- [ ] [Bear Form](https://www.wowhead.com/forever/spell=5487) at 10 `Class`
+- [ ] [Bear Form](https://www.wowhead.com/forever/spell=5487) at 10 `Class`: Also Growl and Maul `Seen in beta`
 - [ ] [Cure Poison](https://www.wowhead.com/forever/spell=8946) at 14 `Class`
 - [ ] Run [The Hall of Thanes](https://www.wowhead.com/forever/zone=16919) `Dungeon`
 
 **Brannoc** (Dwarf Hunter)
-- [ ] [Taming the Beast](https://www.wowhead.com/forever/quest=6102) at 10 `Class`
+- [ ] [Taming the Beast](https://www.wowhead.com/forever/quest=6102) at 10 `Class`: [Tame Beast](https://www.wowhead.com/forever/spell=1515) and Call Pet at 10 `Seen in beta`
 - [ ] Run [The Hall of Thanes](https://www.wowhead.com/forever/zone=16919) `Dungeon`
 
 **Fizzwick** (Gnome Warlock)
-- [ ] [The Binding](https://www.wowhead.com/forever/quest=1689) at 10 `Class`
+- [ ] [The Binding](https://www.wowhead.com/forever/quest=1689) at 10 `Class`: Summon Voidwalker `Seen in beta`
 - [ ] Run [The Hall of Thanes](https://www.wowhead.com/forever/zone=16919) `Dungeon`
 
 ## Levels 16-22
@@ -208,30 +213,30 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Duskwood]
 Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](https://www.wowhead.com/forever/zone=440), [Desolace](https://www.wowhead.com/forever/zone=405), [Feralas](https://www.wowhead.com/forever/zone=357), [Badlands](https://www.wowhead.com/forever/zone=3), [Arathi Highlands](https://www.wowhead.com/forever/zone=45)
 
 **Aldric** (Human Warrior)
-- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
+- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Warrior](https://www.wowhead.com/forever/class=1) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
 
 **Elowen** (Night Elf Druid)
-- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
+- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Druid](https://www.wowhead.com/forever/class=11) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
 
 **Brannoc** (Dwarf Hunter)
-- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
+- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Hunter](https://www.wowhead.com/forever/class=3) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
 
 **Fizzwick** (Gnome Warlock)
 - [ ] [Summon Felsteed](https://www.wowhead.com/forever/spell=5784) at 40 `Class`
-- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
+- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Warlock](https://www.wowhead.com/forever/class=9) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
@@ -283,7 +288,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://w
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 150 `Legacy`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 225 `Legacy`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 300 `Legacy`
-- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`: 1,000 gold `Seen in beta`
 - [ ] Master [Warrior](https://www.wowhead.com/forever/class=1) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -296,7 +301,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://w
 - [ ] Run [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) `Dungeon`
 
 **Elowen** (Night Elf Druid)
-- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`: 1,000 gold `Seen in beta`
 - [ ] Master [Druid](https://www.wowhead.com/forever/class=11) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -310,7 +315,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://w
 
 **Brannoc** (Dwarf Hunter)
 - [ ] [Rhok'delar](https://www.wowhead.com/forever/item=18713) at 60 `Class`
-- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`: 1,000 gold `Seen in beta`
 - [ ] Master [Hunter](https://www.wowhead.com/forever/class=3) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -324,7 +329,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://w
 
 **Fizzwick** (Gnome Warlock)
 - [ ] [Summon Dreadsteed](https://www.wowhead.com/forever/spell=23161) at 60 `Class`
-- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`: 1,000 gold `Seen in beta`
 - [ ] Master [Warlock](https://www.wowhead.com/forever/class=9) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
