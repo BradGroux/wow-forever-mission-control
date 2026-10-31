@@ -92,7 +92,9 @@ def config_path(arg=None):
 
 
 def load_config(path):
-    return normalize(load_json(path))
+    cfg = normalize(load_json(path))
+    cfg["_path"] = path
+    return cfg
 
 
 def normalize(cfg):
@@ -306,7 +308,7 @@ def build_plan(cfg, g, progress=None):
         links[n] = {"url": url, "direct": direct}
     prog = progress or empty_progress(cfg)
     return {
-        "schema": SCHEMA_VERSION, "generated_from": os.path.basename(cfg.get("_path", "roster.json")),
+        "schema": SCHEMA_VERSION, "generated_from": os.path.relpath(cfg.get("_path", CONFIG), ROOT).replace(os.sep, "/"),
         "roster": {"name": cfg.get("roster_name", "Legacy Mission Control"), "faction": fac, "ruleset": cfg["ruleset"],
                    "launch": cfg.get("launch", LAUNCH), "key": roster_key(cfg)},
         "characters": chars, "brackets": brackets, "account": account,
