@@ -188,14 +188,15 @@ end
 
 SLASH_LEGACYTRACKER1 = "/ltrack"
 SlashCmdList.LEGACYTRACKER = function(msg)
-  local arg = (msg or ""):lower():match("^%s*extras%s+(%a+)")
-  if arg == "on" or arg == "off" then
-    getDB().settings.extras = (arg == "on")
-    if arg == "off" then
+  local opt = (msg or ""):lower():match("^%s*extras%s+(%a+)")
+  if opt == "on" or opt == "off" then
+    getDB().settings.extras = (opt == "on")
+    if opt == "off" then
       for _, c in pairs(LegacyTrackerDB.chars) do c.money, c.timePlayed, c.timePlayedLevel = nil, nil, nil end
     end
-    print("|cff33ff99LegacyTracker|r: gold and time played " .. (arg == "on" and "will be recorded" or "are not recorded (cleared)"))
-    if arg == "on" then playedRequested = false; requestPlayed() end
+    local state = opt == "on" and "will be recorded" or "are not recorded (cleared)"
+    print("|cff33ff99LegacyTracker|r: gold and time played " .. state)
+    if opt == "on" then playedRequested = false; requestPlayed() end
     return
   end
   if not inCombat() then pcall(snapshot, true) end
