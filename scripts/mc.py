@@ -10,7 +10,7 @@
   ./mc check ID [ID ...] [--off]         tick (or untick) checklist items by id
   ./mc progress merge FILE|-             merge an exported progress JSON (web "Export" button)
   ./mc progress show                     print progress
-  ./mc import-addon SAVEDVARS.lua        merge LegacyTracker SavedVariables into progress
+  ./mc import-addon SAVEDVARS.lua [--db NAME]  merge LegacyTracker SavedVariables into progress
   ./mc map CHAR INGAME_NAME              map an in-game name to a roster character for import-addon
   ./mc serve [--port 8000]               serve web/ on localhost
   ./mc ids [TEXT] [--open]               list checklist ids (filter by text; --open hides ticked ones)
@@ -347,6 +347,8 @@ def load_progress(cfg, path=PROGRESS):
             p["levels"].setdefault(cid, {}).update(lv)
         p["updated"] = got.get("updated", "")
         p["notes"] = got.get("notes", "")
+        for k, v in got.items():  # keep keys added by other tools or newer versions
+            p.setdefault(k, v)
     return p
 
 
@@ -376,6 +378,9 @@ def merge_progress(p, new):
             mine[prof] = max(int(v or 0), int(mine.get(prof) or 0))
     if new.get("notes"):
         p["notes"] = new["notes"]
+    for k, v in new.items():  # keep keys added by other tools or newer versions
+        if k not in ("version", "roster", "updated", "checks", "levels", "skills", "map", "notes"):
+            p[k] = v
     p["updated"] = new.get("updated") or today()
     return p
 
@@ -386,9 +391,12 @@ def rested_label(rested, xp_max):
     return "Full" if rested / xp_max >= 1.495 else "Partial"
 
 
-def import_addon(cfg, p, text, force=False):
+def import_addon(cfg, p, text, force=False, db_name="LegacyTrackerDB"):
     sv = __import__("savedvars").parse(text)
-    db = sv.get("LegacyTrackerDB") or {}
+    if db_name not in sv:
+        found = ", ".join(k for k in sv if isinstance(sv[k], dict) and "chars" in sv[k]) or "none"
+        raise SystemExit(f"{db_name} not found in the file (tables with characters: {found}); use --db NAME for a renamed copy of the addon")
+    db = sv.get(db_name) or {}
     chars = db.get("chars") or {}
     byname = {ch["name"].lower(): ch["id"] for ch in cfg["characters"]}
     byname.update({k.lower(): v for k, v in (p.get("map") or {}).items()})
@@ -636,7 +644,7 @@ def main(argv=None):
     s = sub.add_parser("skill"); s.add_argument("char"); s.add_argument("profession"); s.add_argument("skill", type=int); s.add_argument("--config")
     s = sub.add_parser("check"); s.add_argument("ids", nargs="+"); s.add_argument("--off", action="store_true"); s.add_argument("--config")
     s = sub.add_parser("progress"); s.add_argument("action", choices=["merge", "show", "reset"]); s.add_argument("file", nargs="?"); s.add_argument("--config")
-    s = sub.add_parser("import-addon"); s.add_argument("savedvars"); s.add_argument("--force", action="store_true"); s.add_argument("--dry-run", action="store_true"); s.add_argument("--config")
+    s = sub.add_parser("import-addon"); s.add_argument("savedvars"); s.add_argument("--force", action="store_true"); s.add_argument("--dry-run", action="store_true"); s.add_argument("--db", default="LegacyTrackerDB", help="SavedVariables table name (for a renamed copy of the addon)"); s.add_argument("--config")
     s = sub.add_parser("map"); s.add_argument("char"); s.add_argument("ingame"); s.add_argument("--config")
     s = sub.add_parser("serve"); s.add_argument("--port", type=int, default=8000)
     sub.add_parser("doctor")
@@ -742,7 +750,7 @@ def main(argv=None):
                 p = merge_progress(p, new)
                 print(f"merged: {sum(1 for v in p['checks'].values() if v)} checks, levels " + ", ".join(f"{k} {v.get('level')}" for k, v in p["levels"].items()))
         elif a.cmd == "import-addon":
-            p, lines = import_addon(cfg, p, open(a.savedvars, encoding="utf-8", errors="replace").read(), a.force)
+            p, lines = import_addon(cfg, p, open(a.savedvars, encoding="utf-8", errors="replace").read(), a.force, a.db)
             print("\n".join(lines))
             if a.dry_run: return 0
         p["updated"] = today()

@@ -112,6 +112,15 @@ class Progress(unittest.TestCase):
         self.assertEqual(p["levels"]["elowen"]["level"], 9)
         self.assertEqual(p["skills"]["elowen"]["Alchemy"], 40)
 
+    def test_unknown_keys_survive(self):
+        p = mc.empty_progress(EX)
+        mc.merge_progress(p, {"moves": {"x": 1}})
+        self.assertEqual(p["moves"], {"x": 1})
+        with tempfile.TemporaryDirectory() as d:
+            f = os.path.join(d, "p.json")
+            mc.save_progress(p, f)
+            self.assertEqual(mc.load_progress(EX, f)["moves"], {"x": 1})
+
     def test_import_addon_sample(self):
         sample = open(os.path.join(ROOT, "addon", "test", "SavedVariables.sample.lua"), encoding="utf-8").read()
         p = mc.empty_progress(EX)
@@ -122,6 +131,14 @@ class Progress(unittest.TestCase):
         # second import is a no-op
         _, lines2 = mc.import_addon(EX, p, sample)
         self.assertTrue(all("unchanged" in x for x in lines2))
+
+    def test_import_addon_db_name(self):
+        sample = open(os.path.join(ROOT, "addon", "test", "SavedVariables.sample.lua"), encoding="utf-8").read()
+        renamed = sample.replace("LegacyTrackerDB", "MyTrackerDB")
+        with self.assertRaises(SystemExit):
+            mc.import_addon(EX, mc.empty_progress(EX), renamed)
+        p, _ = mc.import_addon(EX, mc.empty_progress(EX), renamed, db_name="MyTrackerDB")
+        self.assertEqual(p["levels"]["aldric"]["level"], 12)
 
     def test_import_addon_mapping(self):
         sample = open(os.path.join(ROOT, "addon", "test", "SavedVariables.sample.lua"), encoding="utf-8").read()
