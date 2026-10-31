@@ -250,6 +250,28 @@ class RosterSize(unittest.TestCase):
         self.assertEqual(len(mc.interview({k: v for k, v in ans.items() if k != "count"})["characters"]), 4)
 
 
+class InitFaction(unittest.TestCase):
+    def test_faction_case_and_space(self):
+        for f in ("alliance", "ALLIANCE", " Horde "):
+            cfg = mc.interview({"faction": f, "ruleset": "normal", "count": "1"})
+            self.assertIn(cfg["faction"], ("Alliance", "Horde"))
+            self.assertEqual(cfg["ruleset"], "Normal")
+            self.assertEqual(mc.validate(mc.normalize(cfg), G)[0], [])
+
+    def test_bad_faction_no_crash(self):
+        cfg = mc.interview({"faction": "", "count": "1"})
+        self.assertTrue(mc.validate(cfg, G)[0])
+
+
+class SpelunkerNames(unittest.TestCase):
+    def test_tier_criteria_match_world(self):
+        names = {d["name"] for d in G.world["dungeons"]}
+        for tv in G.legacy["challenges"]["dungeon"]["tiers"].values():
+            for crit in tv["criteria"]:
+                for alt in crit.split(" or "):
+                    self.assertTrue(alt in names or alt.split(": ")[0] in names, alt)
+
+
 class LegacyTracking(unittest.TestCase):
     def test_account_reaches_full_total(self):
         p = mc.build_plan(EX, G)
