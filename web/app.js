@@ -73,16 +73,21 @@
     if (!extra) return out;
     var st = extra.stamp || {}, bst = out.stamp, bday = Date.parse(base.updated || "") || 0;
     function wins(key, t) { return st[key] != null && st[key] >= Math.max(bst[key] || 0, t || 0); }
+    // a stored page edit newer than unstamped incoming data is kept (stale exports can't undo it)
+    var eday = Date.parse(extra.updated || "") || 0;
+    function held(key, t) { return st[key] == null && bst[key] != null && bst[key] > (t || eday); }
     var ek = extra.checks || {}, keys = {};
     Object.keys(ek).forEach(function (k) { keys[k] = 1; });
     Object.keys(st).forEach(function (k) { if (k.slice(0, 2) === "c:") keys[k.slice(2)] = 1; });
     Object.keys(keys).forEach(function (k) {
+      if (held("c:" + k)) return;
       if (st["c:" + k] != null) { if (wins("c:" + k, bday)) { if (ek[k]) out.checks[k] = true; else delete out.checks[k]; } }
       else if (ek[k]) out.checks[k] = true; else delete out.checks[k];
     });
     Object.keys(extra.levels || {}).forEach(function (id) {
       var o = out.levels[id] || {}, n = extra.levels[id] || {};
       if (st["l:" + id] != null) { if (wins("l:" + id, timeOf(o))) out.levels[id] = Object.assign({}, o, n); return; }
+      if (held("l:" + id, timeOf(n))) return;
       if (n.lastSeenEpoch && o.lastSeenEpoch && n.lastSeenEpoch <= o.lastSeenEpoch) return;
       if ((n.level || 0) >= (o.level || 0)) out.levels[id] = Object.assign({}, o, n);
     });
@@ -90,10 +95,11 @@
       out.skills[id] = out.skills[id] || {};
       Object.keys(extra.skills[id]).forEach(function (p) {
         var v = +extra.skills[id][p] || 0, k = "s:" + id + ":" + p;
+        if (held(k)) return;
         out.skills[id][p] = st[k] != null ? (wins(k, bday) ? v : +out.skills[id][p] || 0) : Math.max(v, +out.skills[id][p] || 0);
       });
     });
-    if (st.n != null ? wins("n", bday) : extra.notes) out.notes = extra.notes || "";
+    if (st.n != null ? wins("n", bday) : extra.notes && !held("n")) out.notes = extra.notes || "";
     Object.assign(out.map, extra.map || {});
     Object.keys(st).forEach(function (k) { out.stamp[k] = Math.max(st[k], out.stamp[k] || 0); });
     Object.keys(extra).forEach(function (k) { if (!(k in out)) out[k] = extra[k]; });
