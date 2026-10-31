@@ -58,7 +58,20 @@ assert(SLASH_LEGACYTRACKER1 == "/ltrack")
 SlashCmdList.LEGACYTRACKER("")
 assert(#printed == 2, "/ltrack prints one line per character"); for _, l in ipairs(printed) do io.stderr:write(l, "\n") end
 local c = LegacyTrackerDB.chars["ExampleRealm-Aldric"]
-assert(c.level == 12 and c.levels[12] and c.xp == 900 and c.timePlayed == 3600 and c.professions.Mining.rank == 45)
+assert(c.level == 12 and c.levels[12] and c.xp == 900 and c.professions.Mining.rank == 45)
+-- privacy: gold and time played are off by default
+assert(c.money == nil and c.timePlayed == nil, "gold or time played recorded without opt-in")
+assert(LegacyTrackerDB.chars["ExampleRealm-Elowen"].money == nil)
+-- opt in: both are recorded
+SlashCmdList.LEGACYTRACKER("extras on"); run()
+assert(#printed == 3, "extras on prints one confirmation")
+local e = LegacyTrackerDB.chars["ExampleRealm-Elowen"]
+fire("PLAYER_MONEY"); run()
+assert(e.money == 12345 and e.timePlayed == 3600, "extras on did not record gold and time played")
+assert(ChatFrame1:IsEventRegistered("TIME_PLAYED_MSG"), "chat frame not re-registered after extras on")
+-- opt out: cleared everywhere
+SlashCmdList.LEGACYTRACKER("extras off")
+assert(e.money == nil and e.timePlayed == nil and LegacyTrackerDB.settings.extras == false, "extras off did not clear")
 
 -- Serialize like the WoW client does.
 local function ser(v, ind)

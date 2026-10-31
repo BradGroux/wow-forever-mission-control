@@ -1,5 +1,6 @@
 -- LegacyTracker: silent per-character level, XP, rested and profession recorder. No UI, no chat output except /ltrack.
 -- Data: LegacyTrackerDB.chars["Realm-Name"] (account-wide SavedVariables).
+-- Gold and time played are NOT recorded unless you opt in with /ltrack extras on.
 local ADDON = ...
 local DB_VERSION = 1
 
@@ -34,7 +35,12 @@ local function getDB()
   local db = LegacyTrackerDB
   db.version = DB_VERSION
   db.chars = db.chars or {}
+  db.settings = db.settings or {}
   return db
+end
+
+local function extrasOn()
+  return LegacyTrackerDB and LegacyTrackerDB.settings and LegacyTrackerDB.settings.extras == true
 end
 
 local function professions()
@@ -97,7 +103,11 @@ local function snapshot(skills)
   if fn(IsResting) then c.resting = IsResting() and true or false end
   c.zone = fn(GetRealZoneText) and GetRealZoneText() or nil
   c.subzone = fn(GetSubZoneText) and GetSubZoneText() or nil
-  if fn(GetMoney) then c.money = plain(GetMoney()) or c.money end
+  if db.settings.extras == true then
+    if fn(GetMoney) then c.money = plain(GetMoney()) or c.money end
+  else
+    c.money, c.timePlayed, c.timePlayedLevel = nil, nil, nil
+  end
   if skills or not c.professions then c.professions = professions() end
   c.lastSeen = time()
 end
@@ -123,7 +133,7 @@ local function unmute()
   wipe(muted)
 end
 local function requestPlayed()
-  if playedRequested or not fn(RequestTimePlayed) or inCombat() then return end
+  if playedRequested or not extrasOn() or not fn(RequestTimePlayed) or inCombat() then return end
   if not (C_Timer and fn(C_Timer.After)) then return end
   playedRequested = true
   for i = 1, (NUM_CHAT_WINDOWS or 10) do
@@ -154,7 +164,7 @@ f:SetScript("OnEvent", function(_, event, ...)
     local total, thisLevel = ...
     f:UnregisterEvent("TIME_PLAYED_MSG")
     local c = key and LegacyTrackerDB and LegacyTrackerDB.chars[key]
-    if c then c.timePlayed, c.timePlayedLevel = total, thisLevel end
+    if c and extrasOn() then c.timePlayed, c.timePlayedLevel = total, thisLevel end
     if C_Timer and fn(C_Timer.After) then C_Timer.After(0, unmute) else unmute() end
   elseif event == "PLAYER_REGEN_ENABLED" then
     if dirty then schedule(1) end
@@ -177,7 +187,17 @@ for _, e in ipairs({
 end
 
 SLASH_LEGACYTRACKER1 = "/ltrack"
-SlashCmdList.LEGACYTRACKER = function()
+SlashCmdList.LEGACYTRACKER = function(msg)
+  local arg = (msg or ""):lower():match("^%s*extras%s+(%a+)")
+  if arg == "on" or arg == "off" then
+    getDB().settings.extras = (arg == "on")
+    if arg == "off" then
+      for _, c in pairs(LegacyTrackerDB.chars) do c.money, c.timePlayed, c.timePlayedLevel = nil, nil, nil end
+    end
+    print("|cff33ff99LegacyTracker|r: gold and time played " .. (arg == "on" and "will be recorded" or "are not recorded (cleared)"))
+    if arg == "on" then playedRequested = false; requestPlayed() end
+    return
+  end
   if not inCombat() then pcall(snapshot, true) end
   local chars = LegacyTrackerDB and LegacyTrackerDB.chars or {}
   local keys = {}

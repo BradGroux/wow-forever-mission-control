@@ -3,7 +3,7 @@ PY ?= python3
 MC = $(PY) mc
 PORT ?= 8000
 
-.PHONY: help import init validate generate plan serve doctor test addon-test lint leakcheck check sync
+.PHONY: share help import init validate generate plan serve doctor test addon-test lint leakcheck check sync
 
 help:            ## list targets
 	@grep -E '^[a-z-]+:.*##' Makefile | sed 's/:.*##/\t/'
@@ -26,6 +26,9 @@ serve:           ## open the page at http://localhost:$(PORT)
 import:          ## import addon data: make import SV="/path/to/LegacyTracker.lua"
 	$(MC) import-addon "$(SV)"
 	$(MC) generate
+
+share:           ## shareable addon data: make share SV="/path/to/LegacyTracker.lua"
+	$(MC) scrub-addon "$(SV)"
 
 doctor:          ## CI checks
 	$(MC) doctor

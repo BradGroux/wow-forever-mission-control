@@ -31,6 +31,7 @@ git remote -v
 | Tick or untick items | `./mc check <id> [<id> ...] [--off]` |
 | Merge a page export | `./mc progress merge <file.json>` (or `-` for stdin) |
 | Import addon data | `./mc import-addon <path/to/LegacyTracker.lua> [--dry-run] [--force]` |
+| Make a shareable copy of addon data | `./mc scrub-addon <path/to/LegacyTracker.lua> [-o file.json]` (roster characters only; no gold or time played) |
 | Map an in-game name | `./mc map <char> <InGameName>` |
 | Show progress | `./mc progress show` |
 | Serve the page | `./mc serve --port 8000` |
@@ -55,7 +56,7 @@ Help the user cover all six crafts (Alchemy, Blacksmithing, Enchanting, Engineer
 
 ### Progress updates
 
-Users report progress in plain language ("Aldric is 23 with full rested, Elowen hit 150 Alchemy, we finished Deadmines"). Translate to commands: `./mc level`, `./mc skill`, `./mc ids deadmines` then `./mc check <ids>`. If the user uploads a page export, use `./mc progress merge`. If they upload `LegacyTracker.lua`, use `./mc import-addon` (try `--dry-run` first and show the result). Then `./mc generate`.
+Users report progress in plain language ("Aldric is 23 with full rested, Elowen hit 150 Alchemy, we finished Deadmines"). Translate to commands: `./mc level`, `./mc skill`, `./mc ids deadmines` then `./mc check <ids>`. If the user uploads a page export, use `./mc progress merge`. If they upload `LegacyTracker.lua`, use `./mc import-addon` (try `--dry-run` first and show the result). Then `./mc generate`. If a user wants to send their addon data to someone else, use `./mc scrub-addon` and send its output, never the raw `LegacyTracker.lua`.
 
 The addon reports names exactly as in game. If a name does not match the roster (for example a renamed character), run `./mc map <char> <InGameName>` and import again.
 

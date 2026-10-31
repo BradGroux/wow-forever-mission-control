@@ -151,6 +151,41 @@ class Progress(unittest.TestCase):
         self.assertEqual(p["levels"]["aldric"]["level"], 12)
 
 
+class Safety(unittest.TestCase):
+    EVIL = "Test</script><script>alert(1)</script><!-- & \u2028"
+
+    def test_plan_js_cannot_break_out_of_script(self):
+        c = cfg_with(roster_name=self.EVIL, chars={0: {"display": self.EVIL, "notes": self.EVIL}})
+        plan = mc.build_plan(c, G)
+        js = mc.web_js(plan)
+        for bad in ("</script", "<script", "<!--", "\u2028"):
+            self.assertNotIn(bad, js)
+        self.assertEqual(json.loads(js.split("window.MC_PLAN = ", 1)[1].rstrip().rstrip(";"))["roster"]["name"], self.EVIL)
+
+    def test_canvas_cannot_break_out(self):
+        c = cfg_with(roster_name=self.EVIL)
+        plan = mc.build_plan(c, G)
+        plan["progress"] = mc.empty_progress(c)
+        plan["progress"]["notes"] = self.EVIL
+        tsx = mc.canvas_tsx(plan)
+        self.assertNotIn("</script", tsx)
+        self.assertNotIn("<!--", tsx)
+
+    def test_scrub_addon_keeps_only_roster_progress(self):
+        sample = open(os.path.join(ROOT, "addon", "test", "SavedVariables.sample.lua"), encoding="utf-8").read()
+        sample = sample.replace('["level"] = 12,', '["level"] = 12,\n\t\t\t["money"] = 999999,\n\t\t\t["timePlayed"] = 77777,', 1)
+        out, _ = mc.scrub_addon(EX, sample)
+        text = json.dumps(out)
+        for bad in ("money", "999999", "timePlayed", "77777", "ExampleRealm", "checks"):
+            self.assertNotIn(bad, text)
+        self.assertEqual(out["levels"]["aldric"]["level"], 12)
+        p = mc.empty_progress(EX)
+        p["checks"]["keep-me"] = True
+        mc.merge_progress(p, out)
+        self.assertTrue(p["checks"]["keep-me"], "a scrubbed share must not wipe ticks")
+        self.assertEqual(p["levels"]["aldric"]["level"], 12)
+
+
 class CLI(unittest.TestCase):
     def run_mc(self, *args):
         return subprocess.run([sys.executable, os.path.join(ROOT, "mc"), *args], capture_output=True, text=True, cwd=ROOT)

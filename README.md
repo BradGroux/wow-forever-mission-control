@@ -103,7 +103,7 @@ Everything works by hand:
 
 ## The LegacyTracker addon
 
-[addon/LegacyTracker](addon/LegacyTracker) is a tiny, silent addon (Interface 16001) that works with any character names. It has no UI and prints nothing except when you type `/ltrack`. It records level, XP, rested XP, zone, time played and profession skill for each character on the account. Install it into `World of Warcraft\_forever_\Interface\AddOns\`, play, then import `WTF\Account\<ACCOUNT>\SavedVariables\LegacyTracker.lua` on the page or with `./mc import-addon`. Full steps: [docs/addon.md](docs/addon.md).
+[addon/LegacyTracker](addon/LegacyTracker) is a tiny, silent addon (Interface 16001) that works with any character names. It has no UI and prints nothing except when you type `/ltrack`. It records level, XP, rested XP, zone and profession skill for each character on the account; gold and time played only if you opt in. To share with your group, send `./mc scrub-addon` output, not the raw file. Install it into `World of Warcraft\_forever_\Interface\AddOns\`, play, then import `WTF\Account\<ACCOUNT>\SavedVariables\LegacyTracker.lua` on the page or with `./mc import-addon`. Full steps: [docs/addon.md](docs/addon.md).
 
 ## Staying up to date
 
