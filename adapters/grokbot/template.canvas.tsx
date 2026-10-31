@@ -68,10 +68,16 @@ const loadChecks = (): Record<string, boolean> => {
   try { const s = store()?.getItem(KEY); return { ...SAVED.checks, ...(s ? JSON.parse(s) : {}) }; } catch { return { ...SAVED.checks }; }
 };
 let CHECKS: Record<string, boolean> = loadChecks();
+// edit stamps (ms) for this session's ticks and unticks, so an export carries tombstones the page and CLI honor
+const loadStamps = (): Record<string, number> => {
+  try { const s = store()?.getItem(KEY + ":stamp"); return s ? JSON.parse(s) : {}; } catch { return {}; }
+};
+let STAMPS: Record<string, number> = loadStamps();
 const listeners = new Set<() => void>();
 const setCheck = (k: string, v: boolean): void => {
   CHECKS = { ...CHECKS, [k]: v };
-  try { store()?.setItem(KEY, JSON.stringify(CHECKS)); } catch { /* session only */ }
+  STAMPS = { ...STAMPS, ["c:" + k]: Date.now() };
+  try { store()?.setItem(KEY, JSON.stringify(CHECKS)); store()?.setItem(KEY + ":stamp", JSON.stringify(STAMPS)); } catch { /* session only */ }
   listeners.forEach((f: () => void) => f());
 };
 function useChecks(): Record<string, boolean> {
@@ -84,7 +90,11 @@ const exportProgress = (): string => {
   Object.keys(CHECKS).sort().forEach((k: string) => { if (CHECKS[k]) checks[k] = true; });
   const d = new Date();
   const p2 = (n: number): string => String(n).padStart(2, "0");
-  return JSON.stringify({ ...SAVED, updated: `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`, checks }, null, 2);
+  // an untick is exported as a stamped false so an additive import (the web page) removes the tick too
+  Object.keys(STAMPS).forEach((k: string) => { const id = k.slice(2); if (!CHECKS[id]) checks[id] = false; });
+  const stamp: Record<string, number> = { ...((SAVED as any).stamp || {}) };
+  Object.keys(STAMPS).forEach((k: string) => { stamp[k] = Math.max(STAMPS[k], stamp[k] || 0); });
+  return JSON.stringify({ ...SAVED, updated: `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`, checks, stamp }, null, 2);
 };
 function CopyProgress() {
   useChecks();

@@ -451,6 +451,88 @@ class ProgressSafety(unittest.TestCase):
         self.assertFalse(os.path.exists(mc.PROGRESS) and "level\": 7" in open(mc.PROGRESS, encoding="utf-8").read())
 
 
+class ProgressProtocol(unittest.TestCase):
+    EXP = os.path.join(ROOT, "config", "examples", "alliance.json")
+
+    def cli(self, p, *args):
+        """Run an mc progress command against p in memory; returns the saved progress."""
+        from unittest import mock
+        saved = {}
+        with mock.patch.object(mc, "load_progress", lambda cfg, path=None: p), \
+             mock.patch.object(mc, "save_progress", lambda q, path=None: saved.update(q)), \
+             mock.patch.object(mc, "backup_progress", lambda path=None: None):
+            mc.main([*args, "--config", self.EXP])
+        return saved
+
+    def test_cli_untick_beats_older_page_stamp(self):
+        # #50: a later ./mc check --off survives an older page export of the same tick
+        t0 = mc.now_ms() - 60000
+        p = mc.empty_progress(EX)
+        p["checks"]["a"] = True; p["stamp"] = {"c:a": t0}
+        q = self.cli(p, "check", "a", "--off", "--force")
+        self.assertGreater(q["stamp"]["c:a"], t0)
+        mc.merge_progress(q, {"updated": mc.today(), "checks": {"a": True}, "stamp": {"c:a": t0}})
+        self.assertNotIn("a", q["checks"])
+        # a genuinely later page edit still wins
+        mc.merge_progress(q, {"checks": {"a": True}, "stamp": {"c:a": q["stamp"]["c:a"] + 1000}})
+        self.assertTrue(q["checks"]["a"])
+
+    def test_cli_level_and_skill_stamped(self):
+        p = mc.empty_progress(EX)
+        p["levels"]["aldric"] = {"level": 30, "rested": "Full", "lastSeenEpoch": 1700000000, "updated": "2023-11-14", "source": "LegacyTracker"}
+        q = self.cli(p, "level", "aldric", "28")
+        self.assertIn("l:aldric", q["stamp"])
+        # an older unstamped addon share (newer than the old addon data, older than the correction) can't undo it
+        mc.merge_progress(q, {"levels": {"aldric": {"level": 30, "lastSeenEpoch": 1700000500, "updated": "2023-11-14"}}})
+        self.assertEqual(q["levels"]["aldric"]["level"], 28)
+        q = self.cli(q, "skill", "aldric", "mining", "100")
+        self.assertIn("s:aldric:Mining", q["stamp"])
+        mc.merge_progress(q, {"skills": {"aldric": {"Mining": 150}}, "updated": "2023-11-14"})
+        self.assertEqual(q["skills"]["aldric"]["Mining"], 100)
+
+    def test_addon_import_respects_later_manual_level(self):
+        p = mc.empty_progress(EX)
+        p["stamp"] = {"l:aldric": 1800000000 * 1000}
+        text = 'LegacyTrackerDB = { chars = { ["R-Aldric"] = {name="Aldric", level=40, lastSeen=1700000000} } }'
+        _, out = mc.import_addon(EX, p, text)
+        self.assertTrue(any("later manual" in x for x in out))
+        self.assertNotEqual(p["levels"]["aldric"].get("level"), 40)
+
+    def test_merge_skips_stale_addon_record(self):
+        # #55
+        p = mc.empty_progress(EX)
+        p["levels"]["aldric"] = {"level": 20, "rested": "Full", "lastSeenEpoch": 200, "updated": "2026-11-07"}
+        mc.merge_progress(p, {"levels": {"aldric": {"level": 20, "rested": "Empty", "lastSeenEpoch": 100, "updated": "2026-11-06"}}})
+        self.assertEqual((p["levels"]["aldric"]["rested"], p["levels"]["aldric"]["lastSeenEpoch"]), ("Full", 200))
+        mc.merge_progress(p, {"levels": {"aldric": {"level": 20, "rested": "Empty", "lastSeenEpoch": 200}}})
+        self.assertEqual(p["levels"]["aldric"]["rested"], "Full", "equal epoch is not newer")
+        mc.merge_progress(p, {"levels": {"aldric": {"level": 20, "rested": "Partial", "lastSeenEpoch": 300}}})
+        self.assertEqual(p["levels"]["aldric"]["rested"], "Partial", "a newer same-level snapshot updates")
+        mc.merge_progress(p, {"levels": {"aldric": {"level": 21, "updated": "2026-11-08"}}})
+        self.assertEqual(p["levels"]["aldric"]["level"], 21, "records with no addon time follow the level rule")
+
+    def test_progress_errors(self):
+        # #54
+        self.assertEqual(mc.progress_errors({"levels": {"aldric": {"level": 12, "rested": "Partial"}}, "skills": {"aldric": {"Mining": 45}}}), [])
+        self.assertEqual(mc.progress_errors({"version": 1, "roster": "x", "updated": "2026-11-06", "checks": {"a": True, "b": False}, "map": {}, "stamp": {"c:a": 1}}), [])
+        for bad, frag in ((["x"], "JSON object"), ({"levels": {"aldric": {"level": 1, "updated": "2026-11-06", "rested": {}}}}, "rested"),
+                          ({"levels": []}, "levels: must be an object"), ({"levels": {"aldric": {"level": 61}}}, "1-60"),
+                          ({"levels": {"aldric": {"level": "12"}}}, "1-60"), ({"skills": {"aldric": {"Mining": 400}}}, "0-300"),
+                          ({"checks": {"a": "yes"}}, "checks.a"), ({"version": 2}, "version"), ({"stamp": {"c:a": "x"}}, "stamp")):
+            errs = mc.progress_errors(bad)
+            self.assertTrue(any(frag in e for e in errs), (bad, errs))
+
+    def test_cli_merge_rejects_invalid_without_saving(self):
+        p = mc.empty_progress(EX)
+        with tempfile.TemporaryDirectory() as t:
+            f = os.path.join(t, "bad.json")
+            mc.write_json(f, {"levels": {"aldric": {"level": 1, "updated": "2026-11-06", "rested": {}}}})
+            with self.assertRaises(SystemExit) as cm:
+                self.cli(p, "progress", "merge", f)
+            self.assertIn("rested", str(cm.exception.code))
+        self.assertEqual(p["levels"]["aldric"]["rested"], "Empty")
+
+
 class Safety(unittest.TestCase):
     EVIL = "Test</script><script>alert(1)</script><!-- & \u2028"
 

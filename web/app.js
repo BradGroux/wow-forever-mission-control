@@ -107,10 +107,47 @@
     return out;
   }
   function touch(key) { S.stamp = S.stamp || {}; S.stamp[key] = Date.now(); }
+  // Field-specific problems in a progress blob (same rules as ./mc progress merge). With fix, bad fields are dropped in place.
+  function checkProgress(o, fix) {
+    var E = [];
+    if (!o || typeof o !== "object" || Array.isArray(o)) return ["progress must be a JSON object"];
+    function isObj(v) { return v && typeof v === "object" && !Array.isArray(v); }
+    function num(v) { return typeof v === "number" && isFinite(v); }
+    function bad(msg, del) { E.push(msg); if (fix) del(); }
+    if ("version" in o && o.version !== 1) bad("version: unsupported " + JSON.stringify(o.version) + " (this page reads 1)", function () { delete o.version; });
+    ["roster", "updated", "notes"].forEach(function (k) { if (k in o && typeof o[k] !== "string") bad(k + ": must be a string", function () { delete o[k]; }); });
+    ["checks", "levels", "skills", "map", "stamp"].forEach(function (k) { if (k in o && !isObj(o[k])) bad(k + ": must be an object", function () { delete o[k]; }); });
+    Object.keys(isObj(o.checks) ? o.checks : {}).forEach(function (k) { if (typeof o.checks[k] !== "boolean") bad("checks." + k + ": must be true or false", function () { delete o.checks[k]; }); });
+    Object.keys(isObj(o.levels) ? o.levels : {}).forEach(function (id) {
+      var r = o.levels[id], p = "levels." + id;
+      if (!isObj(r)) return bad(p + ": must be an object", function () { delete o.levels[id]; });
+      if ("level" in r && !(num(r.level) && r.level % 1 === 0 && r.level >= 1 && r.level <= 60)) bad(p + ".level: must be a whole number 1-60", function () { delete r.level; });
+      if ("rested" in r && ["Empty", "Partial", "Full"].indexOf(r.rested) < 0) bad(p + ".rested: must be one of Empty, Partial, Full", function () { delete r.rested; });
+      ["updated", "zone", "source"].forEach(function (f) { if (f in r && typeof r[f] !== "string") bad(p + "." + f + ": must be a string", function () { delete r[f]; }); });
+      ["lastSeenEpoch", "pctToNext", "restedBubbles"].forEach(function (f) { if (f in r && r[f] != null && !(num(r[f]) && r[f] >= 0)) bad(p + "." + f + ": must be a number >= 0", function () { delete r[f]; }); });
+    });
+    Object.keys(isObj(o.skills) ? o.skills : {}).forEach(function (id) {
+      var r = o.skills[id];
+      if (!isObj(r)) return bad("skills." + id + ": must be an object", function () { delete o.skills[id]; });
+      Object.keys(r).forEach(function (k) { var v = r[k]; if (!(num(v) && v % 1 === 0 && v >= 0 && v <= 300)) bad("skills." + id + "." + k + ": must be a whole number 0-300", function () { delete r[k]; }); });
+    });
+    Object.keys(isObj(o.map) ? o.map : {}).forEach(function (k) { if (typeof o.map[k] !== "string") bad("map." + k + ": must be a roster id string", function () { delete o.map[k]; }); });
+    Object.keys(isObj(o.stamp) ? o.stamp : {}).forEach(function (k) { if (!(num(o.stamp[k]) && o.stamp[k] >= 0)) bad("stamp." + k + ": must be a number", function () { delete o.stamp[k]; }); });
+    return E;
+  }
   function load() {
-    var base = merge(blank(), P.progress);
-    try { var raw = localStorage.getItem(KEY); if (raw) return merge(base, JSON.parse(raw)); } catch (e) { /* storage blocked */ }
-    return base;
+    var base = merge(blank(), P.progress), raw = null;
+    try { raw = localStorage.getItem(KEY); } catch (e) { /* storage blocked */ }
+    if (!raw) return base;
+    try {
+      var got = JSON.parse(raw), bad = checkProgress(got, true);
+      if (bad.length) keepBad(raw, bad);  // load what is valid; the original stays in storage under KEY + ":invalid"
+      return merge(base, got);
+    } catch (e) { keepBad(raw, [String(e && e.message || e)]); return base; }
+  }
+  function keepBad(raw, why) {
+    try { if (!localStorage.getItem(KEY + ":invalid")) localStorage.setItem(KEY + ":invalid", raw); } catch (e) { /* storage blocked */ }
+    if (typeof console !== "undefined") console.warn("Saved progress had problems; the original is kept in localStorage under " + KEY + ":invalid", why);
   }
   var S = load();
   function save() { S.updated = today(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* session only */ } render(); }
@@ -206,7 +243,7 @@
           c.id === nu.id ? h("span", { class: "upnext" }, "Up next") : null),
         h("div", { class: "rc-row" }, h("span", null, "Level " + l + " of 60"), h("span", null, b.from + "–" + b.to + " target " + b.to)),
         h("div", { class: "rc-bar" }, h("b", { style: { width: (l / 60 * 100) + "%" } }), ticks()),
-        h("div", { class: "rc-row q" }, h("span", null, "Rested: " + (st.updated ? (st.rested || "Empty").toLowerCase() : "none yet")),
+        h("div", { class: "rc-row q" }, h("span", null, "Rested: " + (st.updated ? String(st.rested || "Empty").toLowerCase() : "none yet")),
           h("span", null, c.professions.filter(function (p) { return (p.from || 1) <= l && (!p.until || l < p.until); }).map(function (p) { return p.name; }).join(" + "))));
     }));
   }
@@ -222,7 +259,7 @@
         h("div", { class: "lvmeta" }, h("span", { class: "br" }, b.from + "–" + b.to),
           edit ? h("select", { class: "rsel", "aria-label": c.display + " rested", onchange: function (e) { S.levels[c.id] = Object.assign({}, S.levels[c.id], { rested: e.target.value, updated: today() }); touch("l:" + c.id); save(); } },
             ["Empty", "Partial", "Full"].map(function (r) { return h("option", { value: r, selected: r === (st.rested || "Empty") }, "Rested " + r.toLowerCase()); }))
-            : h("span", { class: "q" }, "Rested " + (st.rested || "Empty").toLowerCase()),
+            : h("span", { class: "q" }, "Rested " + String(st.rested || "Empty").toLowerCase()),
           h("span", null, st.updated || "")));
     }), h("div", { class: "lvaxis" }, [1, 10, 20, 30, 40, 50, 60].map(function (n) { return h("span", { style: { left: (n / 60 * 100) + "%" } }, String(n)); })));
   }
@@ -527,8 +564,8 @@
     return { extra: extra, db: dbName, matched: Object.keys(best).length, stale: stale, skipped: skipped, ambiguous: ambiguous };
   }
   function importJSON() {
-    var ta = h("textarea", { "aria-label": "Progress JSON or LegacyTracker.lua" });
-    var file = h("input", { type: "file", accept: "application/json,.json,.lua", onchange: function (e) { var f = e.target.files[0]; if (f) f.text().then(function (t) { ta.value = t; }); } });
+    var ta = h("textarea", { "aria-label": "Progress JSON or LegacyTracker.lua", oninput: function () { ta.setCustomValidity(""); } });
+    var file = h("input", { type: "file", accept: "application/json,.json,.lua", onchange: function (e) { var f = e.target.files[0]; if (f) f.text().then(function (t) { ta.value = t; ta.setCustomValidity(""); }); } });
     var dlg = h("dialog", null, h("h2", null, "Import progress"), file, ta,
       h("div", { class: "actions", style: { "justify-content": "flex-end", "margin-top": "8px" } },
         h("button", { type: "button", onclick: function () { dlg.close(); dlg.remove(); } }, "Cancel"),
@@ -539,10 +576,19 @@
               if (!r.matched) throw new Error("No roster characters in LegacyTracker.lua" + (r.skipped.length ? ": " + r.skipped.join(", ") : "") + (r.ambiguous.length ? "; ambiguous: " + r.ambiguous.join("; ") + " (map one Realm-Name with ./mc map)" : ""));
               if (r.ambiguous.length) window.alert("LegacyTracker: skipped ambiguous " + r.ambiguous.join("; ") + ". Map one Realm-Name with ./mc map.");
               if (r.stale.length === r.matched) throw new Error("This LegacyTracker.lua is not newer than what is already saved");
-              S = merge(S, r.extra);
-            } else { var m = ta.value.match(/\{[\s\S]*\}/); S = merge(S, JSON.parse(m ? m[0] : ta.value)); }
-            dlg.close(); dlg.remove(); save();
-          } catch (e) { ta.setCustomValidity(e.message && /LegacyTracker/.test(e.message) ? e.message : "Not valid progress JSON or LegacyTracker.lua"); ta.reportValidity(); }
+              var cand = merge(S, r.extra);
+            } else {
+              var m = ta.value.match(/\{[\s\S]*\}/), obj;
+              try { obj = JSON.parse(m ? m[0] : ta.value); } catch (x) { throw new Error("Not valid progress JSON or LegacyTracker.lua"); }
+              var bad = checkProgress(obj, false);
+              if (bad.length) throw new Error("Not valid progress, nothing changed: " + bad.slice(0, 4).join("; ") + (bad.length > 4 ? " (+" + (bad.length - 4) + " more)" : ""));
+              cand = merge(S, obj);
+            }
+            // render the candidate before committing it; on failure keep the old progress and the dialog open
+            var prev = S; S = cand;
+            try { render(); } catch (x) { S = prev; render(); throw new Error("This progress would not display, nothing changed: " + x.message); }
+            save(); dlg.close(); dlg.remove();
+          } catch (e) { ta.setCustomValidity(e.message || "Not valid progress JSON or LegacyTracker.lua"); ta.reportValidity(); }
         } }, "Import")));
     document.body.appendChild(dlg); dlg.showModal();
   }

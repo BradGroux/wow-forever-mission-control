@@ -489,6 +489,53 @@ def _rec_time(rec):
         return 0
 
 
+def progress_errors(new):
+    """Field-specific problems in a progress blob (export, scrubbed share or progress.json). Empty when valid."""
+    if not isinstance(new, dict):
+        return ["progress must be a JSON object"]
+    E = []
+    if "version" in new and new["version"] != SCHEMA_VERSION:
+        E.append(f"version: unsupported {new['version']!r} (this tool reads {SCHEMA_VERSION})")
+    for k in ("roster", "updated", "notes"):
+        if k in new and not isinstance(new[k], str):
+            E.append(f"{k}: must be a string")
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+    for k in ("checks", "levels", "skills", "map", "stamp"):
+        if k in new and not isinstance(new[k], dict):
+            E.append(f"{k}: must be an object")
+    if isinstance(new.get("checks"), dict):
+        E += [f"checks.{k}: must be true or false" for k, v in new["checks"].items() if not isinstance(v, bool)]
+    if isinstance(new.get("levels"), dict):
+        for cid, lv in new["levels"].items():
+            if not isinstance(lv, dict):
+                E.append(f"levels.{cid}: must be an object"); continue
+            if "level" in lv and not (num(lv["level"]) and lv["level"] == int(lv["level"]) and 1 <= lv["level"] <= 60):
+                E.append(f"levels.{cid}.level: must be a whole number 1-60")
+            if "rested" in lv and lv["rested"] not in RESTED:
+                E.append(f"levels.{cid}.rested: must be one of {', '.join(RESTED)}")
+            for f in ("updated", "zone", "source"):
+                if f in lv and not isinstance(lv[f], str):
+                    E.append(f"levels.{cid}.{f}: must be a string")
+            for f in ("lastSeenEpoch", "pctToNext", "restedBubbles"):
+                if f in lv and lv[f] is not None and not (num(lv[f]) and lv[f] >= 0):
+                    E.append(f"levels.{cid}.{f}: must be a number >= 0")
+    if isinstance(new.get("skills"), dict):
+        for cid, sk in new["skills"].items():
+            if not isinstance(sk, dict):
+                E.append(f"skills.{cid}: must be an object"); continue
+            E += [f"skills.{cid}.{prof}: must be a whole number 0-300" for prof, v in sk.items()
+                  if not (num(v) and v == int(v) and 0 <= v <= 300)]
+    if isinstance(new.get("map"), dict):
+        E += [f"map.{k}: must be a roster id string" for k, v in new["map"].items() if not isinstance(v, str)]
+    if isinstance(new.get("stamp"), dict):
+        E += [f"stamp.{k}: must be a number" for k, v in new["stamp"].items() if not (num(v) and v >= 0)]
+    return E
+
+
+def now_ms():
+    return int(datetime.datetime.now().timestamp() * 1000)
+
+
 def merge_progress(p, new):
     """Merge an exported progress blob into p.
     Checks: the export is the full state. Levels and skills: keep the higher. Page edit stamps
@@ -523,6 +570,8 @@ def merge_progress(p, new):
                 old.update(lv)
         elif held(f"l:{cid}", _rec_time(lv)):
             continue
+        elif lv.get("lastSeenEpoch") and old.get("lastSeenEpoch") and lv["lastSeenEpoch"] <= old["lastSeenEpoch"]:
+            continue  # addon data that isn't newer than what's saved (same rule as import-addon and the page)
         elif (lv.get("level") or 0) >= (old.get("level") or 0):
             old.update(lv)
     for cid, sk in (new.get("skills") or {}).items():
@@ -629,6 +678,9 @@ def import_addon(cfg, p, text, force=False, db_name="LegacyTrackerDB"):
         seen = c.get("lastSeen") or 0
         if not force and old.get("lastSeenEpoch") and seen <= old["lastSeenEpoch"]:
             out.append(f"{cid}: unchanged (addon data not newer)")
+            continue
+        if not force and seen * 1000 <= (p.get("stamp") or {}).get(f"l:{cid}", 0):
+            out.append(f"{cid}: unchanged (a later manual or page edit; use --force)")
             continue
         if not force and (old.get("level") or 0) > (c.get("level") or 0):
             out.append(f"{cid}: skipped, would lower level {old.get('level')} -> {c.get('level')} (use --force)")
@@ -992,6 +1044,7 @@ def main(argv=None):
             e = p["levels"].setdefault(ch["id"], {})
             e.update({"level": a.level, "updated": today(), "source": "manual"})
             if a.rested: e["rested"] = a.rested
+            p.setdefault("stamp", {})[f"l:{ch['id']}"] = now_ms()  # beats older page/addon data, like a page edit
             print(f"{ch['name']}: level {a.level}")
         elif a.cmd == "skill":
             ch = find_char(cfg, a.char)
@@ -999,6 +1052,7 @@ def main(argv=None):
             if prof not in CRAFTS + GATHER + SECONDARY: sys.exit(f"unknown profession {a.profession}")
             if not 0 <= a.skill <= 300: sys.exit("skill must be 0-300")
             p["skills"].setdefault(ch["id"], {})[prof] = a.skill
+            p.setdefault("stamp", {})[f"s:{ch['id']}:{prof}"] = now_ms()
             print(f"{ch['name']}: {prof} {a.skill}")
         elif a.cmd == "check":
             plan = build_plan(cfg, Game())
@@ -1006,9 +1060,11 @@ def main(argv=None):
             bad = [i for i in a.ids if i not in known]
             if bad and not a.off and not a.force:
                 sys.exit(f"unknown checklist id(s): {', '.join(bad)}. Find ids with ./mc ids <text>, or add --force.")
+            t = now_ms()
             for i in a.ids:
                 if a.off: p["checks"].pop(i, None)
                 else: p["checks"][i] = True
+                p.setdefault("stamp", {})[f"c:{i}"] = t
             print(("unticked " if a.off else "ticked ") + ", ".join(a.ids))
         elif a.cmd == "map":
             ch = find_char(cfg, a.char)
@@ -1026,7 +1082,13 @@ def main(argv=None):
                 raw = sys.stdin.read() if a.file in (None, "-") else open(a.file, encoding="utf-8").read()
                 m = re.search(r"\{.*\}", raw, re.S)
                 if not m: sys.exit("no JSON object found")
-                new = json.loads(m.group(0))
+                try:
+                    new = json.loads(m.group(0))
+                except ValueError as e:
+                    sys.exit(f"not valid JSON: {e}")
+                bad = progress_errors(new)
+                if bad:
+                    sys.exit("not valid progress, nothing changed:\n  " + "\n  ".join(bad[:20]))
                 if new.get("roster") and new["roster"] != p["roster"]:
                     print(f"warning: export is for roster {new['roster']!r}, this roster is {p['roster']!r}")
                 p = merge_progress(p, new)

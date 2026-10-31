@@ -82,6 +82,11 @@ jobs:
               echo "ok $f"
             fi
           done
+      - name: Canvas export carries unticks
+        run: |
+          for f in build/mission-control.canvas.tsx adapters/grokbot/mission-control.canvas.tsx; do
+            if [ -f "$f" ]; then node tests/canvas_export.test.js "$f"; fi
+          done
 
   addon:
     name: LegacyTracker addon
