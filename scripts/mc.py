@@ -18,7 +18,7 @@
   ./mc doctor                            CI checks: examples valid, outputs up to date, progress blocks intact
 Every command is plain Python 3.9+, standard library only.
 """
-import argparse, copy, datetime, html, json, os, re, sys, unicodedata, urllib.parse
+import argparse, copy, datetime, html, json, math, os, re, sys, unicodedata, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
@@ -59,7 +59,7 @@ def write_text(path, text):
 
 
 def write_json(path, obj):
-    write_text(path, json.dumps(obj, indent=2, ensure_ascii=False) + "\n")
+    write_text(path, json.dumps(obj, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
 
 
 class Game:
@@ -505,7 +505,7 @@ def progress_errors(new):
     for k in ("roster", "updated", "notes"):
         if k in new and not isinstance(new[k], str):
             E.append(f"{k}: must be a string")
-    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
     for k in ("checks", "levels", "skills", "map", "stamp"):
         if k in new and not isinstance(new[k], dict):
             E.append(f"{k}: must be an object")
@@ -535,6 +535,40 @@ def progress_errors(new):
         E += [f"map.{k}: must be a roster id string" for k, v in new["map"].items() if not isinstance(v, str)]
     if isinstance(new.get("stamp"), dict):
         E += [f"stamp.{k}: must be a number" for k, v in new["stamp"].items() if not (num(v) and v >= 0)]
+    return E
+
+
+def loads_strict(text):
+    """json.loads that refuses NaN/Infinity constants and numbers too large for a float (1e309)."""
+    def const(name):
+        raise ValueError(f"{name} is not a JSON number")
+
+    def flt(x):
+        v = float(x)
+        if not math.isfinite(v):
+            raise ValueError(f"number {x} is out of range")
+        return v
+    return json.loads(text, parse_constant=const, parse_float=flt)
+
+
+def addon_record_errors(c):
+    """Range problems in one LegacyTracker character record (same limits as progress_errors)."""
+    E = []
+    whole = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) and v == int(v)
+    lv = c.get("level")
+    if not (whole(lv) and 1 <= lv <= 60):
+        E.append(f"level {lv!r} (must be a whole number 1-60)")
+    for f in ("lastSeen", "xp", "xpMax", "rested"):
+        v = c.get(f)
+        if v is not None and not (isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) and v >= 0):
+            E.append(f"{f} {v!r} (must be a number >= 0)")
+    profs = c.get("professions")
+    if profs is not None and not isinstance(profs, dict):
+        E.append("professions (must be a table)")
+    for prof, v in (profs if isinstance(profs, dict) else {}).items():
+        r = v.get("rank") if isinstance(v, dict) else None
+        if isinstance(v, dict) and r is not None and not (whole(r) and 0 <= r <= 300):
+            E.append(f"{prof} rank {r!r} (must be a whole number 0-300)")
     return E
 
 
@@ -582,13 +616,16 @@ def merge_progress(p, new):
             old.update(lv)
     for cid, sk in (new.get("skills") or {}).items():
         mine = p["skills"].setdefault(cid, {})
+        # skills observed by the addon carry the character's snapshot time
+        seen = int(((new.get("levels") or {}).get(cid) or {}).get("lastSeenEpoch") or 0) * 1000
         for prof, v in sk.items():
             k = f"s:{cid}:{prof}"
             if k in st:
                 if wins(k):
                     mine[prof] = int(v or 0)
-            elif not held(k):
-                mine[prof] = max(int(v or 0), int(mine.get(prof) or 0))
+            elif not held(k, seen):
+                # an addon snapshot newer than a manual edit replaces it; otherwise the higher value wins
+                mine[prof] = int(v or 0) if (seen and k in mine_st) else max(int(v or 0), int(mine.get(prof) or 0))
     if ("n" in st and wins("n")) or ("n" not in st and new.get("notes") and not held("n")):
         p["notes"] = new.get("notes") or ""
     p.setdefault("map", {}).update(new.get("map") or {})
@@ -680,6 +717,10 @@ def import_addon(cfg, p, text, force=False, db_name="LegacyTrackerDB"):
     chars = db.get("chars") or {}
     best, out = match_addon_chars(cfg, p.get("map") or {}, chars)
     for cid, c in sorted(best.items()):
+        bad = addon_record_errors(c)
+        if bad:
+            out.append(f"skip {cid}: invalid addon data, " + "; ".join(bad))
+            continue
         old = p["levels"].setdefault(cid, {})
         seen = c.get("lastSeen") or 0
         if not force and old.get("lastSeenEpoch") and seen <= old["lastSeenEpoch"]:
@@ -699,9 +740,14 @@ def import_addon(cfg, p, text, force=False, db_name="LegacyTrackerDB"):
             "restedBubbles": round(rs / xm * 20, 1) if xm else None,
             "zone": c.get("zone"), "lastSeenEpoch": seen or None, "source": "LegacyTracker"}.items() if v is not None})
         sk = p["skills"].setdefault(cid, {})
+        st = p.get("stamp") or {}
         for prof, v in (c.get("professions") or {}).items():
             if isinstance(v, dict) and v.get("rank") is not None:
-                sk[prof] = max(int(v["rank"]), int(sk.get(prof) or 0))
+                k = f"s:{cid}:{prof}"
+                if k in st and not force and st[k] >= seen * 1000:
+                    continue  # a manual edit newer than this snapshot
+                # a snapshot newer than a manual edit replaces it; otherwise the higher value wins
+                sk[prof] = int(v["rank"]) if k in st and seen else max(int(v["rank"]), int(sk.get(prof) or 0))
         out.append(f"{cid}: level {c.get('level')}, rested {old['rested']}, skills {sk}")
     p["updated"] = today()
     return p, out
@@ -712,7 +758,7 @@ def scrub_addon(cfg, text, db_name="LegacyTrackerDB", mapping=None):
     base = empty_progress(cfg)
     base["map"] = dict((load_progress(cfg).get("map") or {}) if mapping is None else mapping)
     p, lines = import_addon(cfg, base, text, True, db_name)
-    found = {l.split(":")[0] for l in lines if not l.startswith("skip ")}
+    found = {l.split(":")[0] for l in lines if not l.startswith("skip ")}  # invalid records are skipped too
     out = {"version": 1, "roster": p["roster"], "updated": today(),
            "levels": {k: v for k, v in p["levels"].items() if k in found},
            "skills": {k: v for k, v in p["skills"].items() if k in found and v}}
@@ -806,7 +852,13 @@ def outputs(cfg_path, personal=None):
         raise SystemExit("validation failed:\n  " + "\n  ".join(E))
     if personal is None:
         personal = os.path.abspath(cfg_path) != os.path.abspath(EXAMPLE)
-    plan = build_plan(cfg, g, load_progress(cfg) if personal else None)
+    prog = load_progress(cfg) if personal else None
+    if prog is not None:
+        bad = progress_errors(prog)
+        if bad:
+            raise SystemExit(f"{rel(PROGRESS, ROOT)} is not valid progress:\n  " + "\n  ".join(bad[:20])
+                             + "\nfix those fields (./mc level / ./mc skill) or restore a copy from progress/backups/")
+    plan = build_plan(cfg, g, prog)
     files = {os.path.join(BUILD, "plan.json"): json.dumps(plan, indent=2, ensure_ascii=False) + "\n",
              os.path.join(BUILD, "PLAN.md"): plan_markdown(plan)}
     if personal:
@@ -914,8 +966,14 @@ def doctor():
         cur = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
         if cur != text:
             problems.append(f"{rel(path, ROOT)} is out of date: run ./mc generate")
-    if os.path.exists(CONFIG):
-        files, plan = outputs(CONFIG)
+    personal_ok = os.path.exists(CONFIG)
+    if personal_ok:
+        try:
+            files, plan = outputs(CONFIG)
+        except SystemExit as e:  # e.g. invalid saved progress: report it, check the rest against the example
+            problems.append(str(e.code))
+            personal_ok = False
+    if personal_ok:
         for path in (WEB_PLAN, CANVAS_OUT):
             cur = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
             if cur != files[path]:
@@ -1091,7 +1149,7 @@ def main(argv=None):
                 m = re.search(r"\{.*\}", raw, re.S)
                 if not m: sys.exit("no JSON object found")
                 try:
-                    new = json.loads(m.group(0))
+                    new = loads_strict(m.group(0))
                 except ValueError as e:
                     sys.exit(f"not valid JSON: {e}")
                 bad = progress_errors(new)

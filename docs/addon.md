@@ -77,6 +77,8 @@ It matches characters with your saved `./mc map` entries, the same way an import
 - A renamed character, or one whose in-game name differs from the roster: `./mc map <roster-id> <InGameName>`, then import again.
 - The same name on two realms: map the one you mean with its full key, `./mc map <roster-id> <Realm-Name>`. Until you do, both are skipped as ambiguous. A `Realm-Name` mapping wins over a bare-name mapping, which wins over the roster name.
 - An import never lowers a level and skips data that isn't newer than the last import. `--force` overrides both.
+- A character record with a level outside 1–60, a profession rank outside 0–300, or a negative or non-numeric XP/time is skipped and listed as invalid, on the page and in the CLI (`scrub-addon` too). Nothing is clamped.
+- Profession skills follow the snapshot time: a snapshot newer than a manual skill edit replaces it, an older one leaves it. Without a manual edit the higher value wins.
 - Rested state: **Full** at 1.5 levels of rested XP (the cap), **Partial** above zero, **Empty** otherwise.
 - A renamed copy of the addon (different SavedVariables table name) imports with `--db <TableName>`, for example `./mc import-addon OldTracker.lua --db OldTrackerDB`. The page's **Import progress** finds the table on its own.
 - Gold and time played are never imported, even with `/ltrack extras on`.

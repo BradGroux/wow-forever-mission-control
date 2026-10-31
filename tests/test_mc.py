@@ -596,6 +596,70 @@ class ProgressProtocol(unittest.TestCase):
         self.assertEqual(p["levels"]["aldric"]["rested"], "Empty")
 
 
+class AuditProgress(unittest.TestCase):
+    def lua(self, level=20, rank=None, seen=1800000000, name="Aldric"):
+        prof = "" if rank is None else ", professions={Mining={rank=%s}}" % rank
+        return 'LegacyTrackerDB = { chars = { ["R-%s"] = {name="%s", level=%s, lastSeen=%d%s} } }' % (name, name, level, seen, prof)
+
+    def test_addon_ranges_rejected(self):
+        # #61: import-addon and scrub-addon skip out-of-range records and say why
+        for level, rank, frag in ((0, 10, "level 0"), (61, 10, "level 61"), (999, 10, "level 999"),
+                                  (20, 301, "rank 301"), (20, 999, "rank 999"), (20, -5, "rank -5"), (20, "1e309", "rank inf")):
+            p = mc.empty_progress(EX)
+            _, out = mc.import_addon(EX, p, self.lua(level, rank))
+            self.assertTrue(any(x.startswith("skip aldric: invalid") and frag in x for x in out), (level, rank, out))
+            self.assertEqual(p["levels"]["aldric"].get("level"), 1)
+            self.assertEqual(mc.progress_errors(p), [])
+            sh, _ = mc.scrub_addon(EX, self.lua(level, rank), mapping={})
+            self.assertNotIn("aldric", sh["levels"]); self.assertNotIn("aldric", sh["skills"])
+        p = mc.empty_progress(EX)
+        mc.import_addon(EX, p, self.lua(20, 75))
+        self.assertEqual((p["levels"]["aldric"]["level"], p["skills"]["aldric"]["Mining"]), (20, 75))
+
+    def test_generate_refuses_invalid_saved_progress(self):
+        from unittest import mock
+        bad = mc.empty_progress(EX); bad["levels"]["aldric"]["level"] = 999
+        with mock.patch.object(mc, "load_progress", lambda cfg, path=None: bad):
+            with self.assertRaises(SystemExit) as cm:
+                mc.outputs(mc.EXAMPLE, personal=True)
+        self.assertIn("levels.aldric.level", str(cm.exception.code))
+
+    def test_newer_addon_skill_beats_older_manual_edit(self):
+        # #62: CLI import and JSON merge use the snapshot time for skills
+        t = 1800000000
+        for later, want in ((t + 3600, 100), (t - 3600, 10)):
+            p = mc.empty_progress(EX); p["skills"]["aldric"] = {"Mining": 10}; p["stamp"] = {"s:aldric:Mining": t * 1000}
+            mc.import_addon(EX, p, self.lua(20, 100, later))
+            self.assertEqual(p["skills"]["aldric"]["Mining"], want, later)
+            q = mc.empty_progress(EX); q["skills"]["aldric"] = {"Mining": 10}; q["stamp"] = {"s:aldric:Mining": t * 1000}
+            mc.merge_progress(q, {"levels": {"aldric": {"level": 20, "lastSeenEpoch": later}}, "skills": {"aldric": {"Mining": 100}}})
+            self.assertEqual(q["skills"]["aldric"]["Mining"], want, later)
+        r = mc.empty_progress(EX); r["skills"]["aldric"] = {"Mining": 120}
+        mc.merge_progress(r, {"skills": {"aldric": {"Mining": 100}}})
+        self.assertEqual(r["skills"]["aldric"]["Mining"], 120, "no ordering evidence: higher wins")
+
+    def test_non_finite_numbers(self):
+        # #65
+        for txt in ('{"stamp":{"c:a":1e309}}', '{"levels":{"aldric":{"level":1e309}}}', '{"skills":{"aldric":{"Mining":-1e309}}}',
+                    '{"stamp":{"c:a":NaN}}', '{"levels":{"aldric":{"pctToNext":Infinity}}}'):
+            with self.assertRaises(ValueError):
+                mc.loads_strict(txt)
+        for blob in ({"stamp": {"c:a": float("inf")}}, {"levels": {"aldric": {"level": float("inf")}}},
+                     {"skills": {"aldric": {"Mining": float("nan")}}}, {"levels": {"aldric": {"lastSeenEpoch": float("inf")}}}):
+            self.assertTrue(mc.progress_errors(blob), blob)
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(ValueError):
+                mc.write_json(os.path.join(d, "x.json"), {"stamp": {"c:a": float("inf")}})
+        p = mc.empty_progress(EX)
+        with tempfile.TemporaryDirectory() as d:
+            f = os.path.join(d, "x.json")
+            open(f, "w").write('{"stamp":{"c:acct-explorer":1e309}}')
+            with self.assertRaises(SystemExit) as cm:
+                ProgressProtocol.cli(ProgressProtocol(), p, "progress", "merge", f)
+            self.assertIn("out of range", str(cm.exception.code))
+        self.assertNotIn("c:acct-explorer", p.get("stamp") or {})
+
+
 class Safety(unittest.TestCase):
     EVIL = "Test</script><script>alert(1)</script><!-- & \u2028"
 

@@ -129,5 +129,36 @@ assert.deepStrictEqual(checkProgress({ levels: { aldric: { level: 12, rested: "P
   assert.ok(load()); assert.strictEqual(store[KEY + ":invalid"], "{not json");
 }
 
+// addon ranges (#61): out-of-range records are skipped and reported, valid ones import
+{
+  const lua = (lv, rk) => 'LegacyTrackerDB = { chars = { ["R-Aldric"] = {name="Aldric", level=' + lv + ', lastSeen=1800000000, professions={Mining={rank=' + rk + '}}} } }';
+  S = { levels: {} };
+  [[0, 10], [61, 10], [999, 10], [20, 301], [20, 999], [20, -5]].forEach(([lv, rk]) => {
+    const x = fromAddon(lua(lv, rk));
+    assert.strictEqual(x.invalid.length, 1, lv + "/" + rk); assert.strictEqual(x.matched, 0); assert.ok(!x.extra.levels.aldric);
+  });
+  const ok = fromAddon(lua(20, 75));
+  assert.strictEqual(ok.extra.levels.aldric.level, 20); assert.strictEqual(ok.extra.skills.aldric.Mining, 75);
+  S = {};
+}
+
+// addon skill ordering (#62): a newer snapshot advances a manually edited skill, an older one doesn't
+{
+  const t = Date.parse("2026-11-06T10:00:00Z");
+  const edited = merge(blank(), { skills: { aldric: { Blacksmithing: 10 } }, stamp: { "s:aldric:Blacksmithing": t } });
+  const snap = (sec) => ({ levels: { aldric: { level: 20, lastSeenEpoch: sec } }, skills: { aldric: { Blacksmithing: 100 } } });
+  assert.strictEqual(merge(edited, snap(Date.parse("2026-11-07T11:00:00Z") / 1000)).skills.aldric.Blacksmithing, 100);
+  assert.strictEqual(merge(edited, snap(Date.parse("2026-11-05T11:00:00Z") / 1000)).skills.aldric.Blacksmithing, 10);
+  assert.strictEqual(merge(merge(blank(), { skills: { aldric: { Mining: 120 } } }), { skills: { aldric: { Mining: 100 } } }).skills.aldric.Mining, 120);
+  // through fromAddon too
+  S = edited;
+  const r2 = fromAddon('LegacyTrackerDB = { chars = { ["R-Aldric"] = {name="Aldric", level=20, lastSeen=' + Date.parse("2026-11-07T11:00:00Z") / 1000 + ', professions={Blacksmithing={rank=100}}} } }');
+  assert.strictEqual(merge(S, r2.extra).skills.aldric.Blacksmithing, 100);
+  S = {};
+}
+
+// non-finite numbers are rejected (#65 parity)
+assert.ok(checkProgress({ stamp: { "c:a": Infinity } }).length && checkProgress({ levels: { aldric: { level: NaN } } }).length);
+
 assert.deepStrictEqual(parseLua('X = { "a", ["k"] = "q\\"x", n = -1.5e2, t = true, -- c\n }').X, { 1: "a", k: 'q"x', n: -150, t: true });
 console.log("web import: ok");
