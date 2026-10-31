@@ -584,6 +584,7 @@
  "dungeons": [
   {
    "name": "Ragefire Chasm",
+   "starter": true,
    "min": 13,
    "max": 18,
    "zone": "Orgrimmar",
@@ -596,6 +597,7 @@
   },
   {
    "name": "The Hall of Thanes",
+   "starter": true,
    "min": 13,
    "max": 18,
    "zone": "Ironforge",

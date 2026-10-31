@@ -391,7 +391,7 @@
     var fac = P.roster.faction, bag = P.sleeping_bag;
     return [
       sec("Dungeons", table(["Dungeon", "Levels", "Zone", "Spelunker", ""], P.dungeons.map(function (d) {
-        return [d.name, d.min + "–" + d.max, d.zone, d.spelunker || "", h("span", { class: "pills" }, d["new"] ? h("span", { class: "pill new" }, "New") : null, d.access && d.access !== fac && d.access !== "both" && d.access !== "Both" ? h("span", { class: "pill" }, "Enemy territory") : null, statusTag(d.status))];
+        return [d.name, d.min + "–" + d.max, d.zone, d.spelunker || "", h("span", { class: "pills" }, d["new"] ? h("span", { class: "pill new" }, "New") : null, d.travel ? h("span", { class: "pill" }, "Enemy territory") : null, statusTag(d.status))];
       }), [1])),
       sec(bag.name + " · from " + bag.min_level, [h("p", { class: "lead" }, L(bag.reward)), steps(bag.steps.map(function (st) { return { title: st.quest, sub: st[fac] || st.where }; }))])
     ];

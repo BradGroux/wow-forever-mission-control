@@ -151,6 +151,60 @@ class Progress(unittest.TestCase):
         self.assertEqual(p["levels"]["aldric"]["level"], 12)
 
 
+class Strict(unittest.TestCase):
+    def test_unknown_fields_rejected(self):
+        c = cfg_with(bogus_top=1)
+        c["characters"][0]["leveling_spac"] = "Arms"
+        e, _, _ = mc.validate(c, G)
+        self.assertTrue(any("unknown field 'bogus_top'" in x for x in e))
+        self.assertTrue(any("'leveling_spac'" in x and "leveling_spec" in x for x in e))
+
+    def test_until_range_and_empty_name(self):
+        c = copy.deepcopy(EX)
+        c["characters"][0]["professions"][0]["until"] = 999
+        c["characters"][1]["name"] = ""
+        e, _, _ = mc.validate(c, G)
+        self.assertTrue(any("until" in x and "999" in x for x in e))
+        self.assertTrue(any("name is empty" in x for x in e))
+
+    def test_train_at_60(self):
+        p = mc.build_plan(EX, G)
+        last = p["brackets"][-1]["tasks"]["aldric"]
+        self.assertTrue(any(t["text"] == "Swap Mining for Engineering" for t in last))
+
+    def test_dropped_craft_targets_not_counted(self):
+        c = copy.deepcopy(EX)
+        c["characters"][1]["professions"] = [{"name": "Herbalism", "from": 1}, {"name": "Alchemy", "from": 1, "until": 30}, {"name": "Skinning", "from": 30}]
+        _, w, _ = mc.validate(c, G)
+        self.assertTrue(any("Alchemy is dropped at 30" in x and "225/300" in x for x in w))
+        p = mc.build_plan(c, G)
+        texts = [t["text"] for b in p["brackets"] for t in b["tasks"]["elowen"]]
+        self.assertIn("Alchemy to 150", texts)
+        self.assertNotIn("Alchemy to 300", texts)
+        self.assertEqual(p["coverage"]["legacy_from_plan"], 28)
+        self.assertEqual(p["coverage"]["projection"][-1]["points"], 28)
+
+    def test_starter_dungeons_come_from_data(self):
+        starters = [d for d in G.world["dungeons"] if d.get("starter")]
+        self.assertEqual(sorted(d["access"] for d in starters), ["Alliance", "Horde"])
+        g2 = mc.Game()
+        for d in g2.world["dungeons"]:
+            if d["name"] == "Ragefire Chasm":
+                d["name"] = "Ragefire Chasm Renamed"
+        names = [d["name"] for d in mc.build_plan(EX, g2)["dungeons"]]
+        self.assertNotIn("Ragefire Chasm Renamed", names)
+
+    def run_mc(self, *args):
+        ex = os.path.join(ROOT, "config", "examples", "alliance.json")
+        return subprocess.run([sys.executable, os.path.join(ROOT, "mc"), *args, "--config", ex], capture_output=True, text=True, cwd=ROOT)
+
+    def test_cli_skill_and_check_guards(self):
+        r = self.run_mc("skill", "aldric", "Mining", "999")
+        self.assertNotEqual(r.returncode, 0); self.assertIn("0-300", r.stderr)
+        r = self.run_mc("check", "bogus-id-123")
+        self.assertNotEqual(r.returncode, 0); self.assertIn("unknown checklist id", r.stderr)
+
+
 class ProgressSafety(unittest.TestCase):
     def base(self):
         p = mc.empty_progress(EX)

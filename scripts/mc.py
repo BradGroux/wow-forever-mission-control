@@ -26,6 +26,7 @@ DATA = os.path.join(ROOT, "data")
 CONFIG = os.path.join(ROOT, "config", "roster.json")
 EXAMPLE = os.path.join(ROOT, "config", "examples", "alliance.json")
 PROGRESS = os.path.join(ROOT, "progress", "progress.json")
+DRAFT = os.path.join(ROOT, "config", "roster.draft.json")
 WEB_PLAN = os.path.join(ROOT, "web", "data", "plan.js")              # your roster (copies only)
 WEB_EXAMPLE = os.path.join(ROOT, "web", "data", "plan.example.js")  # shipped upstream
 CANVAS_TEMPLATE = os.path.join(ROOT, "adapters", "grokbot", "template.canvas.tsx")
@@ -105,6 +106,42 @@ def normalize(cfg):
     return cfg
 
 
+SCHEMA_PATH = os.path.join(ROOT, "config", "roster.schema.json")
+
+
+def schema_errors(obj, sch, where="roster"):
+    """Tiny stdlib subset of JSON Schema: type, additionalProperties false, min/max, length, pattern, items.
+    Enums and required fields are left to validate(), which gives friendlier messages."""
+    out = []
+    t = sch.get("type")
+    kinds = {"object": dict, "array": list, "string": str, "boolean": bool}
+    if t == "integer" and (isinstance(obj, bool) or not isinstance(obj, int)):
+        return [f"{where} must be a whole number, got {obj!r}"]
+    if t in kinds and not isinstance(obj, kinds[t]):
+        return [f"{where} must be a{'n' if t[0] in 'aeiou' else ''} {t}, got {obj!r}"]
+    if isinstance(obj, (int, float)) and not isinstance(obj, bool):
+        if "minimum" in sch and obj < sch["minimum"]: out.append(f"{where} must be at least {sch['minimum']}, got {obj}")
+        if "maximum" in sch and obj > sch["maximum"]: out.append(f"{where} must be at most {sch['maximum']}, got {obj}")
+    if isinstance(obj, str):
+        if "pattern" in sch and not re.search(sch["pattern"], obj): out.append(f"{where} {obj!r} does not match {sch['pattern']}")
+        if "minLength" in sch and len(obj) < sch["minLength"]: out.append(f"{where} must not be empty" if sch["minLength"] == 1 else f"{where} is too short")
+    if isinstance(obj, dict):
+        props = sch.get("properties") or {}
+        for k, v in obj.items():
+            if k.startswith("_"):
+                continue
+            if k in props:
+                out += schema_errors(v, props[k], f"{where}.{k}")
+            elif sch.get("additionalProperties") is False:
+                near = [p for p in props if p.replace("_", "") [:5] == k.replace("_", "")[:5]]
+                out.append(f"{where}: unknown field {k!r}" + (f" (did you mean {near[0]!r}?)" if near else ""))
+    if isinstance(obj, list) and isinstance(sch.get("items"), dict):
+        for i, v in enumerate(obj):
+            nm = v.get("name") if isinstance(v, dict) and v.get("name") else str(i)
+            out += schema_errors(v, sch["items"], f"{where}[{nm}]")
+    return out
+
+
 def prof_spans(ch):
     return [(p["name"], int(p.get("from", 1)), int(p.get("until", 61))) for p in ch.get("professions") or []]
 
@@ -112,6 +149,8 @@ def prof_spans(ch):
 def validate(cfg, g):
     """Return (errors, warnings, info). Pure function; no I/O."""
     E, W, I = [], [], []
+    if os.path.exists(SCHEMA_PATH):
+        E += schema_errors(cfg, load_json(SCHEMA_PATH))
     fac = cfg.get("faction")
     if fac not in ("Alliance", "Horde"):
         E.append(f"faction must be Alliance or Horde, got {fac!r}")
@@ -131,7 +170,9 @@ def validate(cfg, g):
         if not re.fullmatch(r"[a-z0-9-]{1,24}", str(ch.get("id", ""))):
             E.append(f"{who}: id must be 1-24 chars of a-z, 0-9 or '-' (it keys saved progress)")
         name = ch.get("name", "")
-        if not re.fullmatch(r"[^\W\d_]{2,12}", name):
+        if not str(name).strip():
+            E.append(f"{who}: name is empty; the addon import matches characters by in-game name")
+        elif not re.fullmatch(r"[^\W\d_]{2,12}", name):
             W.append(f"{who}: in-game names are 2-12 letters with no spaces or digits; add 'display' for a longer label")
         race, cls = ch.get("race"), ch.get("class")
         r = g.races.get(race)
@@ -155,8 +196,12 @@ def validate(cfg, g):
         for n, a, b in spans:
             if n not in CRAFTS + GATHER:
                 E.append(f"{who}: {n!r} is not a primary profession (secondaries {', '.join(SECONDARY)} need no slot)")
-            if not (1 <= a <= 60) or b <= a:
-                E.append(f"{who}: {n} from {a} until {b} is not a valid level span")
+            if not (1 <= a <= 60) or b <= a or (b != 61 and not 2 <= b <= 60):
+                E.append(f"{who}: {n} from {a} until {b} is not a valid level span (from 1-60, until 2-60 and after from)")
+            elif n in CRAFTS and b <= 60:
+                short = [str(sk) for sk, lvl in CRAFT_TARGET.items() if craft_due(lvl, a) >= b]
+                if short:
+                    W.append(f"{who}: {n} is dropped at {b}, before its {'/'.join(short)} target level; those Legacy points are not in the plan")
         for lv in range(1, 61):
             active = [n for n, a, b in spans if a <= lv < b]
             if len(active) > 2:
@@ -185,6 +230,11 @@ def validate(cfg, g):
 
 
 # ---------------------------------------------------------------- plan
+def craft_due(lvl, start):
+    """Level by which a craft target is due: the usual target level, or the level it's trained if that's 52+."""
+    return max(lvl, start if start >= 52 else lvl)
+
+
 def overlaps(lo, hi, a, b):
     return a < hi and b > lo
 
@@ -213,8 +263,8 @@ def build_plan(cfg, g, progress=None):
     for d in g.world["dungeons"]:
         if d["access"] in (fac, "Both"):
             dungeons.append(dict(d))
-        elif d.get("spelunker") and d["name"] not in ("Ragefire Chasm", "The Hall of Thanes"):
-            # Novice Spelunker takes either faction's starter dungeon, so only the other cross-faction ones are needed
+        elif d.get("spelunker") and not d.get("starter"):
+            # each faction's own starter dungeon covers Novice Spelunker (data/world.json "starter"), so skip the other side's
             dungeons.append({**d, "travel": True})
     brackets = []
     for lo, hi in BRACKETS:
@@ -235,15 +285,14 @@ def build_plan(cfg, g, progress=None):
             if lo == 1:
                 add("create", f"Create {ch['name']}, {ch['race']} {ch['class']}, in {ch['start_zone']}", "Start")
             for n, a, b in prof_spans(src):
-                if lo <= a < hi or (lo == 1 and a == 1):
+                if lo <= a < hi or (lo == 1 and a == 1) or (hi == 60 and a == 60):
                     gone = [p for p, _, e in prof_spans(src) if e == a]
                     add(f"train-{slug(n)}", f"Swap {gone[0]} for {n}" if gone else f"Train {n}", "Profession")
                 if n in CRAFTS:
                     for skill, lvl in CRAFT_TARGET.items():
-                        due = max(lvl, a if a >= 52 else lvl)
-                        if lo < due <= hi or (lo == 1 and due == 1):
-                            if a < b:
-                                add(f"{slug(n)}-{skill}", f"{n} to {skill}", "Legacy")
+                        due = craft_due(lvl, a)
+                        if (lo < due <= hi or (lo == 1 and due == 1)) and a < b and due < b:
+                            add(f"{slug(n)}-{skill}", f"{n} to {skill}", "Legacy")
             for m in ch["milestones"]:
                 if lo <= m["level"] < hi or (hi == 60 and m["level"] == 60):
                     add(f"m-{slug(m['name'])}", f"{m['name']} at {m['level']}", "Class")
@@ -283,14 +332,17 @@ def build_plan(cfg, g, progress=None):
     crafts = {c: [ch["id"] for ch, src in zip(chars, cfg["characters"]) if c in [n for n, _, _ in prof_spans(src)]] for c in CRAFTS}
     distinct = len({ch["class"] for ch in chars})
     covered = sum(1 for v in crafts.values() if v)
+    # earliest reachable due level per craft target, across everyone who takes the craft (None: dropped before it)
+    due_at = {}
+    for c in CRAFTS:
+        for sk, lvl in CRAFT_TARGET.items():
+            ds = [craft_due(lvl, a) for src in cfg["characters"] for n, a, b in prof_spans(src) if n == c and craft_due(lvl, a) < b]
+            if ds:
+                due_at[(c, sk)] = min(ds)
     proj = []
     for lo, hi in BRACKETS:
         pts = sum(1 for lv in (25, 45, 60) if lv <= hi) * distinct
-        for c, who in crafts.items():
-            if not who:
-                continue
-            start = min(a for ch in cfg["characters"] for n, a, _ in prof_spans(ch) if n == c)
-            pts += sum(1 for sk, lvl in CRAFT_TARGET.items() if max(lvl, start if start >= 52 else lvl) <= hi)
+        pts += sum(1 for d in due_at.values() if d <= hi)
         proj.append({"at": f"{lo}-{hi}", "points": pts})
     errs, warns, info = validate(cfg, g)
     links = {}
@@ -314,7 +366,7 @@ def build_plan(cfg, g, progress=None):
         "characters": chars, "brackets": brackets, "account": account,
         "coverage": {"crafts": crafts, "gaps": [c for c, v in crafts.items() if not v],
                      "distinct_classes": distinct, "crafts_covered": covered,
-                     "legacy_from_plan": distinct * 3 + covered * 3, "projection": proj},
+                     "legacy_from_plan": distinct * 3 + len(due_at), "projection": proj},
         "validation": {"errors": errs, "warnings": warns, "info": info},
         "faction": g.world["factions"][fac],
         "zones": [z for z in g.world["zones"] if z["owner"] != other],
@@ -665,6 +717,15 @@ def doctor():
         if E or W:
             problems.append(f"examples/{f}: " + "; ".join(E + W))
         build_plan(cfg, g)
+    starters = {}
+    for d in g.world["dungeons"]:
+        if d.get("starter"):
+            starters.setdefault(d["access"], []).append(d["name"])
+            if d.get("spelunker") != "Novice":
+                problems.append(f"starter dungeon {d['name']} should be a Novice Spelunker dungeon")
+    for side in ("Alliance", "Horde"):
+        if len(starters.get(side, [])) != 1:
+            problems.append(f"data/world.json: expected exactly one {side} starter dungeon, found {starters.get(side, [])}")
     for path, text in example_files().items():
         cur = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
         if cur != text:
@@ -719,7 +780,7 @@ def main(argv=None):
     s = sub.add_parser("plan"); s.add_argument("--config")
     s = sub.add_parser("level"); s.add_argument("char"); s.add_argument("level", type=int); s.add_argument("--rested", choices=RESTED); s.add_argument("--config")
     s = sub.add_parser("skill"); s.add_argument("char"); s.add_argument("profession"); s.add_argument("skill", type=int); s.add_argument("--config")
-    s = sub.add_parser("check"); s.add_argument("ids", nargs="+"); s.add_argument("--off", action="store_true"); s.add_argument("--config")
+    s = sub.add_parser("check"); s.add_argument("ids", nargs="+"); s.add_argument("--off", action="store_true"); s.add_argument("--force", action="store_true"); s.add_argument("--config")
     s = sub.add_parser("progress"); s.add_argument("action", choices=["merge", "show", "reset"]); s.add_argument("file", nargs="?"); s.add_argument("--dry-run", action="store_true"); s.add_argument("--force", action="store_true"); s.add_argument("--config")
     s = sub.add_parser("import-addon"); s.add_argument("savedvars"); s.add_argument("--force", action="store_true"); s.add_argument("--dry-run", action="store_true"); s.add_argument("--db", default="LegacyTrackerDB", help="SavedVariables table name (for a renamed copy of the addon)"); s.add_argument("--config")
     s = sub.add_parser("scrub-addon", help="write a shareable progress JSON from LegacyTracker.lua (roster characters only, no gold or time played)")
@@ -737,8 +798,9 @@ def main(argv=None):
         cfg = interview(load_json(a.answers) if a.answers else None)
         g = Game()
         E, W, I = validate(normalize(json.loads(json.dumps(cfg))), g)
-        write_json(CONFIG, cfg)
-        print(f"wrote {os.path.relpath(CONFIG, ROOT)}")
+        dest = DRAFT if E else CONFIG
+        write_json(dest, cfg)
+        print(f"wrote {os.path.relpath(dest, ROOT)}" + (" (not config/roster.json: fix the errors below, then rename it)" if E else ""))
         for x in E: print("error:", x)
         for x in W: print("warning:", x)
         for x in I: print("note:", x)
@@ -811,9 +873,15 @@ def main(argv=None):
             ch = find_char(cfg, a.char)
             prof = a.profession.title()
             if prof not in CRAFTS + GATHER + SECONDARY: sys.exit(f"unknown profession {a.profession}")
+            if not 0 <= a.skill <= 300: sys.exit("skill must be 0-300")
             p["skills"].setdefault(ch["id"], {})[prof] = a.skill
             print(f"{ch['name']}: {prof} {a.skill}")
         elif a.cmd == "check":
+            plan = build_plan(cfg, Game())
+            known = {i["id"] for b in plan["brackets"] for t in b["tasks"].values() for i in t} | {i["id"] for i in plan["account"]}
+            bad = [i for i in a.ids if i not in known]
+            if bad and not a.off and not a.force:
+                sys.exit(f"unknown checklist id(s): {', '.join(bad)}. Find ids with ./mc ids <text>, or add --force.")
             for i in a.ids:
                 if a.off: p["checks"].pop(i, None)
                 else: p["checks"][i] = True
