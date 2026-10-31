@@ -57,6 +57,10 @@ git push
 
 `--allow-unrelated-histories` is needed the first time if you created your copy with **Use this template** (template copies start with fresh history). Files identical on both sides merge cleanly. Forks can also use GitHub's **Sync fork** button, then run `./mc generate`.
 
+### Your own README without conflicts
+
+Put your group's README in `.github/README.md`. GitHub shows that file on your repository's front page instead of the root `README.md`, and upstream never has it, so the root README keeps merging cleanly. Keep other personal notes in a folder upstream doesn't use (for example `personal/`).
+
 ### Resolving conflicts
 
 `git status` lists conflicted files. For a file you never meant to change, take upstream's version:
