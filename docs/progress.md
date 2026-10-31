@@ -56,8 +56,11 @@ Run `./mc generate` after CLI changes, then commit `progress/progress.json`, `we
 ## Merge rules
 
 - **Page edits stick.** Every tick, untick, level, rested or skill change on the page is time-stamped (the `stamp` field). A stamped edit beats older data from `progress/progress.json`, so unticking a baked-in item or correcting a level downward survives a reload. A newer bake (a later `updated` date, or newer addon data) beats an older page edit.
+- **CLI edits stick too.** `./mc level`, `./mc skill` and `./mc check` (including `--off`) stamp what they change, so a correction made after a page export isn't undone by that browser on reload. A later page edit still wins. `./mc import-addon` skips addon data older than a manual level edit (`--force` overrides).
+- **Canvas unticks travel.** The canvas **Copy progress** JSON lists an unticked item as `false` with a stamp, so the page's **Import progress** clears it too.
 - Checks: `./mc progress merge` treats an export as the full set of ticks and replaces the checks; the page's **Import progress** sets or clears each id in the file and keeps ids it doesn't mention. A file with no `checks` key (for example `./mc scrub-addon` output) leaves ticks alone.
 - Levels and skills without a stamp: the higher value wins; equal levels take the newer data. Addon data that isn't newer than what's saved is skipped, on the page and in the CLI.
+- Imports are checked first: levels 1–60, rested Empty/Partial/Full, skills 0–300, checks true/false, and the right container types. A file that fails is rejected with the field names and nothing changes. If the browser's saved copy is ever malformed, the page loads what is valid and keeps the original under `mc:<roster>:v1:invalid` in localStorage.
 - Notes: replaced when the incoming file has notes (or a newer stamped edit, even an empty one).
 - Name mappings (`map`, from `./mc map`): merged, the incoming file wins on a conflict. Page exports include them.
 - Other top-level keys (added by other tools) are kept.

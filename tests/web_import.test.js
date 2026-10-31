@@ -3,10 +3,13 @@ const fs = require("fs"), path = require("path"), assert = require("assert");
 const root = path.join(__dirname, "..");
 const src = fs.readFileSync(path.join(root, "web", "app.js"), "utf8");
 const cut = (a, b) => src.slice(src.indexOf(a), src.indexOf(b));
-const body = cut("  function blank()", "  function load()") + cut("  function parseLua", "  function importJSON");
+const body = cut("  function blank()", "  var S = load();") + cut("  function parseLua", "  function importJSON");
 const CHARS = [{ id: "aldric", name: "Aldric" }, { id: "elowen", name: "Elowen" }, { id: "brannoc", name: "Brannoc" }];
 let P = { roster: { key: "k" }, progress: { map: { Brannocalt: "brannoc" } } }, S = {};
 function today() { return "2026-11-04"; }
+const KEY = "mc:k:v1", store = {};
+global.localStorage = { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = String(v); } };
+console.warn = () => {};
 eval(body);
 const sv = fs.readFileSync(path.join(root, "addon", "test", "SavedVariables.sample.lua"), "utf8");
 
@@ -77,6 +80,54 @@ S = {};
 const m = merge(merge(blank(), { map: { Aldricthebold: "aldric" } }), { map: { SomeAlt: "elowen" } });
 assert.deepStrictEqual(m.map, { Aldricthebold: "aldric", SomeAlt: "elowen" });
 assert.ok("map" in JSON.parse(JSON.stringify(m)));
+
+// CLI edit stamps (#50): a later ./mc check --off (newer baked stamp) beats an older local stamped tick
+{
+  const t1 = Date.parse("2026-11-06T10:00:00Z");
+  const loc = { updated: "2026-11-06", checks: { a: true }, levels: {}, skills: {}, map: {}, stamp: { "c:a": t1 } };
+  const bk = JSON.parse(JSON.stringify(loc)); delete bk.checks.a; bk.stamp["c:a"] = t1 + 60000;
+  assert.ok(!merge(bk, loc).checks.a, "CLI untick lost to an older browser stamp");
+  loc.stamp["c:a"] = t1 + 120000;
+  assert.ok(merge(bk, loc).checks.a, "a later browser edit must still win");
+  // manual level over a record with addon metadata
+  const lb = { levels: { aldric: { level: 28, lastSeenEpoch: 1700000000, updated: "2026-11-06", source: "manual" } }, stamp: { "l:aldric": t1 } };
+  const ll = { levels: { aldric: { level: 30, lastSeenEpoch: 1700000500, updated: "2023-11-14" } } };
+  assert.strictEqual(merge(merge(blank(), lb), ll).levels.aldric.level, 28);
+}
+
+// canvas Copy progress tombstones (#56): a stamped false unticks a baked tick
+{
+  const t2 = Date.parse("2026-11-06T12:00:00Z");
+  const bakedU = merge(blank(), { updated: "2026-11-05", checks: { a: true, b: true } });  // unstamped (e.g. ./mc check)
+  const canvas = { updated: "2026-11-06", checks: { a: true, b: false }, stamp: { "c:b": t2 } };
+  let pg = merge(bakedU, canvas);
+  assert.ok(!pg.checks.b && pg.checks.a, "canvas untick lost on page import");
+  assert.ok(!merge(merge(blank(), { updated: "2026-11-05", checks: { a: true, b: true } }), pg).checks.b, "untick lost after reload");
+  const bakedS = merge(blank(), { updated: "2026-11-05", checks: { b: true }, stamp: { "c:b": t2 - 1000 } });
+  assert.ok(!merge(bakedS, canvas).checks.b, "untick lost against an older stamped tick");
+  const newer = merge(blank(), { updated: "2026-11-06", checks: { b: true }, stamp: { "c:b": t2 + 1000 } });
+  assert.ok(merge(newer, canvas).checks.b, "a newer destination edit must win");
+  assert.ok(merge(blank(), { checks: { c: true } }).checks.c && merge(merge(blank(), { checks: { c: true } }), canvas).checks.c, "ids the file doesn't address are kept");
+}
+
+// progress validation (#54)
+assert.deepStrictEqual(checkProgress({ levels: { aldric: { level: 12, rested: "Partial" } }, skills: { aldric: { Mining: 45 } } }), []);
+[[{ levels: { aldric: { level: 1, updated: "2026-11-06", rested: {} } } }, "rested"], [{ levels: [] }, "levels: must be an object"],
+ [{ levels: { aldric: { level: 0 } } }, "1-60"], [{ skills: { aldric: { Mining: "x" } } }, "0-300"], [{ checks: { a: 1 } }, "checks.a"],
+ [{ version: 9 }, "version"], [[1], "JSON object"], [null, "JSON object"]].forEach(([o, frag]) => {
+  assert.ok(checkProgress(o).some((e) => e.indexOf(frag) >= 0), JSON.stringify(o));
+});
+// a malformed saved record loads what is valid and keeps the original
+{
+  const badRaw = JSON.stringify({ checks: { a: true }, levels: { aldric: { level: 14, rested: {}, updated: "2026-11-06" } } });
+  store[KEY] = badRaw;
+  const L = load();
+  assert.ok(L.checks.a); assert.strictEqual(L.levels.aldric.level, 14); assert.strictEqual(typeof (L.levels.aldric.rested || ""), "string");
+  assert.strictEqual(store[KEY + ":invalid"], badRaw);
+  assert.strictEqual(store[KEY], badRaw, "load must not overwrite the saved copy");
+  store[KEY] = "{not json"; delete store[KEY + ":invalid"];
+  assert.ok(load()); assert.strictEqual(store[KEY + ":invalid"], "{not json");
+}
 
 assert.deepStrictEqual(parseLua('X = { "a", ["k"] = "q\\"x", n = -1.5e2, t = true, -- c\n }').X, { 1: "a", k: 'q"x', n: -150, t: true });
 console.log("web import: ok");
