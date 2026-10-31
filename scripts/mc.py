@@ -93,11 +93,19 @@ def config_path(arg=None):
     return CONFIG if os.path.exists(CONFIG) else EXAMPLE
 
 
+def rel(path, start=ROOT):
+    """Relative path for messages; falls back to the absolute path (e.g. another drive on Windows)."""
+    try:
+        return os.path.relpath(path, start)
+    except ValueError:
+        return os.path.abspath(path)
+
+
 def load_config(path):
     raw = load_json(path)
     bad = structure_errors(raw)
     if bad:
-        raise SystemExit(f"{os.path.relpath(path, ROOT)}: invalid roster structure:\n  " + "\n  ".join(bad))
+        raise SystemExit(f"{rel(path, ROOT)}: invalid roster structure:\n  " + "\n  ".join(bad))
     cfg = normalize(raw)
     cfg["_path"] = path
     return cfg
@@ -414,7 +422,7 @@ def build_plan(cfg, g, progress=None):
         links[n] = {"url": url, "direct": direct}
     prog = progress or empty_progress(cfg)
     return {
-        "schema": SCHEMA_VERSION, "generated_from": os.path.relpath(cfg.get("_path", CONFIG), ROOT).replace(os.sep, "/"),
+        "schema": SCHEMA_VERSION, "generated_from": rel(cfg.get("_path", CONFIG), ROOT).replace(os.sep, "/"),
         "roster": {"name": cfg.get("roster_name", "Legacy Mission Control"), "faction": fac, "ruleset": cfg["ruleset"],
                    "launch": cfg.get("launch", LAUNCH), "key": roster_key(cfg)},
         "characters": chars, "brackets": brackets, "account": account,
@@ -821,13 +829,13 @@ def doctor():
     for path, text in example_files().items():
         cur = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
         if cur != text:
-            problems.append(f"{os.path.relpath(path, ROOT)} is out of date: run ./mc generate")
+            problems.append(f"{rel(path, ROOT)} is out of date: run ./mc generate")
     if os.path.exists(CONFIG):
         files, plan = outputs(CONFIG)
         for path in (WEB_PLAN, CANVAS_OUT):
             cur = open(path, encoding="utf-8").read() if os.path.exists(path) else ""
             if cur != files[path]:
-                problems.append(f"{os.path.relpath(path, ROOT)} is out of date: run ./mc generate")
+                problems.append(f"{rel(path, ROOT)} is out of date: run ./mc generate")
         src = files[CANVAS_OUT]
     else:
         files, plan = outputs(EXAMPLE, personal=False)
@@ -892,7 +900,7 @@ def main(argv=None):
         E, W, I = validate(normalize(json.loads(json.dumps(cfg))), g)
         dest = DRAFT if E else CONFIG
         write_json(dest, cfg)
-        print(f"wrote {os.path.relpath(dest, ROOT)}" + (" (not config/roster.json: fix the errors below, then rename it)" if E else ""))
+        print(f"wrote {rel(dest, ROOT)}" + (" (not config/roster.json: fix the errors below, then rename it)" if E else ""))
         for x in E: print("error:", x)
         for x in W: print("warning:", x)
         for x in I: print("note:", x)
@@ -900,7 +908,7 @@ def main(argv=None):
     if a.cmd == "validate":
         path = config_path(a.config)
         E, W, I = validate(load_config(path), Game())
-        print(f"{os.path.relpath(path, ROOT)}: {len(E)} error(s), {len(W)} warning(s)")
+        print(f"{rel(path, ROOT)}: {len(E)} error(s), {len(W)} warning(s)")
         for x in E: print("error:", x)
         for x in W: print("warning:", x)
         for x in I: print("note:", x)
@@ -913,7 +921,7 @@ def main(argv=None):
         files.update(example_files())
         for path, text in files.items():
             write_text(path, text)
-            print("wrote", os.path.relpath(path, ROOT))
+            print("wrote", rel(path, ROOT))
         if not os.path.exists(CONFIG) and not a.config:
             print("no config/roster.json yet: the page shows the example roster (./mc init to make yours)")
         for x in plan["validation"]["warnings"]: print("warning:", x)
@@ -1005,7 +1013,7 @@ def main(argv=None):
             if a.dry_run:
                 return 0
             bk = backup_progress()
-            if bk: print("backup:", os.path.relpath(bk, ROOT))
+            if bk: print("backup:", rel(bk, ROOT))
         elif a.cmd == "import-addon":
             p, lines = import_addon(cfg, p, open(a.savedvars, encoding="utf-8", errors="replace").read(), a.force, a.db)
             print("\n".join(lines))
