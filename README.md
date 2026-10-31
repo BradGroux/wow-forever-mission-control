@@ -26,7 +26,7 @@ You need Python 3.9 or newer and nothing else. No packages, no build step.
    ./mc generate      # writes web/data/plan.js, build/PLAN.md and the Grok Bot canvas
    ```
    On Windows, run `python mc init` and so on.
-3. **Open the page.** Open `web/index.html` in your browser, or run `./mc serve` and go to http://localhost:8000. To share it with your group, host it for free on [GitHub Pages or Cloudflare Pages](docs/hosting.md).
+3. **Open the page.** Open `web/index.html` in your browser, or run `./mc serve` and go to http://localhost:8000. To share it with your group, host it on [GitHub Pages, Cloudflare Pages or ChatGPT Sites](docs/hosting.md).
 4. **Track progress.** Tick checklists and set levels on the page. Or install the [LegacyTracker addon](docs/addon.md) and import its data with the page's **Import progress** button or `./mc import-addon`.
 
 `make` users: every `./mc` command has a Makefile target (`make init`, `make generate`, `make serve`, `make check` ...).
