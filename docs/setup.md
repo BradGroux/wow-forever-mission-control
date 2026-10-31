@@ -27,7 +27,7 @@ Interactive:
 ./mc init
 ```
 
-It asks for a roster name, faction, ruleset, and for each of four characters a name, race, class, leveling and endgame spec, and professions. Press Enter to accept a default. It writes `config/roster.json`.
+It asks for a roster name, faction, ruleset, and how many characters (1 to 10, Enter for four), then for each a name, race, class, leveling and endgame spec, and professions. Press Enter to accept a default. It writes `config/roster.json`.
 
 Or copy an example and edit it:
 
@@ -43,7 +43,7 @@ Every field is described in [config.md](config.md).
 ./mc validate
 ```
 
-Errors (must fix): illegal race and class combos, a race from the other faction, a spec that doesn't belong to the class, more or fewer than four characters, three primary professions at once, duplicate names or ids.
+Errors (must fix): illegal race and class combos, a race from the other faction, a spec that doesn't belong to the class, fewer than 1 or more than 10 characters, three primary professions at once, duplicate names or ids.
 
 Warnings (worth fixing): a crafting profession nobody takes (that costs 3 Legacy points), two characters on the same craft, two characters of the same class, names that are not 2 to 12 letters.
 

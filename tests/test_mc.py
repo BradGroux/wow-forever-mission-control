@@ -38,11 +38,12 @@ class Validate(unittest.TestCase):
         e, _, _ = mc.validate(cfg_with(chars={0: {"race": "High Order Skyborne", "class": "Shaman", "leveling_spec": "Enhancement", "endgame_spec": "Restoration"}}), G)
         self.assertTrue(any("cannot be a Shaman" in x for x in e))
 
-    def test_four_characters(self):
+    def test_three_characters_allowed(self):
         c = copy.deepcopy(EX)
         c["characters"] = c["characters"][:3]
-        e, _, _ = mc.validate(c, G)
-        self.assertTrue(any("exactly four" in x for x in e))
+        e, _, i = mc.validate(c, G)
+        self.assertEqual(e, [])
+        self.assertTrue(any("four is the recommended" in x for x in i))
 
     def test_three_primaries(self):
         e, _, _ = mc.validate(cfg_with(chars={1: {"professions": [{"name": "Herbalism", "from": 1}, {"name": "Alchemy", "from": 1}, {"name": "Mining", "from": 5}]}}), G)
@@ -203,6 +204,50 @@ class Strict(unittest.TestCase):
         self.assertNotEqual(r.returncode, 0); self.assertIn("0-300", r.stderr)
         r = self.run_mc("check", "bogus-id-123")
         self.assertNotEqual(r.returncode, 0); self.assertIn("unknown checklist id", r.stderr)
+
+
+class RosterSize(unittest.TestCase):
+    EXTRA = [
+        {"name": "Brunhild", "race": "Dwarf", "class": "Paladin", "professions": [{"name": "Mining"}, {"name": "Herbalism"}]},
+        {"name": "Selwyn", "race": "Human", "class": "Priest", "professions": [{"name": "Herbalism"}, {"name": "Skinning"}]},
+    ]
+
+    def roster(self, n):
+        c = copy.deepcopy(EX)
+        c["characters"] = (c["characters"] + copy.deepcopy(self.EXTRA))[:n]
+        return mc.normalize(c)
+
+    def test_sizes_validate_and_plan(self):
+        for n in (1, 2, 3, 4, 5, 6):
+            c = self.roster(n)
+            e, w, i = mc.validate(c, G)
+            self.assertEqual(e, [], (n, e))
+            if n < 3:
+                self.assertFalse(any(x.startswith("gap:") for x in w), (n, w))
+            if n != 4:
+                self.assertTrue(any("four is the recommended" in x for x in i))
+            p = mc.build_plan(c, G)
+            self.assertEqual(len(p["characters"]), n)
+            ids = [t["id"] for b in p["brackets"] for tl in b["tasks"].values() for t in tl]
+            self.assertEqual(len(ids), len(set(ids)))
+            self.assertEqual(len(p["brackets"][0]["rotation"]), n)
+
+    def test_bounds(self):
+        c = copy.deepcopy(EX); c["characters"] = []
+        self.assertTrue(any("1 to 10" in x for x in mc.validate(c, G)[0]))
+        c = self.roster(4); c["characters"] = [dict(c["characters"][0], name=f"Alt{chr(97 + i)}", id=f"alt{i}") for i in range(11)]
+        self.assertTrue(any("1 to 10" in x for x in mc.validate(c, G)[0]))
+
+    def test_four_unchanged(self):
+        self.assertEqual(mc.build_plan(EX, G)["roster"]["key"], mc.roster_key(EX))
+        self.assertEqual(mc.validate(EX, G), ([], [], []))
+
+    def test_init_count(self):
+        ans = {"roster_name": "Duo", "faction": "Alliance", "ruleset": "Normal", "count": "2",
+               "c1.name": "Aldric", "c1.race": "Human", "c1.class": "Warrior", "c2.name": "Elowen", "c2.race": "Night Elf", "c2.class": "Druid"}
+        cfg = mc.interview(ans)
+        self.assertEqual(len(cfg["characters"]), 2)
+        self.assertEqual(len(mc.interview({k: v for k, v in ans.items() if k != "count"})["characters"]), 4)
 
 
 class LegacyTracking(unittest.TestCase):

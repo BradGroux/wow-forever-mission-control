@@ -208,7 +208,7 @@ export default function App() {
   const b = PLAN.brackets.find((x: any) => x.id === bid) ?? PLAN.brackets[0];
   const cur = bracketOf(level(c.id));
   return (
-    <Page title={PLAN.roster.name} summary={`${PLAN.roster.faction} · ${PLAN.roster.ruleset} · ${CHARS.length} characters`} width="wide">
+    <Page title={PLAN.roster.name} summary={`${PLAN.roster.faction} · ${PLAN.roster.ruleset} · ${CHARS.length} character${CHARS.length === 1 ? "" : "s"}`} width="wide">
       <Section>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
           {CHARS.map((x: any) => (
