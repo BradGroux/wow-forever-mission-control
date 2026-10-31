@@ -1,5 +1,5 @@
 """Unit tests for the mc CLI. Run: python3 -m unittest discover -s tests -v"""
-import contextlib, copy, io, json, os, subprocess, sys, tempfile, unittest
+import contextlib, copy, io, json, os, re, subprocess, sys, tempfile, unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
@@ -310,6 +310,43 @@ class CraftDue(unittest.TestCase):
         self.assertEqual(late[5]["points"], base[5]["points"] - 2)  # 32-40 still before training
         self.assertEqual(late[6]["points"], base[6]["points"])      # 40-45 trained and caught up
 
+    def test_projection_matches_tasks(self):
+        # #64: a target due the level the craft is trained (start 32 or 52) counts where its task is, never earlier
+        c = mc.load_config(mc.EXAMPLE)
+        self.assertEqual([ch["id"] for ch in c["characters"] if any(p["name"] == "Alchemy" for p in ch["professions"])], ["elowen"])
+        c["characters"][1]["professions"][1]["until"] = 2
+        none = [x["points"] for x in mc.build_plan(c, G)["coverage"]["projection"]]
+        for start in (1, 24, 25, 26, 31, 32, 33, 40, 51, 52, 53, 59):
+            p = self.plan(start)
+            run, want = 0, []
+            for b in p["brackets"]:
+                run += sum(1 for t in b["tasks"]["elowen"] if t["text"].startswith("Alchemy to"))
+                want.append(run)
+            got = [x["points"] - n for x, n in zip(p["coverage"]["projection"], none)]
+            self.assertEqual(got, want, start)
+        p = self.plan(32)
+        self.assertEqual([t["text"] for b in p["brackets"] if b["id"] == "26-32" for t in b["tasks"]["elowen"] if "Alchemy" in t["text"]], [])
+        self.assertEqual(p["coverage"]["projection"][4]["points"], none[4])
+
+    def test_markdown_breakdown_matches_total(self):
+        # #68: 0, 1, 2 and 3 reachable Alchemy targets, plus the standard roster
+        for until, cp in ((20, 15), (30, 16), (40, 17), (None, 18)):
+            c = mc.load_config(mc.EXAMPLE)
+            if until:
+                c["characters"][1]["professions"][1]["until"] = until
+            p = mc.build_plan(c, G)
+            cv = p["coverage"]
+            self.assertEqual(cv["craft_points"], cp, until)
+            self.assertEqual(cv["legacy_from_plan"], cv["distinct_classes"] * 3 + cp)
+            line = [l for l in mc.plan_markdown(p).splitlines() if l.startswith("Legacy points from this plan")][0]
+            nums = [int(x) for x in re.findall(r"\d+", line)]
+            if until:
+                self.assertIn(f"{cp} craft targets reachable across {cv['crafts_covered']} crafts", line)
+                self.assertEqual(nums[0], nums[1] * nums[2] + nums[3])
+            else:
+                self.assertIn(f"{cv['crafts_covered']} crafts x 3", line)
+                self.assertEqual(nums[0], nums[1] * nums[2] + nums[3] * nums[4])
+
     def test_early_and_60_unchanged(self):
         self.assertEqual(mc.craft_due(25, 1), 25)
         self.assertEqual(mc.craft_due(25, 52), 52)
@@ -328,7 +365,32 @@ class RosterStructure(unittest.TestCase):
             ch(lambda c: c.__setitem__("characters", {"a": 1})),
             ch(lambda c: c["characters"][0].__setitem__("professions", "Mining")),
             [],
+            # #63: scalar fields with the wrong type
+            ch(lambda c: (c["characters"][0].__setitem__("name", 12), c["characters"][0].pop("id", None))),
+            ch(lambda c: (c["characters"][0].__setitem__("name", None), c["characters"][0].pop("id", None))),
+            ch(lambda c: c["characters"][0].__setitem__("name", ["Aldric"])),
+            ch(lambda c: (c["characters"][0].__setitem__("name", 12), c["characters"][0].__setitem__("id", "aldric"))),
+            ch(lambda c: c["characters"][0].__setitem__("race", [])),
+            ch(lambda c: c["characters"][0].__setitem__("class", {})),
+            ch(lambda c: c["characters"][0].__setitem__("id", 7)),
+            ch(lambda c: c.__setitem__("faction", ["Alliance"])),
         ]
+
+    def test_scalar_type_messages(self):
+        c = copy.deepcopy(mc.load_json(mc.EXAMPLE)); c["characters"][0]["race"] = []
+        self.assertIn("roster.characters[0].race must be a string, got []", mc.structure_errors(c))
+
+    def test_generate_rejects_before_writing(self):
+        c = copy.deepcopy(mc.load_json(mc.EXAMPLE)); c["characters"][0]["class"] = {}
+        out = os.path.join(mc.ROOT, "build", "PLAN.md")
+        before = open(out, encoding="utf-8").read() if os.path.exists(out) else None
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+            json.dump(c, f)
+        r = subprocess.run([sys.executable, os.path.join(mc.ROOT, "scripts", "mc.py"), "generate", "--config", f.name], capture_output=True, text=True)
+        os.unlink(f.name)
+        self.assertNotEqual(r.returncode, 0); self.assertNotIn("Traceback", r.stderr)
+        self.assertIn("class must be a string", r.stderr + r.stdout)
+        self.assertEqual(before, open(out, encoding="utf-8").read() if os.path.exists(out) else None)
 
     def test_errors_not_exceptions(self):
         for raw in self.cases():

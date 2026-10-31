@@ -115,17 +115,22 @@ def structure_errors(cfg):
     """Shape problems that would stop normalize/validate from reading the roster at all."""
     if not isinstance(cfg, dict):
         return [f"roster must be a JSON object, got {type(cfg).__name__}"]
+    out = [f"roster.{k} must be a string, got {cfg[k]!r}" for k in ("roster_name", "faction", "ruleset", "launch")
+           if k in cfg and not isinstance(cfg[k], str)]
     chars = cfg.get("characters")
     if chars is None:
-        return []
+        return out
     if not isinstance(chars, list):
-        return [f"roster.characters must be an array, got {type(chars).__name__}"]
-    out = []
+        return out + [f"roster.characters must be an array, got {type(chars).__name__}"]
     for i, ch in enumerate(chars):
         where = f"roster.characters[{i}]"
         if not isinstance(ch, dict):
             out.append(f"{where} must be an object, got {ch!r}")
             continue
+        # scalar fields are used as dict keys, slugs and regex input, so check them before anything reads them
+        for k in ("id", "name", "display", "race", "class", "leveling_spec", "endgame_spec", "role", "notes"):
+            if k in ch and not isinstance(ch[k], str):
+                out.append(f"{where}.{k} must be a string, got {ch[k]!r}")
         profs = ch.get("professions")
         if profs is None:
             continue
@@ -149,7 +154,8 @@ def normalize(cfg):
     if structure_errors(cfg):
         return cfg
     for i, ch in enumerate(cfg.get("characters") or []):
-        ch.setdefault("id", slug(ch.get("name", f"c{i + 1}")))
+        if "id" not in ch:
+            ch["id"] = slug(ch.get("name", f"c{i + 1}"))
         for p in ch.get("professions") or []:
             p.setdefault("from", 1)
     return cfg
@@ -397,8 +403,8 @@ def build_plan(cfg, g, progress=None):
     due_at = {}
     for c in CRAFTS:
         for sk, lvl in CRAFT_TARGET.items():
-            # (due, trained that level): a target due the level it's trained counts from that level's bracket
-            ds = [(craft_due(lvl, a), craft_due(lvl, a) == a and a > lvl) for src in cfg["characters"] for n, a, b in prof_spans(src) if n == c and craft_due(lvl, a) < b]
+            # (due, due the level it's trained): such a target counts from the bracket that holds the training, as the tasks do
+            ds = [(craft_due(lvl, a), craft_due(lvl, a) == a) for src in cfg["characters"] for n, a, b in prof_spans(src) if n == c and craft_due(lvl, a) < b]
             if ds:
                 due_at[(c, sk)] = min(ds)
     proj = []
@@ -427,7 +433,7 @@ def build_plan(cfg, g, progress=None):
                    "launch": cfg.get("launch", LAUNCH), "key": roster_key(cfg)},
         "characters": chars, "brackets": brackets, "account": account,
         "coverage": {"crafts": crafts, "gaps": [c for c, v in crafts.items() if not v],
-                     "distinct_classes": distinct, "crafts_covered": covered,
+                     "distinct_classes": distinct, "crafts_covered": covered, "craft_points": len(due_at),
                      "legacy_from_plan": distinct * 3 + len(due_at), "projection": proj},
         "validation": {"errors": errs, "warnings": warns, "info": info},
         "faction": g.world["factions"][fac],
@@ -741,7 +747,9 @@ def plan_markdown(plan):
     names = {c["id"]: c["display"] for c in plan["characters"]}
     for craft, who in cv["crafts"].items():
         o.append(f"| {a(craft)} | {', '.join(names[w] for w in who) or 'none'} |")
-    o += ["", f"Legacy points from this plan: {cv['legacy_from_plan']} ({cv['distinct_classes']} classes x 3, {cv['crafts_covered']} crafts x 3).", ""]
+    cp = cv.get("craft_points", cv["crafts_covered"] * 3)
+    crafts_txt = f"{cv['crafts_covered']} crafts x 3" if cp == cv["crafts_covered"] * 3 else f"{cp} craft targets reachable across {cv['crafts_covered']} crafts"
+    o += ["", f"Legacy points from this plan: {cv['legacy_from_plan']} ({cv['distinct_classes']} classes x 3, {crafts_txt}).", ""]
     v = plan["validation"]
     if v["warnings"] or v["info"]:
         o += ["## Validator notes", ""] + [f"- {x}" for x in v["warnings"] + v["info"]] + [""]
