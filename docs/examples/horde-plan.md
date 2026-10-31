@@ -207,22 +207,22 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](
 
 **Grukk** (Orc Warrior)
 - [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/search?q=Dual%20Specialization) at 40 `Class`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
 - [ ] Experienced [Warrior](https://www.wowhead.com/forever/class=1) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
 
 **Thalwen** (Tauren Druid)
 - [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/search?q=Dual%20Specialization) at 40 `Class`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
 - [ ] Experienced [Druid](https://www.wowhead.com/forever/class=11) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
 
 **Morvane** (Undead Paladin)
-- [ ] [Warhorse](https://www.wowhead.com/forever/search?q=Warhorse) at 40 `Class`
+- [ ] [Warhorse](https://www.wowhead.com/forever/spell=13819) at 40 `Class`
 - [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/search?q=Dual%20Specialization) at 40 `Class`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
 - [ ] Experienced [Paladin](https://www.wowhead.com/forever/class=2) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
@@ -230,7 +230,7 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](
 **Zalaji** (Troll Mage)
 - [ ] [Portals](https://www.wowhead.com/forever/search?q=Portals) at 40 `Class`
 - [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/search?q=Dual%20Specialization) at 40 `Class`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
 - [ ] Experienced [Mage](https://www.wowhead.com/forever/class=8) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
@@ -281,6 +281,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 150 `Legacy`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 225 `Legacy`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 300 `Legacy`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
 - [ ] Master [Warrior](https://www.wowhead.com/forever/class=1) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -293,6 +294,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 - [ ] Run [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) `Dungeon`
 
 **Thalwen** (Tauren Druid)
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
 - [ ] Master [Druid](https://www.wowhead.com/forever/class=11) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -305,7 +307,8 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 - [ ] Run [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) `Dungeon`
 
 **Morvane** (Undead Paladin)
-- [ ] [Charger](https://www.wowhead.com/forever/search?q=Charger) at 60 `Class`
+- [ ] [Charger](https://www.wowhead.com/forever/spell=23214) at 60 `Class`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
 - [ ] Master [Paladin](https://www.wowhead.com/forever/class=2) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -318,6 +321,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 - [ ] Run [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) `Dungeon`
 
 **Zalaji** (Troll Mage)
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
 - [ ] Master [Mage](https://www.wowhead.com/forever/class=8) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -379,3 +383,11 @@ Claim rewards from Innkeeper Wiley in [Ratchet](https://www.wowhead.com/forever/
 - [Druid Class Quests in WoW Forever](https://wowforevercodex.com/classes/druid/quests) · wowforevercodex.com
 - [Ragefire Chasm](https://www.warcraftforever.wiki/wiki/Ragefire_Chasm) · warcraftforever.wiki
 - [WoW Forever Horde Races](https://wowforevertierlist.com/races/horde) · wowforevertierlist.com
+- [Wowhead WoW: Forever database tooltips (beta client data)](https://www.wowhead.com/forever) · wowhead.com
+- [World of Warcraft: Forever Found Photos Panel Recap](https://news.blizzard.com/en-us/article/24304071/world-of-warcraft-forever-found-photos-panel-recap) · news.blizzard.com
+- [World of Warcraft: Forever Class Deep Dives: Priest and Warrior](https://news.blizzard.com/en-us/article/24301514/world-of-warcraft-forever-class-deep-dives-priest-and-warrior) · news.blizzard.com
+- [WoW: Forever Meet the New Skyborne](https://news.blizzard.com/en-us/article/24302071/wow-forever-meet-the-new-skyborne) · news.blizzard.com
+- [Zephras Isle Zone Overview: Maps, Locations, and Trainers](https://www.wowhead.com/forever/guide/zephras-isle-zone-overview) · wowhead.com
+- [Zephras Isle Walkthrough (Skyborne Starting Zone)](https://www.warcrafttavern.com/forever/guides/zephras-isle-walkthrough/) · warcrafttavern.com
+- [Riding in WoW Forever: Mount Level, Cost and Trainers](https://mmonster.co/wow-forever/guides/mounts/riding) · mmonster.co
+- [How To Get A Mount In WoW Forever: Cost, Requirement & Mount Options](https://www.method.gg/wow-forever/how-to-get-a-mount-in-wow-forever-cost-requirement-and-mount-options) · method.gg
