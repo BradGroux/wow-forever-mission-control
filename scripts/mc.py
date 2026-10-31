@@ -694,7 +694,11 @@ def interview(answers=None):
     cfg = {"$schema": "./roster.schema.json", "launch": LAUNCH}
     for k, q, d in QUESTIONS:
         cfg[k] = ask(k, q, d)
-    fac = cfg["faction"]
+    fac = str(cfg["faction"]).strip()
+    fac = next((f for f in ("Alliance", "Horde") if f.lower() == fac.lower()), fac)
+    cfg["faction"] = fac
+    rs = str(cfg.get("ruleset", "")).strip()
+    cfg["ruleset"] = next((r for r in g.world["rulesets"] if r.lower() == rs.lower()), rs)
     chars = []
     try:
         n = int(ask("count", f"How many characters ({MIN_CHARS}-{MAX_CHARS}; {RECOMMENDED_CHARS} recommended)", str(RECOMMENDED_CHARS)))
@@ -704,8 +708,8 @@ def interview(answers=None):
     for i in range(n):
         pre = f"c{i + 1}."
         races = [r for r, v in g.races.items() if v["faction"] == fac]
-        name = ask(pre + "name", f"Character {i + 1} name", f"Hero{i + 1}")
-        race = ask(pre + "race", f"  Race ({', '.join(races)})", races[0])
+        name = ask(pre + "name", f"Character {i + 1} name", "Hero" + "abcdefghij"[i])
+        race = ask(pre + "race", f"  Race ({', '.join(races) or 'pick Alliance or Horde first'})", races[0] if races else "")
         cls_opts = g.races.get(race, {}).get("classes", [])
         cls = ask(pre + "class", f"  Class ({', '.join(cls_opts)})", cls_opts[0] if cls_opts else "Warrior")
         c = g.classes.get(cls, {})
@@ -742,6 +746,12 @@ def doctor():
             starters.setdefault(d["access"], []).append(d["name"])
             if d.get("spelunker") != "Novice":
                 problems.append(f"starter dungeon {d['name']} should be a Novice Spelunker dungeon")
+    dnames = {d["name"] for d in g.world["dungeons"]}
+    for tier, tv in g.legacy["challenges"]["dungeon"]["tiers"].items():
+        for crit in tv["criteria"]:
+            for alt in crit.split(" or "):
+                if alt not in dnames and alt.split(": ")[0] not in dnames:
+                    problems.append(f"data/legacy.json: Spelunker {tier} criterion '{alt}' matches no dungeon in data/world.json")
     for side in ("Alliance", "Horde"):
         if len(starters.get(side, [])) != 1:
             problems.append(f"data/world.json: expected exactly one {side} starter dungeon, found {starters.get(side, [])}")

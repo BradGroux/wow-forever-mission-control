@@ -201,7 +201,7 @@
         h("div", { class: "rc-row" }, h("span", null, "Level " + l + " of 60"), h("span", null, b.from + "–" + b.to + " target " + b.to)),
         h("div", { class: "rc-bar" }, h("b", { style: { width: (l / 60 * 100) + "%" } }), ticks()),
         h("div", { class: "rc-row q" }, h("span", null, "Rested: " + (st.updated ? (st.rested || "Empty").toLowerCase() : "none yet")),
-          h("span", null, c.professions.filter(function (p) { return !p.until; }).map(function (p) { return p.name; }).join(" + "))));
+          h("span", null, c.professions.filter(function (p) { return (p.from || 1) <= l && (!p.until || l < p.until); }).map(function (p) { return p.name; }).join(" + "))));
     }));
   }
   function levelRows(edit) {
