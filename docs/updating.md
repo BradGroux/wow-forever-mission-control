@@ -1,5 +1,18 @@
 # Updating from upstream
 
+
+```mermaid
+sequenceDiagram
+  participant UP as Public template
+  participant WF as Sync from upstream (weekly, in your copy)
+  participant MY as Your copy
+  WF->>UP: fetch main
+  WF->>WF: merge, ./mc generate
+  WF->>MY: push sync/upstream, open PR
+  MY->>MY: review and merge (roster and progress untouched)
+  MY-->>UP: contribute: branch without personal files, ./mc leakcheck, PR
+```
+
 WoW Forever data will move after launch: quest levels, racials, new dungeons, fixes. Your copy can pull those updates from [the upstream template](https://github.com/BradGroux/wow-forever-mission-control) without touching your roster or progress.
 
 ## Why updates don't clobber your data

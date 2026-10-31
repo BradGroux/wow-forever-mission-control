@@ -7,7 +7,7 @@
   if (!P) { document.getElementById("view").textContent = "No plan data. Run ./mc generate."; return; }
 
   // ---------- fixed colors (also used inside SVG, where CSS variables are avoided)
-  var C = { t1: "#ECECEC", t2: "#BEBEBE", t3: "#9C9C9C", f2: "#2B2B2B", b1: "#4A4A4A", b0: "#353535", bg: "#141414", gold: "#C9A227" };
+  var C = { t1: "#ECECEC", t2: "#BEBEBE", t3: "#9C9C9C", f2: "#2B2B2B", b1: "#4A4A4A", b0: "#353535", bg: "#070707", gold: "#C9A227" };
   var CHARS = P.characters;
   var byId = {}; CHARS.forEach(function (c) { byId[c.id] = c; });
 
@@ -106,106 +106,151 @@
     return pts;
   }
   function statusTag(st) {
-    if (st === "classic") return h("span", { class: "tag warn", title: "Classic data, unconfirmed for Forever" }, "Classic data");
-    if (st === "unverified") return h("span", { class: "tag warn" }, "Unverified");
+    if (st === "classic") return h("span", { class: "pill warn", title: "Classic data, unconfirmed for Forever" }, "Classic data");
+    if (st === "unverified") return h("span", { class: "pill warn" }, "Unverified");
+    if (st === "beta") return h("span", { class: "pill" }, "Seen in beta");
     return null;
   }
   function icon(c, size) {
-    var img = h("img", { class: "icon", src: c.icon, alt: c["class"], width: size || 26, height: size || 26, style: { "--cc": c.color } });
-    img.addEventListener("error", function () { img.replaceWith(h("span", { class: "icon", style: { "--cc": c.color, display: "inline-grid", "place-items": "center", color: c.color, "font-weight": "700" } }, c["class"].charAt(0))); });
+    var z = size || 26;
+    var img = h("img", { class: "icon", src: c.icon, alt: c["class"], width: z, height: z, style: { "--cc": c.color, width: z + "px", height: z + "px" } });
+    img.addEventListener("error", function () { img.replaceWith(h("span", { class: "icon", style: { "--cc": c.color, width: z + "px", height: z + "px", display: "inline-grid", "place-items": "center", color: c.color, "font-weight": "700" } }, c["class"].charAt(0))); });
     return img;
   }
-  function bar(value, max, color) { return h("div", { class: "bar", style: { "--cc": color } }, h("i", { style: { width: Math.max(0, Math.min(100, value / max * 100)) + "%" } })); }
+  function ticks(cls) {
+    return P.brackets.slice(1).map(function (b) { return h("i", { class: cls, style: { left: (b.from / 60 * 100) + "%" } }); });
+  }
+  function bar(value, max, color, cls) {
+    return h("div", { class: "bar " + (cls || ""), style: { "--cc": color } }, h("b", { style: { width: Math.max(0, Math.min(100, value / max * 100)) + "%" } }));
+  }
+  function nm(c) { return h("span", { class: "nm", style: { "--cc": c.color } }, c.display); }
 
-  // ---------- components
+  // ---------- components (look of the Grok Bot canvas)
+  function sec(title, body, actions, id) {
+    return h("section", { class: "sec", id: id },
+      title ? h("div", { class: "sec-head" }, h("h2", null, title), actions ? h("div", { class: "acts" }, actions) : null) : null,
+      h("div", { class: "sec-body" }, body));
+  }
+  function panel(head) { return h("div", { class: "panel" }, head, [].slice.call(arguments, 1)); }
+  function charHead(c, title) {
+    return h("div", { class: "phead", style: { "--cc": c.color } }, icon(c, 30), h("div", null, h("span", { class: "nm" }, c.display), h("span", { class: "pt" }, title)));
+  }
   function checklist(items, color) {
     var done = items.filter(function (i) { return S.checks[i.id]; }).length;
-    return h("div", null,
-      h("div", { style: { display: "flex", gap: "10px", "align-items": "center", "margin-bottom": "6px" } },
-        h("div", { style: { flex: "1" } }, bar(done, Math.max(1, items.length), color || C.gold)),
-        h("span", { class: "dim" }, done + " / " + items.length)),
-      h("div", { class: "checklist", role: "list" }, items.map(function (it) {
+    return h("div", { class: "cl", style: { "--cc": color || C.gold } },
+      h("div", { class: "cl-prog" }, h("div", { class: "track" }, h("b", { style: { width: (items.length ? done / items.length * 100 : 0) + "%" } })), h("span", null, done + " / " + items.length)),
+      h("div", { role: "list" }, items.map(function (it) {
         var on = !!S.checks[it.id];
         function toggle() { if (on) delete S.checks[it.id]; else S.checks[it.id] = true; save(); }
-        return h("div", { class: "check", role: "checkbox", tabindex: "0", "aria-checked": on ? "true" : "false", style: { "--cc": color || C.gold },
-          onclick: toggle, onkeydown: function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(); } } },
+        return h("div", { class: "ck", role: "checkbox", tabindex: "0", "aria-checked": on ? "true" : "false",
+          onclick: function (e) { if (e.target.tagName !== "A") toggle(); }, onkeydown: function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(); } } },
           h("span", { class: "box", "aria-hidden": "true" }, on ? "✓" : ""),
-          h("span", { class: "txt" }, L(it.text), it.detail ? h("div", { class: "dim" }, L(it.detail)) : null),
-          it.tag ? h("span", { class: "tag" }, it.tag) : null);
+          h("span", { class: "tx" }, L(it.text), it.detail ? h("span", { class: "dt" }, L(it.detail)) : null),
+          it.tag ? h("span", { class: "tg" }, it.tag) : null);
       })));
   }
-  function charHead(c, title, right) {
-    return h("div", { class: "head", style: { "--cc": c.color } }, icon(c, 28), h("span", { class: "name" }, c.display), h("span", { class: "title" }, title), right ? h("span", { class: "count" }, right) : null);
+  function steps(items) {
+    return h("ol", { class: "steps" }, items.map(function (it, i) {
+      return h("li", null, h("div", { class: "rail" }, h("span", { class: "sn" }, String(i + 1)), h("span", { class: "line" })),
+        h("div", { class: "st" }, h("p", { class: "t" }, L(it.title), " ", it.tag || null), it.sub ? h("p", { class: "s" }, L(it.sub)) : null));
+    }));
   }
-  function seg(options, value, onpick) {
+  function segmented(options, value, onpick) {
     return h("div", { class: "seg", role: "group" }, options.map(function (o) {
       return h("button", { type: "button", "aria-pressed": o.value === value ? "true" : "false", onclick: function () { onpick(o.value); } }, o.label);
     }));
   }
-  function table(cols, rows) {
-    return h("table", null, h("thead", null, h("tr", null, cols.map(function (c) { return h("th", null, c); }))),
-      h("tbody", null, rows.map(function (r) { return h("tr", null, r.map(function (c) { return h("td", null, typeof c === "string" ? L(c) : c); })); })));
+  function table(cols, rows, numCols) {
+    numCols = numCols || [];
+    return h("div", { class: "tbl" }, h("table", null, h("thead", null, h("tr", null, cols.map(function (c, i) { return h("th", { class: numCols.indexOf(i) >= 0 ? "num" : null }, c); }))),
+      h("tbody", null, rows.map(function (r) { return h("tr", null, r.map(function (c, i) { return h("td", { class: numCols.indexOf(i) >= 0 ? "num" : null }, typeof c === "string" ? L(c) : c); })); }))));
   }
+  function bullets(list) { return h("ul", { class: "bul" }, list.map(function (x) { return h("li", null, typeof x === "string" ? L(x) : x); })); }
 
-  function cards() {
+  function rosterCards() {
     var nu = nextUp();
-    return h("div", { class: "cards" }, CHARS.map(function (c) {
-      var l = lv(c.id), b = bracketOf(l), rest = (S.levels[c.id] || {}).rested || "Empty";
-      return h("div", { class: "card", role: "button", tabindex: "0", "aria-pressed": UI.char === c.id ? "true" : "false", style: { "--cc": c.color },
+    return h("div", { class: "roster", role: "radiogroup", "aria-label": "Select a character" }, CHARS.map(function (c) {
+      var l = lv(c.id), b = bracketOf(l), st = S.levels[c.id] || {};
+      return h("button", { type: "button", class: "rc", role: "radio", "aria-checked": UI.char === c.id ? "true" : "false", style: { "--cc": c.color },
         onclick: function () { UI.char = c.id; render(); } },
-        h("div", { class: "row" }, icon(c), h("span", { class: "name" }, c.display), h("span", { class: "sub" }, L(c.race + " " + c["class"])),
-          c.id === nu.id ? h("span", { class: "tag next", style: { "margin-left": "auto" } }, "Up next") : null),
-        h("div", { class: "row sub" }, "Level ",
-          h("input", { type: "number", min: "1", max: "60", value: String(l), "aria-label": c.display + " level", onclick: function (e) { e.stopPropagation(); },
-            onchange: function (e) { var v = Math.max(1, Math.min(60, parseInt(e.target.value, 10) || 1)); S.levels[c.id] = Object.assign({}, S.levels[c.id], { level: v, updated: today() }); save(); } }),
-          h("select", { "aria-label": c.display + " rested", onclick: function (e) { e.stopPropagation(); },
-            onchange: function (e) { S.levels[c.id] = Object.assign({}, S.levels[c.id], { rested: e.target.value, updated: today() }); save(); } },
-            ["Empty", "Partial", "Full"].map(function (r) { return h("option", { value: r, selected: r === rest }, "Rested " + r.toLowerCase()); })),
-          h("span", { class: "dim", style: { "margin-left": "auto" } }, b.from + "–" + b.to)),
-        bar(l, 60, c.color),
-        h("div", { class: "row dim" }, c.leveling_spec + " → " + c.endgame_spec, h("span", { style: { "margin-left": "auto" } }, c.professions.map(function (p) { return p.name; }).join(" · "))));
+        h("div", { class: "rc-top" }, icon(c), h("span", { class: "nm" }, c.display), h("span", { class: "meta" }, c.race + " " + c["class"]),
+          c.id === nu.id ? h("span", { class: "upnext" }, "Up next") : null),
+        h("div", { class: "rc-row" }, h("span", null, "Level " + l + " of 60"), h("span", null, b.from + "–" + b.to + " target " + b.to)),
+        h("div", { class: "rc-bar" }, h("b", { style: { width: (l / 60 * 100) + "%" } }), ticks()),
+        h("div", { class: "rc-row q" }, h("span", null, "Rested: " + (st.updated ? (st.rested || "Empty").toLowerCase() : "none yet")),
+          h("span", null, c.professions.filter(function (p) { return !p.until; }).map(function (p) { return p.name; }).join(" + "))));
     }));
   }
+  function levelRows(edit) {
+    return h("div", { class: "lvls" }, CHARS.map(function (c) {
+      var l = lv(c.id), st = S.levels[c.id] || {}, b = bracketOf(l);
+      return h("div", { class: "lvrow", style: { "--cc": c.color } },
+        h("div", { class: "who" }, icon(c, 22), h("span", { class: "nm" }, c.display),
+          edit ? h("input", { type: "number", class: "lvin", min: "1", max: "60", value: String(l), "aria-label": c.display + " level",
+            onchange: function (e) { var v = Math.max(1, Math.min(60, parseInt(e.target.value, 10) || 1)); S.levels[c.id] = Object.assign({}, S.levels[c.id], { level: v, updated: today() }); save(); } })
+            : h("span", { class: "lvn" }, String(l))),
+        h("div", { class: "lvbar", "aria-label": c.display + " level " + l + " of 60" }, h("b", { style: { width: (l / 60 * 100) + "%" } }), ticks()),
+        h("div", { class: "lvmeta" }, h("span", { class: "br" }, b.from + "–" + b.to),
+          edit ? h("select", { class: "rsel", "aria-label": c.display + " rested", onchange: function (e) { S.levels[c.id] = Object.assign({}, S.levels[c.id], { rested: e.target.value, updated: today() }); save(); } },
+            ["Empty", "Partial", "Full"].map(function (r) { return h("option", { value: r, selected: r === (st.rested || "Empty") }, "Rested " + r.toLowerCase()); }))
+            : h("span", { class: "q" }, "Rested " + (st.rested || "Empty").toLowerCase()),
+          h("span", null, st.updated || "")));
+    }), h("div", { class: "lvaxis" }, [1, 10, 20, 30, 40, 50, 60].map(function (n) { return h("span", { style: { left: (n / 60 * 100) + "%" } }, String(n)); })));
+  }
 
-  // ---------- Road to 60 timeline (SVG, fixed colors)
+  // ---------- Road to 60 timeline (SVG, fixed hex colors)
+  var SHORT = { "Ragefire Chasm": "RFC", "Wailing Caverns": "WC", "Shadowfang Keep": "SFK", "Blackfathom Deeps": "BFD", "Razorfen Kraul": "RFK", "Razorfen Downs": "RFD",
+    "Scarlet Monastery": "SM", "Zul'Farrak": "ZF", "Sunken Temple": "ST", "Blackrock Depths": "BRD", "Lower Blackrock Spire": "LBRS", "Upper Blackrock Spire": "UBRS",
+    "Dire Maul": "DM", "Scholomance": "Scholo", "Stratholme": "Strat", "City of Dalaran": "Dalaran", "Excavation Site: Wetlands": "Excavation", "The Hall of Thanes": "Thanes",
+    "Ruins of Lordaeron": "Lordaeron", "Krol'dok Stronghold": "Krol'dok", "The Drowned City": "Drowned", "Alcaz Prison": "Alcaz", "Blackmaw Hold": "Blackmaw", "Shaper's Terrace": "Shaper's" };
+  function short(n) { if (SHORT[n]) return SHORT[n]; n = n.replace(/^The /, "").split(":")[0]; return n.length > 16 ? n.split(" ").slice(0, 2).join(" ") : n; }
   function timeline() {
-    var W = 1120, left = 140, right = 30, top = 8, bandH = 32, rowH = 52;
+    var W = 1120, left = 132, right = 28, top = 8, bandH = 34, tierH = 19, fs = 14.5;
     var x = function (l) { return left + (l - 1) / 59 * (W - left - right); };
-    var rows = CHARS.map(function (c) { return { label: c.display, color: c.color, id: c.id, marks: c.milestones.map(function (m) { return { lv: m.level, name: m.name }; }) }; });
-    rows.push({ label: "Dungeons", color: C.t2, marks: P.dungeons.map(function (d) { return { lv: Math.round((d.min + d.max) / 2), name: d.name }; }) });
-    rows.push({ label: "Legacy", color: C.gold, marks: [{ lv: 25, name: "Novice class points" }, { lv: 45, name: "Experienced class points" }, { lv: 60, name: "Master class points" }] });
-    var H = top + bandH + 16 + rows.length * rowH;
-    var svg = s("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", role: "img", "aria-label": "Levels 1 to 60" });
+    var c0 = byId[UI.char];
+    var rows = [{ label: "Dungeons", fill: "#FCFCFC", marks: P.dungeons.map(function (d) { return { lv: Math.round((d.min + d.max) / 2), name: d.name, label: short(d.name) }; }) }];
+    CHARS.forEach(function (c) { rows.push({ label: "Class · " + c.display, fill: c.color, id: c.id, dim: c.id !== c0.id, marks: c.milestones.map(function (m) { return { lv: Math.max(1, m.level), name: m.name, label: short(m.name) }; }) }); });
+    rows.push({ label: "Legacy", fill: C.gold, marks: [{ lv: 25, name: "Novice class points (25)", label: "Class 25" }, { lv: 45, name: "Experienced class points (45)", label: "Class 45" }, { lv: 60, name: "Master class points (60)", label: "Class 60" },
+      { lv: 25, name: "Crafts to 150 by 25", label: "Crafts 150" }, { lv: 32, name: "Crafts to 225 by 32", label: "Crafts 225" }, { lv: 52, name: "Crafts to 300 by 52", label: "Crafts 300" }] });
+    // place labels in tiers above the dot: tier 0 sits on the dot, higher tiers get a connector line
+    rows.forEach(function (r) {
+      var ends = [];
+      r.marks.sort(function (a, b) { return a.lv - b.lv; }).forEach(function (m) {
+        var cx = x(m.lv), w = m.label.length * fs * 0.52 + 10;
+        m.cx = cx; m.tier = -1;
+        for (var t = 0; t < 3; t++) { if ((ends[t] === undefined || cx - w / 2 > ends[t]) && cx + w / 2 < W + 30) { m.tier = t; ends[t] = cx + w / 2; break; } }
+      });
+      r.tiers = Math.max(1, 1 + Math.max.apply(null, r.marks.map(function (m) { return m.tier; }).concat([0])));
+      r.h = 24 + r.tiers * tierH;
+    });
+    var H = top + bandH + 12 + rows.reduce(function (a, r) { return a + r.h; }, 0) + 22;
+    var svg = s("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", role: "img", "aria-label": "Level 1 to 60 timeline with brackets and milestones" });
     P.brackets.forEach(function (b) {
       var on = UI.bracket === b.id, bw = x(b.to) - x(b.from) - 3;
-      var g = s("g", { style: { cursor: "pointer" }, onclick: function () { UI.bracket = b.id; UI.tab = "levels"; render(); } },
-        s("rect", { x: x(b.from) + 1.5, y: top, width: bw, height: bandH, rx: 6, fill: on ? C.gold : C.f2, stroke: on ? C.gold : C.b1 }),
-        s("text", { x: (x(b.from) + x(b.to)) / 2, y: top + bandH / 2 + 5, "text-anchor": "middle", "font-size": bw < 70 ? 13 : 15, "font-weight": 600, fill: on ? "#1A1405" : C.t1 }, b.from + "–" + b.to));
-      svg.appendChild(g);
+      svg.appendChild(s("g", { style: { cursor: "pointer" }, onclick: function () { UI.bracket = b.id; UI.tab = "brackets"; setHash(); render(); } },
+        s("title", null, "Levels " + b.from + "–" + b.to),
+        s("rect", { x: x(b.from) + 1.5, y: top, width: bw, height: bandH, rx: 6, fill: on ? "#ECECEC" : C.f2, stroke: on ? "#ECECEC" : C.b1 }),
+        s("text", { x: (x(b.from) + x(b.to)) / 2, y: top + bandH / 2 + 5.5, "text-anchor": "middle", style: { "font-size": (bw < 70 ? 15 : 16) + "px", "font-weight": 600 }, fill: on ? "#070707" : C.t1 }, b.from + "–" + b.to)));
     });
+    var y0 = top + bandH + 12;
     rows.forEach(function (r, i) {
-      var y = top + bandH + 16 + i * rowH + rowH / 2 + 6;
-      if (i > 0) svg.appendChild(s("line", { x1: 8, x2: W - 8, y1: y - rowH / 2 - 2, y2: y - rowH / 2 - 2, stroke: C.b0, "stroke-dasharray": "2 4" }));
-      svg.appendChild(s("text", { x: 8, y: y + 5, "font-size": 14, fill: r.id ? r.color : C.t3, "font-weight": r.id ? 700 : 400 }, r.label));
+      var y = y0 + r.h - 12;
+      if (i > 0) svg.appendChild(s("line", { x1: 8, x2: W - 8, y1: y0 - 2, y2: y0 - 2, stroke: C.b0, "stroke-dasharray": "2 4" }));
+      svg.appendChild(s("text", { x: 8, y: y + 5, fill: C.t3, style: { "font-size": "15px" } }, r.label));
       svg.appendChild(s("line", { x1: left, x2: W - right, y1: y, y2: y, stroke: C.b1 }));
-      if (r.id) {
-        var l = lv(r.id);
-        svg.appendChild(s("rect", { x: left, y: y - 2, width: Math.max(0, x(l) - left), height: 4, rx: 2, fill: r.color }));
-      }
-      var labelEnd = -1e9;
-      r.marks.slice().sort(function (a, b) { return a.lv - b.lv; }).forEach(function (m) {
-        var cx = x(m.lv), done = r.id && lv(r.id) >= m.lv;
-        var g = s("g", null, s("title", null, m.name + " · " + m.lv),
-          s("circle", { cx: cx, cy: y, r: 6, fill: done ? r.color : C.bg, stroke: r.color, "stroke-width": 2 }));
-        var w = m.name.length * 6.2;
-        if (cx - w / 2 > labelEnd + 8 && cx + w / 2 < W) {
-          g.appendChild(s("text", { x: cx, y: y - 12, "text-anchor": "middle", "font-size": 11, fill: C.t2 }, m.name));
-          labelEnd = cx + w / 2;
-        }
+      if (r.id) svg.appendChild(s("rect", { x: left, y: y - 1.5, width: Math.max(0, x(lv(r.id)) - left), height: 3, rx: 1.5, fill: r.fill }));
+      r.marks.forEach(function (m) {
+        var g = s("g", { opacity: r.dim ? 0.55 : 1 }, s("title", null, m.name + " · level " + m.lv));
+        var ly = y - 14 - m.tier * tierH;
+        if (m.tier > 0) g.appendChild(s("line", { x1: m.cx, x2: m.cx, y1: ly + 4, y2: y - 8, stroke: C.b1 }));
+        g.appendChild(s("circle", { cx: m.cx, cy: y, r: 6, fill: r.fill }));
+        var tw = m.label.length * fs * 0.52, anchor = m.cx + tw / 2 > W - 4 ? "end" : "middle", tx = anchor === "end" ? Math.min(W - 4, m.cx + 8) : m.cx;
+        if (m.tier >= 0) g.appendChild(s("text", { x: tx, y: ly, "text-anchor": anchor, fill: r.dim ? C.t3 : C.t2, style: { "font-size": fs + "px" } }, m.label));
         svg.appendChild(g);
       });
+      y0 += r.h;
     });
-    [1, 10, 20, 30, 40, 50, 60].forEach(function (n) { svg.appendChild(s("text", { x: x(n), y: H - 2, "text-anchor": "middle", "font-size": 11, fill: C.t3 }, String(n))); });
+    [1, 10, 20, 30, 40, 50, 60].forEach(function (n) { svg.appendChild(s("text", { x: x(n), y: H - 4, "text-anchor": "middle", fill: C.t3, style: { "font-size": "13px" } }, String(n))); });
     return svg;
   }
 
@@ -213,140 +258,147 @@
     var W = 1120, L0 = 24, R0 = 24, y = 50, max = 65;
     var x = function (p) { return L0 + p / max * (W - L0 - R0); };
     var svg = s("svg", { viewBox: "0 0 " + W + " 110", width: "100%", role: "img", "aria-label": "Legacy reward track" },
-      s("rect", { x: L0, y: y - 6, width: W - L0 - R0, height: 12, rx: 6, fill: C.f2 }),
-      s("rect", { x: L0, y: y - 6, width: Math.max(0, x(points) - L0), height: 12, rx: 6, fill: C.gold }),
+      s("rect", { x: L0, y: y - 5, width: W - L0 - R0, height: 10, rx: 5, fill: C.f2 }),
+      s("rect", { x: L0, y: y - 5, width: Math.max(0, x(points) - L0), height: 10, rx: 5, fill: C.gold }),
       s("rect", { x: x(P.legacy.spend_cap) - 1, y: y - 14, width: 2, height: 28, fill: C.t1 }),
-      s("text", { x: x(P.legacy.spend_cap), y: y - 20, "text-anchor": "middle", "font-size": 12, "font-weight": 600, fill: C.t1 }, P.legacy.spend_cap + " spend cap"),
+      s("text", { x: x(P.legacy.spend_cap), y: y - 20, "text-anchor": "middle", fill: C.t1, style: { "font-size": "13px", "font-weight": 600 } }, P.legacy.spend_cap + " spend cap"),
       s("rect", { x: x(P.coverage.legacy_from_plan) - 1, y: y - 14, width: 2, height: 28, fill: C.t3 }),
-      s("text", { x: x(P.coverage.legacy_from_plan), y: y - 20, "text-anchor": "middle", "font-size": 12, fill: C.t2 }, P.coverage.legacy_from_plan + " from leveling and crafts"));
+      s("text", { x: x(P.coverage.legacy_from_plan), y: y - 20, "text-anchor": "middle", fill: C.t2, style: { "font-size": "13px" } }, P.coverage.legacy_from_plan + " in the plan"));
     P.legacy.rewards.forEach(function (r) {
-      svg.appendChild(s("circle", { cx: x(r.points), cy: y, r: 9, fill: C.bg, stroke: C.gold, "stroke-width": 3 }));
-      svg.appendChild(s("text", { x: x(r.points), y: y + 30, "text-anchor": "middle", "font-size": 12, "font-weight": 600, fill: C.t1 }, String(r.points)));
-      var a = s("a", { href: (LINKS[r.name] || {}).url || "#", target: "_blank" }, s("text", { x: x(r.points), y: y + 46, "text-anchor": "middle", "font-size": 11, fill: C.t1, "text-decoration": "underline" }, r.name));
-      svg.appendChild(a);
+      svg.appendChild(s("circle", { cx: x(r.points), cy: y, r: 8, fill: C.bg, stroke: C.gold, "stroke-width": 3 }));
+      svg.appendChild(s("text", { x: x(r.points), y: y + 30, "text-anchor": "middle", fill: C.t1, style: { "font-size": "13px", "font-weight": 600 } }, String(r.points)));
+      svg.appendChild(s("a", { href: (LINKS[r.name] || {}).url || "#", target: "_blank" }, s("text", { x: x(r.points), y: y + 48, "text-anchor": "middle", fill: C.t2, style: { "font-size": "13px" } }, r.name)));
     });
     return svg;
   }
 
   // ---------- views
   var UI = { tab: (location.hash || "#today").slice(1), char: CHARS[0].id, bracket: bracketOf(lv(nextUp().id)).id };
-  var TABS = [["today", "Today"], ["road", "Road to 60"], ["levels", "Levels"], ["profs", "Professions"], ["legacy", "Legacy"], ["dungeons", "Dungeons"], ["world", "World"], ["reference", "Reference"]];
+  var ALIAS = { road: "brackets", levels: "brackets" };
+  if (ALIAS[UI.tab]) UI.tab = ALIAS[UI.tab];
+  var TABS = [["today", "Today"], ["brackets", "Brackets"], ["rested", "Rested"], ["legacy", "Legacy"], ["profs", "Professions"], ["dungeons", "Dungeons + bag"], ["classes", "Classes"], ["world", "World"], ["reference", "Reference"]];
+  function setHash() { try { history.replaceState(null, "", "#" + UI.tab); } catch (e) { /* file:// */ } }
 
   function vToday() {
-    var c = byId[UI.char], b = bracketOf(lv(c.id)), nu = nextUp();
-    var mine = b.tasks[c.id] || [];
+    var c = byId[UI.char], l = lv(c.id), b = bracketOf(l), nu = nextUp(), nb = bracketOf(lv(nu.id));
+    var next = c.milestones.filter(function (m) { return m.level >= l; }).slice(0, 5);
     return [
-      h("section", null, h("h2", null, "Roster"), cards()),
-      h("section", null, h("div", { class: "metrics" },
-        h("div", { class: "metric" }, h("b", { style: { color: nu.color } }, nu.display), h("span", null, "Up next · level " + lv(nu.id))),
-        h("div", { class: "metric" }, h("b", null, bracketOf(lv(nu.id)).from + "–" + bracketOf(lv(nu.id)).to), h("span", null, "Current range")),
-        h("div", { class: "metric" }, h("b", null, earned() + " / " + P.coverage.legacy_from_plan), h("span", null, "Legacy points")),
-        h("div", { class: "metric" }, h("b", null, P.roster.launch), h("span", null, "Launch")))),
-      h("div", { class: "grid" },
-        h("section", null, charHead(c, "Levels " + b.from + "–" + b.to), checklist(mine, c.color)),
-        h("section", null, charHead(c, "Next milestones"), h("ul", { class: "plain" },
-          c.milestones.filter(function (m) { return m.level >= lv(c.id); }).slice(0, 6).map(function (m) {
-            return h("li", null, L(m.name), " · " + m.level + " ", statusTag(m.status));
-          })))),
-      h("section", null, h("h2", null, "Road to 60"), timeline())
+      sec("Status", h("div", { class: "metrics" },
+        h("div", null, h("b", null, nu.display), h("span", null, "Up next"), h("i", null, nu["class"] + " · level " + lv(nu.id))),
+        h("div", null, h("b", null, nb.from + "–" + nb.to), h("span", null, "Current bracket"), h("i", null, "Target " + nb.to)),
+        h("div", null, h("b", null, earned() + " / " + P.coverage.legacy_from_plan), h("span", null, "Legacy points"), h("i", null, "Spend cap " + P.legacy.spend_cap)),
+        h("div", null, h("b", null, fmtDate(P.roster.launch)), h("span", null, "Launch"), h("i", null, P.roster.ruleset))),
+        [h("button", { type: "button", class: "ob", onclick: exportJSON }, "Export progress"), h("button", { type: "button", class: "ob", onclick: importJSON }, "Import progress")]),
+      sec("Levels", levelRows(true)),
+      h("div", { class: "grid2 gap-top" },
+        panel(charHead(c, "Next milestones"), next.length ? steps(next.map(function (m) { return { title: m.name, sub: "Level " + m.level + " · " + m.kind, tag: statusTag(m.status) }; })) : h("p", { class: "q" }, "All milestones reached")),
+        panel(charHead(c, b.from + "–" + b.to + " to-do"), checklist(b.tasks[c.id] || [], c.color))),
+      sec("Road to 60", h("div", { class: "hscroll" }, timeline()))
     ];
   }
-  function vRoad() {
-    return [h("section", null, h("h2", null, "Road to 60"), timeline()),
-      h("section", null, h("h2", null, "Milestones"), table(["Level", "Character", "Milestone", "Type", ""],
-        CHARS.reduce(function (acc, c) { return acc.concat(c.milestones.map(function (m) { return [m.level, c, m]; })); }, []).sort(function (a, b) { return a[0] - b[0]; })
-          .map(function (r) { return [String(r[0]), h("span", { class: "name", style: { "--cc": r[1].color } }, r[1].display), r[2].name, r[2].kind, statusTag(r[2].status) || ""]; })))];
-  }
-  function vLevels() {
+  function vBrackets() {
     var b = P.brackets.filter(function (x) { return x.id === UI.bracket; })[0] || P.brackets[0];
     return [
-      seg(P.brackets.map(function (x) { return { value: x.id, label: x.from + "–" + x.to }; }), b.id, function (v) { UI.bracket = v; render(); }),
-      h("div", { class: "grid" },
-        h("section", null, h("h2", null, "Levels " + b.from + "–" + b.to), b.why.length ? h("ul", { class: "plain" }, b.why.map(function (w) { return h("li", null, L(w)); })) : null,
-          h("p", null, h("span", { class: "dim" }, "Zones "), b.zones.map(function (z, i) { return [i ? ", " : "", wl(z)]; }))),
-        h("section", null, h("h2", null, "Rotation"), table(["Character", "Target", "Zones", "Log out"], b.rotation.map(function (r) {
-          var c = byId[r["char"]];
-          return [h("span", { class: "name", style: { "--cc": c.color } }, c.display), String(r.target), r.zones.join(", "), r.logout];
-        })))),
-      h("div", { class: "grid" }, CHARS.map(function (c) {
-        return h("section", null, charHead(c, c.race + " " + c["class"]), checklist(b.tasks[c.id] || [], c.color));
-      }))
+      sec("Levels " + b.from + "–" + b.to, [
+        segmented(P.brackets.map(function (x) { return { value: x.id, label: x.from + "–" + x.to }; }), b.id, function (v) { UI.bracket = v; render(); }),
+        h("div", { class: "grid2 gap-top" },
+          h("div", null, b.why.length ? [h("h3", null, "Why this bracket"), bullets(b.why)] : null, h("h3", null, "Zones"), h("p", null, b.zones.map(function (z, i) { return [i ? " · " : "", wl(z)]; }))),
+          h("div", null, h("h3", null, "Rotation"), table(["Character", "Target", "Zones", "Log out"], b.rotation.map(function (r) {
+            var c = byId[r["char"]]; return [nm(c), String(r.target), r.zones.join(", "), r.logout];
+          }), [1])))]),
+      h("div", { class: "grid2 gap-top" }, CHARS.map(function (c) { return panel(charHead(c, b.from + "–" + b.to), checklist(b.tasks[c.id] || [], c.color)); }))
     ];
+  }
+  function vRested() {
+    return [sec("Levels", levelRows(true)),
+      sec("From the addon", table(["Character", "Level", "To next", "Rested", "Zone", "Updated"], CHARS.map(function (c) {
+        var st = S.levels[c.id] || {};
+        return [nm(c), String(lv(c.id)), st.pctToNext != null ? st.pctToNext + "%" : "", st.restedBubbles != null ? st.restedBubbles + " bubbles" : (st.rested || "Empty"), st.zone || "", st.updated || ""];
+      }), [1, 2]))];
+  }
+  function vClasses() {
+    return [h("div", { class: "grid2" }, CHARS.map(function (c) {
+      return panel(charHead(c, c.race + " " + c["class"] + " · " + c.leveling_spec + " → " + c.endgame_spec),
+        steps(c.milestones.map(function (m) { return { title: m.name, sub: "Level " + m.level + " · " + m.kind, tag: statusTag(m.status) }; })),
+        c.racials && c.racials.length ? h("p", { class: "q" }, "Racials: ", c.racials.map(function (r, i) { return [i ? ", " : "", wl(r)]; })) : null);
+    }))];
   }
   function vProfs() {
     var crafts = Object.keys(P.coverage.crafts);
     return [
-      h("section", null, h("h2", null, "Craft coverage"), table(["Craft"].concat(CHARS.map(function (c) { return c.display; })),
+      sec("Craft coverage", table(["Craft"].concat(CHARS.map(function (c) { return nm(c); })),
         crafts.map(function (cr) {
-          return [cr].concat(CHARS.map(function (c) {
-            var on = P.coverage.crafts[cr].indexOf(c.id) >= 0;
-            return on ? h("span", { class: "dot", style: { "--cc": c.color }, title: c.display }) : "";
-          }));
+          return [cr].concat(CHARS.map(function (c) { return P.coverage.crafts[cr].indexOf(c.id) >= 0 ? h("span", { class: "dot", style: { "--cc": c.color }, title: c.display }) : ""; }));
         }))),
-      h("div", { class: "grid" }, CHARS.map(function (c) {
-        return h("section", null, charHead(c, "Professions"), c.professions.map(function (p) {
+      h("div", { class: "grid2 gap-top" }, CHARS.map(function (c) {
+        return panel(charHead(c, "Professions"), h("div", { class: "profs" }, c.professions.map(function (p) {
           var isCraft = !!P.professions.crafting[p.name], v = skill(c.id, p.name);
-          return h("div", { style: { margin: "8px 0" } },
-            h("div", { class: "row", style: { display: "flex", gap: "8px", "align-items": "center" } },
-              wl(p.name), h("span", { class: "dim" }, p.until ? p.from + "–" + p.until : p.from > 1 ? "from " + p.from : ""),
-              h("input", { type: "number", min: "0", max: "300", value: String(v), "aria-label": c.display + " " + p.name, style: { "margin-left": "auto" },
+          return h("div", { class: "prof", style: { "--cc": c.color } },
+            h("div", { class: "pr" }, wl(p.name), h("span", { class: "q" }, p.until ? p.from + "–" + p.until : p.from > 1 ? "from " + p.from : ""),
+              h("input", { type: "number", class: "skin", min: "0", max: "300", value: String(v), "aria-label": c.display + " " + p.name,
                 onchange: function (e) { S.skills[c.id] = S.skills[c.id] || {}; S.skills[c.id][p.name] = Math.max(0, Math.min(300, parseInt(e.target.value, 10) || 0)); save(); } }),
-              h("span", { class: "dim" }, "/ 300")),
-            bar(v, 300, c.color), isCraft ? h("div", { class: "dim" }, "Legacy at 150 · 225 · 300") : null);
-        }));
+              h("span", { class: "q" }, "/ 300")),
+            h("div", { class: "pbar" }, h("b", { style: { width: (v / 300 * 100) + "%" } }), isCraft ? [150, 225].map(function (t) { return h("i", { style: { left: (t / 300 * 100) + "%" } }); }) : null));
+        })));
       })),
-      h("section", null, h("h2", null, "Pairings"), table(["Craft", "Uses", "Note"], Object.keys(P.professions.crafting).map(function (k) {
-        var x = P.professions.crafting[k]; return [k, x.uses.join(", "), x.note || ""];
-      })), h("ul", { class: "plain" }, P.professions.notes.map(function (n) { return h("li", null, L(n)); })))
+      sec("Pairings", [table(["Craft", "Uses", "Note"], Object.keys(P.professions.crafting).map(function (k) { var x = P.professions.crafting[k]; return [k, x.uses.join(", "), x.note || ""]; })),
+        P.professions.notes.length ? bullets(P.professions.notes) : null])
     ];
   }
   function vLegacy() {
     var ch = P.legacy.challenges;
     return [
-      h("section", null, h("h2", null, "Legacy points"), h("div", { class: "metrics" },
-        h("div", { class: "metric" }, h("b", null, String(earned())), h("span", null, "Earned")),
-        h("div", { class: "metric" }, h("b", null, String(P.coverage.legacy_from_plan)), h("span", null, P.coverage.distinct_classes + " classes · " + P.coverage.crafts_covered + " crafts")),
-        h("div", { class: "metric" }, h("b", null, String(P.legacy.spend_cap)), h("span", null, "Spend cap at launch"))), rewardTrack(earned())),
-      h("div", { class: "grid" },
-        h("section", null, h("h2", null, "Challenges"), table(["Category", "Points", "How"], [
+      sec("Legacy points", [h("div", { class: "metrics" },
+        h("div", null, h("b", null, String(earned())), h("span", null, "Earned")),
+        h("div", null, h("b", null, String(P.coverage.legacy_from_plan)), h("span", null, "In the plan"), h("i", null, P.coverage.distinct_classes + " classes · " + P.coverage.crafts_covered + " crafts")),
+        h("div", null, h("b", null, String(P.legacy.spend_cap)), h("span", null, "Spend cap at launch")),
+        h("div", null, h("b", null, "65"), h("span", null, "All challenges"))), h("div", { class: "hscroll" }, rewardTrack(earned()))]),
+      h("div", { class: "grid2 gap-top" },
+        panel(h("h3", { class: "ph3" }, "Challenges"), table(["Category", "Points", "How"], [
           ["Classes", String(ch["class"].total), "Each class at 25, 45, 60"], ["Crafts", String(ch.craft.total), "Each craft at 150, 225, 300"],
           ["PvP", String(ch.pvp.total), ch.pvp.items.join(", ")], ["Dungeons", String(ch.dungeon.total), ch.dungeon.items.join(", ")],
-          ["Raids", String(ch.raid.total), ch.raid.items.join(", ")], ["Adventure", String(ch.adventure.total), ch.adventure.items.join(", ")]])),
-        h("section", null, h("h2", null, "Account"), checklist(P.account))),
-      h("div", { class: "grid" }, Object.keys(P.legacy.trees).map(function (t) {
-        return h("section", null, h("h2", null, t), table(["Perk", "Ranks", "Effect"], P.legacy.trees[t].map(function (p) { return [p[0], String(p[1]), p[2]]; })));
-      })),
-      h("section", null, h("h2", null, "Projection"), table(["By the end of", "Points"], P.coverage.projection.map(function (p) { return [p.at.replace("-", "–"), String(p.points)]; })))
+          ["Raids", String(ch.raid.total), ch.raid.items.join(", ")], ["Adventure", String(ch.adventure.total), ch.adventure.items.join(", ")]], [1])),
+        panel(h("h3", { class: "ph3" }, "Account"), checklist(P.account))),
+      sec("Perk trees", h("div", { class: "grid3" }, Object.keys(P.legacy.trees).map(function (t) {
+        return h("div", null, h("h3", null, t), table(["Perk", "Ranks", "Effect"], P.legacy.trees[t].map(function (p) { return [p[0], String(p[1]), p[2]]; }), [1]));
+      }))),
+      sec("Projection", table(["By the end of", "Points"], P.coverage.projection.map(function (p) { return [p.at.replace("-", "–"), String(p.points)]; }), [1]))
     ];
   }
   function vDungeons() {
-    return [h("section", null, h("h2", null, "Dungeons"), table(["Dungeon", "Levels", "Zone", "Spelunker", ""], P.dungeons.map(function (d) {
-      return [d.name, d.min + "–" + d.max, d.zone, d.spelunker || "", h("span", null, d["new"] ? h("span", { class: "tag new" }, "New") : null, " ", d.travel ? h("span", { class: "tag" }, "Enemy territory") : null, " ", statusTag(d.status))];
-    })))];
-  }
-  function vWorld() {
     var fac = P.roster.faction, bag = P.sleeping_bag;
     return [
-      h("section", null, h("h2", null, "Zones"), table(["Zone", "Levels", "Quests", ""], P.zones.map(function (z) {
-        return [z.name, z.min + "–" + z.max, z.quests[fac] == null ? "" : String(z.quests[fac]), h("span", null, z["new"] ? h("span", { class: "tag new" }, "New") : null, " ", statusTag(z.status))];
-      }))),
-      h("div", { class: "grid" },
-        h("section", null, h("h2", null, "Boats, zeppelins and trams"), table(["From", "To", "Type", ""], P.transport.map(function (t) { return [t.from, t.to, t.kind, statusTag(t.status) || ""]; }))),
-        h("section", null, h("h2", null, "Flight paths"), h("p", null, P.flight_paths.map(function (f, i) { return [i ? " · " : "", wl(f)]; })))),
-      h("section", null, h("h2", null, bag.name + " · from " + bag.min_level), h("p", null, L(bag.reward)),
-        table(["Quest", "Where"], bag.steps.map(function (st) { return [st.quest, st[fac] || st.where]; })))
+      sec("Dungeons", table(["Dungeon", "Levels", "Zone", "Spelunker", ""], P.dungeons.map(function (d) {
+        return [d.name, d.min + "–" + d.max, d.zone, d.spelunker || "", h("span", { class: "pills" }, d["new"] ? h("span", { class: "pill new" }, "New") : null, d.access && d.access !== fac && d.access !== "both" && d.access !== "Both" ? h("span", { class: "pill" }, "Enemy territory") : null, statusTag(d.status))];
+      }), [1])),
+      sec(bag.name + " · from " + bag.min_level, [h("p", { class: "lead" }, L(bag.reward)), steps(bag.steps.map(function (st) { return { title: st.quest, sub: st[fac] || st.where }; }))])
+    ];
+  }
+  function vWorld() {
+    var fac = P.roster.faction;
+    return [
+      sec("Zones", table(["Zone", "Levels", "Quests", ""], P.zones.map(function (z) {
+        return [z.name, z.min + "–" + z.max, z.quests[fac] == null ? "" : String(z.quests[fac]), h("span", { class: "pills" }, z["new"] ? h("span", { class: "pill new" }, "New") : null, statusTag(z.status))];
+      }), [1, 2])),
+      h("div", { class: "grid2 gap-top" },
+        panel(h("h3", { class: "ph3" }, "Boats, zeppelins and trams"), table(["From", "To", "Type", ""], P.transport.map(function (t) { return [t.from, t.to, t.kind, statusTag(t.status) || ""]; }))),
+        panel(h("h3", { class: "ph3" }, "Flight paths"), h("p", { class: "flow" }, P.flight_paths.map(function (f, i) { return [i ? " · " : "", wl(f)]; }))))
     ];
   }
   function vReference() {
     var v = P.validation, unv = [];
     CHARS.forEach(function (c) { c.milestones.forEach(function (m) { if (m.status === "unverified" || m.status === "classic") unv.push([m.name, c["class"], m.status]); }); });
     return [
-      v.warnings.length || v.info.length ? h("section", null, h("h2", null, "Roster notes"), h("ul", { class: "plain" }, v.warnings.concat(v.info).map(function (x) { return h("li", null, L(x)); }))) : null,
-      h("section", null, h("h2", null, "Open questions"), table(["Item", "Class", "Data"], unv.map(function (u) { return [u[0], u[1], statusTag(u[2])]; }))),
-      h("section", null, h("h2", null, "Sources"), h("ul", { class: "plain" }, Object.keys(P.sources).map(function (k) {
-        var x = P.sources[k]; return h("li", null, h("a", { href: x.url, target: "_blank", rel: "noopener noreferrer" }, x.title), h("span", { class: "dim" }, " · " + x.site));
+      v.warnings.length || v.info.length ? sec("Roster notes", bullets(v.warnings.concat(v.info))) : null,
+      sec("Open questions", table(["Item", "Class", "Data"], unv.map(function (u) { return [u[0], u[1], statusTag(u[2])]; }))),
+      sec("Sources", h("ul", { class: "bul" }, Object.keys(P.sources).map(function (k) {
+        var x = P.sources[k]; return h("li", null, h("a", { href: x.url, target: "_blank", rel: "noopener noreferrer" }, x.title), h("span", { class: "q" }, " · " + x.site));
       })))
     ];
+  }
+  function fmtDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || ""); if (!m) return iso;
+    return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][+m[2] - 1] + " " + (+m[3]);
   }
 
   // ---------- export / import
@@ -453,15 +505,14 @@
     var top = document.getElementById("top"), nav = document.getElementById("tabs"), view = document.getElementById("view");
     document.title = P.roster.name + " · Legacy Mission Control";
     top.replaceChildren(
-      h("div", null, h("h1", null, P.roster.name), h("div", { class: "meta" }, h("span", null, wl(P.roster.faction)), h("span", null, P.roster.ruleset), h("span", null, CHARS.length + " characters"))),
-      h("div", { class: "actions" },
-        h("button", { type: "button", onclick: exportJSON }, "Export progress"),
-        h("button", { type: "button", onclick: importJSON }, "Import progress")));
-    nav.replaceChildren.apply(nav, TABS.map(function (t) {
-      return h("button", { type: "button", role: "tab", "aria-selected": UI.tab === t[0] ? "true" : "false", onclick: function () { UI.tab = t[0]; try { history.replaceState(null, "", "#" + t[0]); } catch (e) { /* file:// */ } render(); } }, t[1]);
-    }));
+      h("h1", null, P.roster.name),
+      h("p", { class: "sub" }, wl(P.roster.faction), " · " + P.roster.ruleset + " · " + CHARS.length + " characters"),
+      rosterCards());
     if (!TABS.some(function (t) { return t[0] === UI.tab; })) UI.tab = "today";
-    var v = { today: vToday, road: vRoad, levels: vLevels, profs: vProfs, legacy: vLegacy, dungeons: vDungeons, world: vWorld, reference: vReference }[UI.tab]();
+    nav.replaceChildren.apply(nav, TABS.map(function (t) {
+      return h("button", { type: "button", role: "tab", "aria-selected": UI.tab === t[0] ? "true" : "false", onclick: function () { UI.tab = t[0]; setHash(); render(); } }, h("span", null, t[1]));
+    }));
+    var v = { today: vToday, brackets: vBrackets, rested: vRested, legacy: vLegacy, profs: vProfs, dungeons: vDungeons, classes: vClasses, world: vWorld, reference: vReference }[UI.tab]();
     view.replaceChildren.apply(view, [].concat(v).filter(Boolean));
     document.getElementById("foot").replaceChildren(h("span", null, "Progress saved " + (S.updated || "never") + " · ",
       h("a", { href: "https://github.com/BradGroux/wow-forever-mission-control", target: "_blank", rel: "noopener noreferrer" }, "WoW Forever Legacy Mission Control")));

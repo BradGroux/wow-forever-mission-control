@@ -14,6 +14,35 @@ Every game name links to [Wowhead's WoW Forever database](https://www.wowhead.co
 
 **Demo:** [bradgroux.github.io/wow-forever-mission-control](https://bradgroux.github.io/wow-forever-mission-control/) (the example Alliance roster).
 
+![Today view: roster cards, status, levels, next milestones and checklist](docs/images/today.png)
+
+| Road to 60 | Legacy |
+| --- | --- |
+| ![Road to 60 timeline](docs/images/road-to-60.png) | ![Legacy points, reward track, challenges and perk trees](docs/images/legacy.png) |
+| **Brackets** | **Professions** |
+| ![Bracket rotation and per-character checklists](docs/images/brackets.png) | ![Craft coverage and profession skill tracking](docs/images/professions.png) |
+
+<img src="docs/images/mobile.png" alt="Today view on a phone" width="260">
+
+## How it fits together
+
+```mermaid
+flowchart LR
+  R[config/roster.json] --> V[./mc validate]
+  V --> G[./mc generate]
+  D[data/*.json<br/>researched game data] --> G
+  G --> PJ[web/data/plan.js]
+  G --> PM[build/PLAN.md]
+  G --> CV[Grok Bot canvas<br/>adapters/grokbot]
+  PJ --> W[web/index.html<br/>static page]
+  A[LegacyTracker addon<br/>SavedVariables] --> I[./mc import-addon<br/>or page Import]
+  I --> PR[progress/progress.json<br/>or browser storage]
+  PR --> W
+  PR --> CV
+```
+
+Progress lives in your browser (localStorage) and moves as JSON; see [Progress and sync](docs/progress.md). Updates flow from this repo into your copy by pull request; see [Updating](docs/updating.md). Agents drive everything through `./mc`; see [AGENTS.md](AGENTS.md).
+
 ## Quick start
 
 You need Python 3.9 or newer and nothing else. No packages, no build step.
@@ -43,7 +72,22 @@ Later:
 
 > I'm level 23 on Aldric with full rested. Elowen hit 150 Alchemy. Update our progress.
 
-Agents do everything through the same `./mc` commands, so nothing depends on a particular platform. Grok Bot users can also get a live canvas Page from [adapters/grokbot/](adapters/grokbot/README.md).
+Agents do everything through the same `./mc` commands, so nothing depends on a particular platform.
+
+```mermaid
+flowchart LR
+  AG[AGENTS.md] --- P1[CLAUDE.md]
+  AG --- P2[GEMINI.md]
+  AG --- P3[.github/copilot-instructions.md]
+  AG --- P4[.cursor/rules/]
+  U[You, in plain words] --> AGT[Any agent]
+  AGT -->|reads| AG
+  AGT --> C1[./mc init / validate / generate]
+  AGT --> C2[./mc level / skill / check<br/>./mc progress merge]
+  AGT --> C3[./mc import-addon]
+  C1 & C2 & C3 --> OUT[roster, progress, plan.js]
+```
+ Grok Bot users can also get a live canvas Page from [adapters/grokbot/](adapters/grokbot/README.md).
 
 ## No agent? Manual path
 
@@ -67,6 +111,14 @@ Game data will change after launch. Your copy can pull fixes and new data from t
 
 - **Automatic:** the included [Sync from upstream](.github/workflows/sync-upstream.yml) workflow checks weekly and opens a pull request in your copy. It never touches your roster or progress files.
 - **Manual:** `make sync`, or the git commands in [docs/updating.md](docs/updating.md).
+
+```mermaid
+flowchart LR
+  UP[BradGroux/wow-forever-mission-control<br/>public template] -->|weekly Sync from upstream| PRU[PR: sync/upstream]
+  PRU --> MY[your copy<br/>roster + progress untouched]
+  MY -->|branch without personal files<br/>./mc leakcheck| PRD[PR upstream]
+  PRD --> UP
+```
 
 ## Contributing
 
