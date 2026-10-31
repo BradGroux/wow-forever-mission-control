@@ -1,5 +1,19 @@
 # Progress and sync
 
+
+```mermaid
+flowchart LR
+  PG[Web page] <-->|every change| LS[(browser localStorage)]
+  PG -->|Export progress| EX[progress-YYYY-MM-DD.json]
+  EX -->|Import progress| PG2[a friend's page]
+  EX -->|./mc progress merge| PJ[progress/progress.json]
+  AD[LegacyTracker.lua<br/>SavedVariables] -->|Import progress| PG
+  AD -->|./mc import-addon| PJ
+  CLI[./mc level / skill / check] --> PJ
+  PJ -->|./mc generate| PL[web/data/plan.js]
+  PL --> PG
+```
+
 Progress is a small JSON document:
 
 ```json
