@@ -1,5 +1,5 @@
 {
- "_about": "Name -> Wowhead Forever entity. Every id here was checked against nether.wowhead.com/forever/tooltip/<type>/<id> returning the same name. Names not listed link to a Wowhead Forever search. Add ids with tools/wowhead_lookup.py.",
+ "_about": "Name -> Wowhead Forever entity. Every id here was checked against nether.wowhead.com/forever/tooltip/<type>/<id> returning the same name; where the page label is shorter than the game name, the entry carries a \"tooltip\" key with the name the tooltip returned. Names not listed link to a Wowhead Forever search. Add ids with tools/wowhead_lookup.py.",
  "ids": {
   "A Dynamite Plan": {
    "id": 92749,
@@ -1740,6 +1740,40 @@
   "Zul'Farrak": {
    "id": 1176,
    "type": "zone"
+  },
+  "Spectral Bear Mount": {
+   "type": "item",
+   "id": 277718,
+   "tooltip": "Reins of the Spectral Bear"
+  },
+  "Rhok'delar": {
+   "type": "item",
+   "id": 18713,
+   "tooltip": "Rhok'delar, Longbow of the Ancient Keepers"
+  },
+  "Charger": {
+   "type": "spell",
+   "id": 23214,
+   "tooltip": "Summon Charger"
+  },
+  "Warhorse": {
+   "type": "spell",
+   "id": 13819,
+   "tooltip": "Summon Warhorse"
+  },
+  "Ravenholdt": {
+   "type": "quest",
+   "id": 6681,
+   "tooltip": "The Manor, Ravenholdt"
+  },
+  "Journeyman Riding": {
+   "type": "spell",
+   "id": 33391
+  },
+  "Dual Specialization": {
+   "type": "spell",
+   "id": 63624,
+   "tooltip": "Learn a Second Talent Specialization"
   }
  }
 }

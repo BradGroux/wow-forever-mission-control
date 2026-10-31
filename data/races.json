@@ -123,7 +123,7 @@
    ],
    "start_zone": "Zephras Isle",
    "start_area": "Thendal Village",
-   "first_hub": "Valanaar",
+   "first_hub": "Shen'dar Village",
    "capital": "Stormwind City",
    "racials": [
     "Walk on Air",
@@ -133,13 +133,19 @@
    ],
    "notes": [
     "Needs the Skyborne Heroic Pack or higher",
-    "Zephras Isle covers levels 1-12"
+    "Zephras Isle covers levels 1-12",
+    "Thendal Village, then Shen'dar Village, then Valanaar (racial hub, bank, skyship docks)",
+    "Skyships from Valanaar: Dalaran (Alliance) and Mulgore near Skywatcher Plateau (Horde)"
    ],
-   "capital_note": "No Skyborne capital; Valanaar is the hub",
-   "status": "beta",
-   "source": "egt-combos",
+   "capital_note": "No Skyborne capital; Valanaar is the racial hub",
+   "status": "blizzard",
+   "source": "bz-skyborne",
    "racials_status": "unverified",
-   "racials_source": "wh-races"
+   "racials_source": "wh-races",
+   "first_hub_status": "beta",
+   "first_hub_source": "wt-zephras",
+   "capital_status": "beta",
+   "capital_source": "egt-combos"
   },
   "Orc": {
    "faction": "Horde",
@@ -264,7 +270,7 @@
    ],
    "start_zone": "Zephras Isle",
    "start_area": "Thendal Village",
-   "first_hub": "Valanaar",
+   "first_hub": "Shen'dar Village",
    "capital": "Orgrimmar",
    "racials": [
     "Walk on Air",
@@ -275,13 +281,18 @@
    "notes": [
     "Needs the Skyborne Heroic Pack or higher",
     "Zephras Isle covers levels 1-12",
-    "Leaves Zephras by skyship to Skywatcher Plateau in Mulgore"
+    "Thendal Village, then Shen'dar Village, then Valanaar (racial hub, bank, skyship docks)",
+    "Skyships from Valanaar: Dalaran (Alliance) and Mulgore near Skywatcher Plateau (Horde)"
    ],
-   "capital_note": "No Skyborne capital; Valanaar is the hub",
-   "status": "beta",
-   "source": "egt-combos",
+   "capital_note": "No Skyborne capital; Valanaar is the racial hub",
+   "status": "blizzard",
+   "source": "bz-skyborne",
    "racials_status": "unverified",
-   "racials_source": "wh-races"
+   "racials_source": "wh-races",
+   "first_hub_status": "beta",
+   "first_hub_source": "wt-zephras",
+   "capital_status": "beta",
+   "capital_source": "egt-combos"
   }
  }
 }

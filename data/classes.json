@@ -29,16 +29,16 @@
      "name": "Defensive Stance",
      "kind": "class quest",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq"
+     "status": "beta",
+     "source": "wh-db"
     },
     {
      "level": 30,
      "name": "Berserker Stance",
      "kind": "class quest",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq"
+     "status": "beta",
+     "source": "wh-db"
     },
     {
      "level": 30,
@@ -136,16 +136,17 @@
      "name": "Warhorse",
      "kind": "mount",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq"
+     "status": "beta",
+     "source": "wh-db"
     },
     {
      "level": 60,
      "name": "Charger",
      "kind": "mount",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq"
+     "status": "blizzard",
+     "source": "bz-photos",
+     "note": "Forsaken paladins get their own level 60 epic mount quest"
     }
    ]
   },
@@ -186,8 +187,8 @@
      "name": "Rhok'delar",
      "kind": "class quest",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq"
+     "status": "beta",
+     "source": "wh-db"
     }
    ]
   },
@@ -235,8 +236,8 @@
      "name": "Poisons",
      "kind": "class quest",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq"
+     "status": "beta",
+     "source": "wh-db"
     },
     {
      "level": 24,
@@ -276,8 +277,8 @@
      "name": "Desperate Prayer",
      "kind": "race spell",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq"
+     "status": "beta",
+     "source": "wh-db"
     },
     {
      "level": 10,
@@ -419,8 +420,8 @@
      "name": "Teleport",
      "kind": "trainer",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq",
+     "status": "beta",
+     "source": "wh-db",
      "note": "City teleports need Rune of Teleportation"
     },
     {
@@ -436,8 +437,8 @@
      "name": "Portals",
      "kind": "trainer",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq",
+     "status": "beta",
+     "source": "wh-db",
      "note": "Rune of Portals"
     }
    ]
@@ -586,8 +587,8 @@
      "name": "Travel Form",
      "kind": "trainer",
      "faction": "both",
-     "status": "classic",
-     "source": "wcalc-classq"
+     "status": "beta",
+     "source": "wh-db"
     }
    ]
   }
@@ -598,18 +599,27 @@
    "name": "Riding",
    "kind": "trainer",
    "faction": "both",
-   "status": "unverified",
-   "source": "bz-starter",
-   "note": "Cost not published"
+   "status": "beta",
+   "source": "mmo-riding",
+   "note": "Apprentice Riding: 100 gold, first mount included"
   },
   {
    "level": 40,
    "name": "Dual Specialization",
    "kind": "trainer",
    "faction": "both",
-   "status": "unverified",
-   "source": "wh-legacy",
-   "note": "Level and cost unconfirmed"
+   "status": "blizzard",
+   "source": "bz-deep-pw",
+   "note": "Class trainer in a major city"
+  },
+  {
+   "level": 60,
+   "name": "Journeyman Riding",
+   "kind": "trainer",
+   "faction": "both",
+   "status": "beta",
+   "source": "mmo-riding",
+   "note": "1,000 gold"
   }
  ]
 }

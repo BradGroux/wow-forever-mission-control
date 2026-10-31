@@ -105,6 +105,46 @@
    "title": "WoW Forever Horde Races",
    "site": "wowforevertierlist.com",
    "url": "https://wowforevertierlist.com/races/horde"
+  },
+  "wh-db": {
+   "title": "Wowhead WoW: Forever database tooltips (beta client data)",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever"
+  },
+  "bz-photos": {
+   "title": "World of Warcraft: Forever Found Photos Panel Recap",
+   "site": "news.blizzard.com",
+   "url": "https://news.blizzard.com/en-us/article/24304071/world-of-warcraft-forever-found-photos-panel-recap"
+  },
+  "bz-deep-pw": {
+   "title": "World of Warcraft: Forever Class Deep Dives: Priest and Warrior",
+   "site": "news.blizzard.com",
+   "url": "https://news.blizzard.com/en-us/article/24301514/world-of-warcraft-forever-class-deep-dives-priest-and-warrior"
+  },
+  "bz-skyborne": {
+   "title": "WoW: Forever Meet the New Skyborne",
+   "site": "news.blizzard.com",
+   "url": "https://news.blizzard.com/en-us/article/24302071/wow-forever-meet-the-new-skyborne"
+  },
+  "wh-zephras": {
+   "title": "Zephras Isle Zone Overview: Maps, Locations, and Trainers",
+   "site": "wowhead.com",
+   "url": "https://www.wowhead.com/forever/guide/zephras-isle-zone-overview"
+  },
+  "wt-zephras": {
+   "title": "Zephras Isle Walkthrough (Skyborne Starting Zone)",
+   "site": "warcrafttavern.com",
+   "url": "https://www.warcrafttavern.com/forever/guides/zephras-isle-walkthrough/"
+  },
+  "mmo-riding": {
+   "title": "Riding in WoW Forever: Mount Level, Cost and Trainers",
+   "site": "mmonster.co",
+   "url": "https://mmonster.co/wow-forever/guides/mounts/riding"
+  },
+  "method-mount": {
+   "title": "How To Get A Mount In WoW Forever: Cost, Requirement & Mount Options",
+   "site": "method.gg",
+   "url": "https://www.method.gg/wow-forever/how-to-get-a-mount-in-wow-forever-cost-requirement-and-mount-options"
   }
  }
 }

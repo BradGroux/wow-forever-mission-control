@@ -923,6 +923,15 @@
   },
   {
    "kind": "boat",
+   "from": "Stormwind Harbor",
+   "to": "Auberdine",
+   "faction": "Alliance",
+   "status": "blizzard",
+   "source": "bz-photos",
+   "note": "New early route to Kalimdor"
+  },
+  {
+   "kind": "boat",
    "from": "Menethil Harbor",
    "to": "Auberdine",
    "faction": "Alliance",
@@ -975,24 +984,36 @@
    "from": "Steamwheedle Port",
    "to": "Powderfuse Port",
    "faction": "Both",
-   "status": "beta",
-   "note": "Tanaris to Riverglades"
-  },
-  {
-   "kind": "skyship",
-   "from": "Valanaar",
-   "to": "Skywatcher Plateau",
-   "faction": "Horde",
-   "status": "unverified",
-   "note": "Windshaper Skyborne leave Zephras Isle for Mulgore; beta report"
+   "status": "blizzard",
+   "note": "Tanaris to Riverglades",
+   "source": "bz-photos"
   },
   {
    "kind": "boat",
    "from": "Menethil Harbor",
    "to": "Southshore",
    "faction": "Alliance",
-   "status": "unverified",
-   "note": "Reported by beta players; not in Classic"
+   "status": "blizzard",
+   "note": "Menethil, Southshore and Auberdine route",
+   "source": "bz-photos"
+  },
+  {
+   "kind": "skyship",
+   "from": "Valanaar",
+   "to": "Dalaran",
+   "faction": "Both",
+   "status": "beta",
+   "source": "wh-zephras",
+   "note": "Zephras Isle; Alliance route, either faction may ride"
+  },
+  {
+   "kind": "skyship",
+   "from": "Valanaar",
+   "to": "Skywatcher Plateau",
+   "faction": "Both",
+   "status": "beta",
+   "source": "wh-zephras",
+   "note": "Lands on the cliffs south of Skywatcher Plateau, north of Thunder Bluff; Horde route, either faction may ride"
   }
  ],
  "flight_paths": {
