@@ -151,6 +151,14 @@ tbody tr:hover td { background: var(--f1); }
 
 .hscroll { overflow-x: auto; }
 .hscroll > svg { display: block; min-width: 860px; }
+dialog { background: var(--f1); color: var(--t1); border: 1px solid var(--b2); border-radius: var(--r); padding: 20px 24px; width: min(640px, 92vw); }
+dialog::backdrop { background: rgba(0, 0, 0, .6); }
+dialog h2 { font-size: 18px; margin-bottom: 12px; }
+dialog input[type=file] { display: block; margin-bottom: 12px; color: var(--t2); }
+dialog textarea { width: 100%; height: 240px; background: var(--f2); border: 1px solid var(--b1); border-radius: var(--r-sm); padding: 10px; font: 12px/1.5 var(--mono); color: var(--t1); }
+dialog .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+dialog button { background: var(--f2); border: 1px solid var(--b1); border-radius: var(--r-sm); padding: 6px 14px; cursor: pointer; }
+dialog button:last-child { background: var(--t1); color: var(--bg); border-color: var(--t1); font-weight: 600; }
 svg text { font-family: var(--font); }
 svg a text:hover { text-decoration: underline; }
 

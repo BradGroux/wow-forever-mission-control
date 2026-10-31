@@ -151,6 +151,58 @@ class Progress(unittest.TestCase):
         self.assertEqual(p["levels"]["aldric"]["level"], 12)
 
 
+class ProgressSafety(unittest.TestCase):
+    def base(self):
+        p = mc.empty_progress(EX)
+        p["checks"] = {"a": True, "b": True}
+        p["levels"]["aldric"].update({"level": 20, "updated": "2026-11-05"})
+        p["skills"]["aldric"] = {"Mining": 120}
+        p["map"] = {"Aldricthebold": "aldric"}
+        return p
+
+    def test_page_stamp_lowers_level_and_skill(self):
+        p = self.base()
+        later = mc._rec_time(p["levels"]["aldric"]) + 1000
+        mc.merge_progress(p, {"levels": {"aldric": {"level": 12, "updated": "2026-11-06"}}, "skills": {"aldric": {"Mining": 80}},
+                              "stamp": {"l:aldric": later, "s:aldric:Mining": later}})
+        self.assertEqual(p["levels"]["aldric"]["level"], 12)
+        self.assertEqual(p["skills"]["aldric"]["Mining"], 80)
+
+    def test_unstamped_still_keeps_higher(self):
+        p = self.base()
+        mc.merge_progress(p, {"levels": {"aldric": {"level": 12}}, "skills": {"aldric": {"Mining": 80}}})
+        self.assertEqual((p["levels"]["aldric"]["level"], p["skills"]["aldric"]["Mining"]), (20, 120))
+
+    def test_map_survives_merge(self):
+        p = self.base()
+        mc.merge_progress(p, {"map": {"SomeAlt": "elowen"}})
+        self.assertEqual(p["map"], {"Aldricthebold": "aldric", "SomeAlt": "elowen"})
+
+    def test_diff_and_backup(self):
+        old = self.base(); new = copy.deepcopy(old)
+        new["checks"].pop("b"); new["levels"]["aldric"]["level"] = 21
+        d = "\n".join(mc.progress_diff(old, new))
+        self.assertIn("-1 check(s): b", d); self.assertIn("level 20 -> 21", d)
+        with tempfile.TemporaryDirectory() as t:
+            path = os.path.join(t, "progress.json")
+            self.assertIsNone(mc.backup_progress(path))
+            mc.write_json(path, old)
+            bk = mc.backup_progress(path)
+            self.assertTrue(bk.startswith(os.path.join(t, "backups")))
+            self.assertEqual(json.load(open(bk, encoding="utf-8"))["checks"], old["checks"])
+
+    def test_cli_reset_needs_force_and_merge_dry_run(self):
+        ex = os.path.join(ROOT, "config", "examples", "alliance.json")
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "mc"), "progress", "reset", "--config", ex], capture_output=True, text=True, cwd=ROOT)
+        self.assertNotEqual(r.returncode, 0); self.assertIn("--force", r.stderr)
+        with tempfile.TemporaryDirectory() as t:
+            f = os.path.join(t, "x.json")
+            mc.write_json(f, {"levels": {"aldric": {"level": 7}}})
+            r = subprocess.run([sys.executable, os.path.join(ROOT, "mc"), "progress", "merge", f, "--dry-run", "--config", ex], capture_output=True, text=True, cwd=ROOT)
+            self.assertEqual(r.returncode, 0, r.stderr); self.assertIn("would: aldric: level", r.stdout)
+        self.assertFalse(os.path.exists(mc.PROGRESS) and "level\": 7" in open(mc.PROGRESS, encoding="utf-8").read())
+
+
 class Safety(unittest.TestCase):
     EVIL = "Test</script><script>alert(1)</script><!-- & \u2028"
 

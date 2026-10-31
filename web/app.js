@@ -61,24 +61,46 @@
   function today() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   function blank() {
     var lv = {}; CHARS.forEach(function (c) { lv[c.id] = { level: 1, rested: "Empty", updated: "" }; });
-    return { version: 1, roster: P.roster.key, updated: "", checks: {}, levels: lv, skills: {}, notes: "" };
+    return { version: 1, roster: P.roster.key, updated: "", checks: {}, levels: lv, skills: {}, map: {}, notes: "", stamp: {} };
   }
+  // Page edits carry a time stamp (S.stamp["c:id" | "l:char" | "s:char:prof" | "n"], ms). A stamped edit beats
+  // older baked or imported data, so unticks and lowered levels stick. Unstamped data follows the old rules:
+  // ticks add, the higher level and skill win, and addon data that isn't newer than what's saved is skipped.
+  function timeOf(rec) { return rec ? ((rec.lastSeenEpoch || 0) * 1000 || Date.parse(rec.updated || "") || 0) : 0; }
   function merge(base, extra) {
     var out = JSON.parse(JSON.stringify(base));
+    out.stamp = out.stamp || {}; out.map = out.map || {}; out.checks = out.checks || {}; out.levels = out.levels || {}; out.skills = out.skills || {};
     if (!extra) return out;
-    Object.keys(extra.checks || {}).forEach(function (k) { if (extra.checks[k]) out.checks[k] = true; else delete out.checks[k]; });
+    var st = extra.stamp || {}, bst = out.stamp, bday = Date.parse(base.updated || "") || 0;
+    function wins(key, t) { return st[key] != null && st[key] >= Math.max(bst[key] || 0, t || 0); }
+    var ek = extra.checks || {}, keys = {};
+    Object.keys(ek).forEach(function (k) { keys[k] = 1; });
+    Object.keys(st).forEach(function (k) { if (k.slice(0, 2) === "c:") keys[k.slice(2)] = 1; });
+    Object.keys(keys).forEach(function (k) {
+      if (st["c:" + k] != null) { if (wins("c:" + k, bday)) { if (ek[k]) out.checks[k] = true; else delete out.checks[k]; } }
+      else if (ek[k]) out.checks[k] = true; else delete out.checks[k];
+    });
     Object.keys(extra.levels || {}).forEach(function (id) {
       var o = out.levels[id] || {}, n = extra.levels[id] || {};
-      out.levels[id] = (n.level || 0) >= (o.level || 0) ? Object.assign({}, o, n) : o;
+      if (st["l:" + id] != null) { if (wins("l:" + id, timeOf(o))) out.levels[id] = Object.assign({}, o, n); return; }
+      if (n.lastSeenEpoch && o.lastSeenEpoch && n.lastSeenEpoch <= o.lastSeenEpoch) return;
+      if ((n.level || 0) >= (o.level || 0)) out.levels[id] = Object.assign({}, o, n);
     });
     Object.keys(extra.skills || {}).forEach(function (id) {
       out.skills[id] = out.skills[id] || {};
-      Object.keys(extra.skills[id]).forEach(function (p) { out.skills[id][p] = Math.max(+extra.skills[id][p] || 0, +out.skills[id][p] || 0); });
+      Object.keys(extra.skills[id]).forEach(function (p) {
+        var v = +extra.skills[id][p] || 0, k = "s:" + id + ":" + p;
+        out.skills[id][p] = st[k] != null ? (wins(k, bday) ? v : +out.skills[id][p] || 0) : Math.max(v, +out.skills[id][p] || 0);
+      });
     });
-    if (extra.notes) out.notes = extra.notes;
+    if (st.n != null ? wins("n", bday) : extra.notes) out.notes = extra.notes || "";
+    Object.assign(out.map, extra.map || {});
+    Object.keys(st).forEach(function (k) { out.stamp[k] = Math.max(st[k], out.stamp[k] || 0); });
+    Object.keys(extra).forEach(function (k) { if (!(k in out)) out[k] = extra[k]; });
     out.updated = extra.updated || out.updated;
     return out;
   }
+  function touch(key) { S.stamp = S.stamp || {}; S.stamp[key] = Date.now(); }
   function load() {
     var base = merge(blank(), P.progress);
     try { var raw = localStorage.getItem(KEY); if (raw) return merge(base, JSON.parse(raw)); } catch (e) { /* storage blocked */ }
@@ -141,7 +163,7 @@
       h("div", { class: "cl-prog" }, h("div", { class: "track" }, h("b", { style: { width: (items.length ? done / items.length * 100 : 0) + "%" } })), h("span", null, done + " / " + items.length)),
       h("div", { role: "list" }, items.map(function (it) {
         var on = !!S.checks[it.id];
-        function toggle() { if (on) delete S.checks[it.id]; else S.checks[it.id] = true; save(); }
+        function toggle() { if (on) delete S.checks[it.id]; else S.checks[it.id] = true; touch("c:" + it.id); save(); }
         return h("div", { class: "ck", role: "checkbox", tabindex: "0", "aria-checked": on ? "true" : "false",
           onclick: function (e) { if (e.target.tagName !== "A") toggle(); }, onkeydown: function (e) { if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(); } } },
           h("span", { class: "box", "aria-hidden": "true" }, on ? "✓" : ""),
@@ -187,11 +209,11 @@
       return h("div", { class: "lvrow", style: { "--cc": c.color } },
         h("div", { class: "who" }, icon(c, 22), h("span", { class: "nm" }, c.display),
           edit ? h("input", { type: "number", class: "lvin", min: "1", max: "60", value: String(l), "aria-label": c.display + " level",
-            onchange: function (e) { var v = Math.max(1, Math.min(60, parseInt(e.target.value, 10) || 1)); S.levels[c.id] = Object.assign({}, S.levels[c.id], { level: v, updated: today() }); save(); } })
+            onchange: function (e) { var v = Math.max(1, Math.min(60, parseInt(e.target.value, 10) || 1)); S.levels[c.id] = Object.assign({}, S.levels[c.id], { level: v, updated: today(), source: "page" }); touch("l:" + c.id); save(); } })
             : h("span", { class: "lvn" }, String(l))),
         h("div", { class: "lvbar", "aria-label": c.display + " level " + l + " of 60" }, h("b", { style: { width: (l / 60 * 100) + "%" } }), ticks()),
         h("div", { class: "lvmeta" }, h("span", { class: "br" }, b.from + "–" + b.to),
-          edit ? h("select", { class: "rsel", "aria-label": c.display + " rested", onchange: function (e) { S.levels[c.id] = Object.assign({}, S.levels[c.id], { rested: e.target.value, updated: today() }); save(); } },
+          edit ? h("select", { class: "rsel", "aria-label": c.display + " rested", onchange: function (e) { S.levels[c.id] = Object.assign({}, S.levels[c.id], { rested: e.target.value, updated: today() }); touch("l:" + c.id); save(); } },
             ["Empty", "Partial", "Full"].map(function (r) { return h("option", { value: r, selected: r === (st.rested || "Empty") }, "Rested " + r.toLowerCase()); }))
             : h("span", { class: "q" }, "Rested " + (st.rested || "Empty").toLowerCase()),
           h("span", null, st.updated || "")));
@@ -336,7 +358,7 @@
           return h("div", { class: "prof", style: { "--cc": c.color } },
             h("div", { class: "pr" }, wl(p.name), h("span", { class: "q" }, p.until ? p.from + "–" + p.until : p.from > 1 ? "from " + p.from : ""),
               h("input", { type: "number", class: "skin", min: "0", max: "300", value: String(v), "aria-label": c.display + " " + p.name,
-                onchange: function (e) { S.skills[c.id] = S.skills[c.id] || {}; S.skills[c.id][p.name] = Math.max(0, Math.min(300, parseInt(e.target.value, 10) || 0)); save(); } }),
+                onchange: function (e) { S.skills[c.id] = S.skills[c.id] || {}; S.skills[c.id][p.name] = Math.max(0, Math.min(300, parseInt(e.target.value, 10) || 0)); touch("s:" + c.id + ":" + p.name); save(); } }),
               h("span", { class: "q" }, "/ 300")),
             h("div", { class: "pbar" }, h("b", { style: { width: (v / 300 * 100) + "%" } }), isCraft ? [150, 225].map(function (t) { return h("i", { style: { left: (t / 300 * 100) + "%" } }); }) : null));
         })));
@@ -459,9 +481,11 @@
     return out;
   }
   function fromAddon(text) {
-    var db = parseLua(text).LegacyTrackerDB || {}, chars = db.chars || {}, byName = {}, best = {}, extra = { checks: {}, levels: {}, skills: {} }, skipped = [];
+    var all = parseLua(text), names = Object.keys(all).filter(function (k) { return all[k] && typeof all[k] === "object" && all[k].chars; });
+    var dbName = names.indexOf("LegacyTrackerDB") >= 0 ? "LegacyTrackerDB" : names[0];
+    var db = all[dbName] || {}, chars = db.chars || {}, byName = {}, best = {}, extra = { levels: {}, skills: {} }, skipped = [], stale = [];
     CHARS.forEach(function (c) { byName[c.name.toLowerCase()] = c.id; });
-    var map = Object.assign({}, (P.progress && P.progress.map) || {}, S.map || {});
+    var map = Object.assign({}, (P.progress && P.progress.map) || {}, S.map || {}), have = S.levels || {};
     Object.keys(map).forEach(function (k) { byName[k.toLowerCase()] = map[k]; });
     Object.keys(chars).forEach(function (key) {
       var c = chars[key]; if (!c || typeof c !== "object") return;
@@ -471,14 +495,16 @@
     });
     Object.keys(best).forEach(function (id) {
       var c = best[id], xm = c.xpMax || 0, rs = c.rested || 0;
+      if (c.lastSeen && have[id] && have[id].lastSeenEpoch && c.lastSeen <= have[id].lastSeenEpoch) { stale.push(id); return; }
       extra.levels[id] = { level: c.level, rested: !rs || !xm ? "Empty" : rs / xm >= 1.495 ? "Full" : "Partial", source: "LegacyTracker",
         updated: c.lastSeen ? new Date(c.lastSeen * 1000).toISOString().slice(0, 10) : today() };
+      if (c.lastSeen) extra.levels[id].lastSeenEpoch = c.lastSeen;
       if (xm) { extra.levels[id].pctToNext = Math.round((c.xp || 0) / xm * 1000) / 10; extra.levels[id].restedBubbles = Math.round(rs / xm * 200) / 10; }
       if (c.zone) extra.levels[id].zone = c.zone;
       extra.skills[id] = {};
       Object.keys(c.professions || {}).forEach(function (p) { var v = c.professions[p]; if (v && v.rank != null) extra.skills[id][p] = v.rank; });
     });
-    return { extra: extra, matched: Object.keys(best).length, skipped: skipped };
+    return { extra: extra, db: dbName, matched: Object.keys(best).length, stale: stale, skipped: skipped };
   }
   function importJSON() {
     var ta = h("textarea", { "aria-label": "Progress JSON or LegacyTracker.lua" });
@@ -488,9 +514,10 @@
         h("button", { type: "button", onclick: function () { dlg.close(); dlg.remove(); } }, "Cancel"),
         h("button", { type: "button", onclick: function () {
           try {
-            if (/LegacyTrackerDB\s*=/.test(ta.value)) {
+            if (/^\s*[A-Za-z_]\w*\s*=\s*\{/.test(ta.value) && /\[?"?chars"?\]?\s*=/.test(ta.value)) {
               var r = fromAddon(ta.value);
               if (!r.matched) throw new Error("No roster characters in LegacyTracker.lua" + (r.skipped.length ? ": " + r.skipped.join(", ") : ""));
+              if (r.stale.length === r.matched) throw new Error("This LegacyTracker.lua is not newer than what is already saved");
               S = merge(S, r.extra);
             } else { var m = ta.value.match(/\{[\s\S]*\}/); S = merge(S, JSON.parse(m ? m[0] : ta.value)); }
             dlg.close(); dlg.remove(); save();
