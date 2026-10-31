@@ -35,13 +35,15 @@ Each entry is `{"name": ..., "from": 1, "until": 60}`.
 
 - `name`: a primary profession: `Alchemy`, `Blacksmithing`, `Enchanting`, `Engineering`, `Leatherworking`, `Tailoring` (crafting) or `Herbalism`, `Mining`, `Skinning` (gathering).
 - `from`: the level you train it (default 1).
-- `until`: the level you drop it (omit to keep it).
+- `until`: the level you drop it, 2-60 and after `from` (omit to keep it).
 
 A character can hold two primary professions at any level, so you can swap: `Mining 1-60` then `Engineering` from 60. Cooking, First Aid and Fishing are secondary and not tracked.
 
 **Legacy goal:** each crafting profession earns Legacy points at 150, 225 and 300 skill (18 points for all six). Four characters with two primaries each can cover all six crafts if two of them pick two crafts, or if someone swaps a gatherer for a craft late. `./mc validate` warns about any craft nobody takes.
 
-Mission Control schedules craft targets of 150 by level 25, 225 by 32 and 300 by 52. A craft you start at 52 or later gets all three targets at its start level.
+Mission Control schedules craft targets of 150 by level 25, 225 by 32 and 300 by 52. A craft you start at 52 or later gets all three targets at its start level. A craft you drop (`until`) before a target's level doesn't get that target, the plan doesn't count its point, and `./mc validate` warns.
+
+`./mc validate` also checks the file against [config/roster.schema.json](../config/roster.schema.json): an unknown or misspelled field is an error, so a typo like `leveling_spac` can't be silently ignored. `./mc init` writes `config/roster.draft.json` instead of `config/roster.json` when the answers don't validate.
 
 ## Example
 

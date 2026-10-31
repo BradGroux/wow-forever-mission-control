@@ -10,3 +10,4 @@ node_modules/
 WTF/
 SavedVariables/
 progress/backups/
+config/roster.draft.json

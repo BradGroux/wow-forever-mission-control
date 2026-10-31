@@ -279,6 +279,7 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](
 Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://www.wowhead.com/forever/zone=1377), [Eastern Plaguelands](https://www.wowhead.com/forever/zone=139), [Western Plaguelands](https://www.wowhead.com/forever/zone=28), [Feralas](https://www.wowhead.com/forever/zone=357), [Un'Goro Crater](https://www.wowhead.com/forever/zone=490)
 
 **Aldric** (Human Warrior)
+- [ ] Swap [Mining](https://www.wowhead.com/forever/skill=186) for [Engineering](https://www.wowhead.com/forever/skill=202) `Profession`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 150 `Legacy`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 225 `Legacy`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 300 `Legacy`
