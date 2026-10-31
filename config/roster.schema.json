@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "roster.schema.json",
   "title": "WoW Forever Legacy Mission Control roster",
-  "description": "Four characters, one faction. ./mc validate checks the rules JSON Schema can't express (race/class combos, faction match, craft coverage, two primary professions at a time).",
+  "description": "One to ten characters (four recommended), one faction. ./mc validate checks the rules JSON Schema can't express (race/class combos, faction match, craft coverage, two primary professions at a time).",
   "type": "object",
   "required": [
     "faction",

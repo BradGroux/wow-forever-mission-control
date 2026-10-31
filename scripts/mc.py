@@ -94,12 +94,52 @@ def config_path(arg=None):
 
 
 def load_config(path):
-    cfg = normalize(load_json(path))
+    raw = load_json(path)
+    bad = structure_errors(raw)
+    if bad:
+        raise SystemExit(f"{os.path.relpath(path, ROOT)}: invalid roster structure:\n  " + "\n  ".join(bad))
+    cfg = normalize(raw)
     cfg["_path"] = path
     return cfg
 
 
+def structure_errors(cfg):
+    """Shape problems that would stop normalize/validate from reading the roster at all."""
+    if not isinstance(cfg, dict):
+        return [f"roster must be a JSON object, got {type(cfg).__name__}"]
+    chars = cfg.get("characters")
+    if chars is None:
+        return []
+    if not isinstance(chars, list):
+        return [f"roster.characters must be an array, got {type(chars).__name__}"]
+    out = []
+    for i, ch in enumerate(chars):
+        where = f"roster.characters[{i}]"
+        if not isinstance(ch, dict):
+            out.append(f"{where} must be an object, got {ch!r}")
+            continue
+        profs = ch.get("professions")
+        if profs is None:
+            continue
+        if not isinstance(profs, list):
+            out.append(f"{where}.professions must be an array, got {type(profs).__name__}")
+            continue
+        for j, p in enumerate(profs):
+            pw = f"{where}.professions[{j}]"
+            if not isinstance(p, dict):
+                out.append(f"{pw} must be an object, got {p!r}")
+                continue
+            if not isinstance(p.get("name"), str) or not p.get("name"):
+                out.append(f"{pw}.name is required (a profession name)")
+            for k in ("from", "until"):
+                if k in p and (isinstance(p[k], bool) or not isinstance(p[k], int)):
+                    out.append(f"{pw}.{k} must be a whole number, got {p[k]!r}")
+    return out
+
+
 def normalize(cfg):
+    if structure_errors(cfg):
+        return cfg
     for i, ch in enumerate(cfg.get("characters") or []):
         ch.setdefault("id", slug(ch.get("name", f"c{i + 1}")))
         for p in ch.get("professions") or []:
@@ -150,6 +190,9 @@ def prof_spans(ch):
 def validate(cfg, g):
     """Return (errors, warnings, info). Pure function; no I/O."""
     E, W, I = [], [], []
+    bad = structure_errors(cfg)
+    if bad:
+        return bad, W, I
     if os.path.exists(SCHEMA_PATH):
         E += schema_errors(cfg, load_json(SCHEMA_PATH))
     fac = cfg.get("faction")
@@ -235,8 +278,8 @@ def validate(cfg, g):
 
 # ---------------------------------------------------------------- plan
 def craft_due(lvl, start):
-    """Level by which a craft target is due: the usual target level, or the level it's trained if that's 52+."""
-    return max(lvl, start if start >= 52 else lvl)
+    """Level by which a craft target is due: the usual target level, never before the craft is trained."""
+    return max(lvl, start)
 
 
 def overlaps(lo, hi, a, b):
@@ -295,7 +338,9 @@ def build_plan(cfg, g, progress=None):
                 if n in CRAFTS:
                     for skill, lvl in CRAFT_TARGET.items():
                         due = craft_due(lvl, a)
-                        if (lo < due <= hi or (lo == 1 and due == 1)) and a < b and due < b:
+                        # due at the training level: same bracket as "Train"; otherwise the bracket it ends in
+                        here = (lo <= due < hi or (hi == 60 and due == 60)) if due == a else (lo < due <= hi or (lo == 1 and due == 1))
+                        if here and a < b and due < b:
                             add(f"{slug(n)}-{skill}", f"{n} to {skill}", "Legacy")
             for m in ch["milestones"]:
                 if lo <= m["level"] < hi or (hi == 60 and m["level"] == 60):
@@ -344,13 +389,14 @@ def build_plan(cfg, g, progress=None):
     due_at = {}
     for c in CRAFTS:
         for sk, lvl in CRAFT_TARGET.items():
-            ds = [craft_due(lvl, a) for src in cfg["characters"] for n, a, b in prof_spans(src) if n == c and craft_due(lvl, a) < b]
+            # (due, trained that level): a target due the level it's trained counts from that level's bracket
+            ds = [(craft_due(lvl, a), craft_due(lvl, a) == a and a > lvl) for src in cfg["characters"] for n, a, b in prof_spans(src) if n == c and craft_due(lvl, a) < b]
             if ds:
                 due_at[(c, sk)] = min(ds)
     proj = []
     for lo, hi in BRACKETS:
         pts = sum(1 for lv in (25, 45, 60) if lv <= hi) * distinct
-        pts += sum(1 for d in due_at.values() if d <= hi)
+        pts += sum(1 for d, at_train in due_at.values() if ((d < hi or hi == 60) if at_train else d <= hi))
         proj.append({"at": f"{lo}-{hi}", "points": pts})
     errs, warns, info = validate(cfg, g)
     links = {}
