@@ -1,5 +1,5 @@
 """Unit tests for the mc CLI. Run: python3 -m unittest discover -s tests -v"""
-import copy, json, os, subprocess, sys, tempfile, unittest
+import contextlib, copy, io, json, os, subprocess, sys, tempfile, unittest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
@@ -460,7 +460,8 @@ class ProgressProtocol(unittest.TestCase):
         saved = {}
         with mock.patch.object(mc, "load_progress", lambda cfg, path=None: p), \
              mock.patch.object(mc, "save_progress", lambda q, path=None: saved.update(q)), \
-             mock.patch.object(mc, "backup_progress", lambda path=None: None):
+             mock.patch.object(mc, "backup_progress", lambda path=None: None), \
+             contextlib.redirect_stdout(io.StringIO()):
             mc.main([*args, "--config", self.EXP])
         return saved
 
