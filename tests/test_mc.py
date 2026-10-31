@@ -700,6 +700,38 @@ class StatusAndNotes(unittest.TestCase):
         self.assertNotIn("detail", self.tasks(p, "aldric")["Defensive Stance at 10"])
 
 
+class ReleaseVersion(unittest.TestCase):
+    def tree(self, t, version, toc, changelog):
+        os.makedirs(os.path.join(t, "addon", "LegacyTracker"), exist_ok=True)
+        open(os.path.join(t, "VERSION"), "w").write(version + "\n")
+        open(os.path.join(t, "addon", "LegacyTracker", "LegacyTracker.toc"), "w").write(f"## Interface: 16001\n## Version: {toc}\n")
+        open(os.path.join(t, "CHANGELOG.md"), "w").write(changelog)
+
+    def test_repo_versions_agree(self):
+        self.assertEqual(mc.version_problems(), [])
+        self.assertRegex(mc.release_version(), mc.VERSION_RE)
+        self.assertEqual(mc.build_plan(EX, G)["release"], mc.release_version())
+
+    def test_mismatches_reported(self):
+        ok = "## [Unreleased]\n\n## [2026.11.04.1] - 2026-11-04\n\n## [2026.11.04] - 2026-11-04\n"
+        with tempfile.TemporaryDirectory() as t:
+            self.tree(t, "2026.11.04.1", "2026.11.04.1", ok)
+            self.assertEqual(mc.version_problems(t), [])
+            self.tree(t, "2026.11.04.1", "2026.11.04", ok)
+            self.assertTrue(any(".toc" in x for x in mc.version_problems(t)))
+            self.tree(t, "2026.11.05", "2026.11.05", ok)
+            self.assertTrue(any("CHANGELOG.md newest entry is 2026.11.04.1" in x for x in mc.version_problems(t)))
+            self.tree(t, "2026.11.04", "2026.11.04", "## [2026.11.04] - 2026-11-05\n")
+            self.assertTrue(any("dated 2026-11-04" in x for x in mc.version_problems(t)))
+            for bad in ("v2026.11.04", "2026.11.4", "2026.11.04.0", "2026.02.30", "1.0.0"):
+                self.tree(t, bad, bad, f"## [{bad}] - 2026-11-04\n")
+                self.assertTrue(mc.version_problems(t), bad)
+
+    def test_package_check(self):
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "package_release.py"), "--check"], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+
 class Safety(unittest.TestCase):
     EVIL = "Test</script><script>alert(1)</script><!-- & \u2028"
 

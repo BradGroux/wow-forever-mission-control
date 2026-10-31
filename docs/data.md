@@ -18,7 +18,7 @@ Everything Mission Control knows about WoW Forever is in `data/`. Each record ci
 | Status | Meaning | On the page |
 | --- | --- | --- |
 | `blizzard` | Confirmed by Blizzard (news post, patch notes, in-game) | no tag |
-| `beta` | Seen on the Forever beta, may change at launch | no tag |
+| `beta` | Seen on the Forever beta, may change at launch | **Seen in beta** |
 | `classic` | Carried over from Classic Era data, not yet confirmed for Forever | **Classic data** |
 | `unverified` | Reported by one community source, or inferred | **Unverified** |
 
@@ -38,11 +38,11 @@ The tool accepts only exact name matches confirmed by Wowhead's tooltip service.
 Open questions are tracked as [issues labeled `data`](https://github.com/BradGroux/wow-forever-mission-control/labels/data). At the time of writing:
 
 - Racials changed during the beta; all are `unverified` until launch.
-- Riding and Dual Specialization at level 40 (and their cost) are `unverified`.
-- Many class milestones and all flight paths are `classic` data.
-- The Menethil Harbor to Southshore boat and the Skyborne skyship routes are `unverified`.
+- Riding prices are `beta` data (Apprentice Riding at 40 for 100 gold, first mount included; Journeyman Riding at 60 for 1,000 gold). Dual Specialization at 40 is confirmed by Blizzard; its cost is not recorded yet.
+- Six class milestones, all flight paths and most boats, zeppelins and the tram are `classic` data.
+- The Skyborne skyship routes from Valanaar are `beta` data.
 - Five of the nine new dungeons were not playable in the beta; their levels come from Blizzard's announcement only.
 - Ragefire Chasm levels come from community data.
-- Around 75 names have no verified Wowhead id yet and use search links.
+- About 70 names on the example rosters have no verified Wowhead id yet and use search links.
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md#data-sourcing-rules) to fix any of these.

@@ -626,7 +626,8 @@
     var v = { today: vToday, brackets: vBrackets, rested: vRested, legacy: vLegacy, profs: vProfs, dungeons: vDungeons, classes: vClasses, world: vWorld, reference: vReference }[UI.tab]();
     view.replaceChildren.apply(view, [].concat(v).filter(Boolean));
     document.getElementById("foot").replaceChildren(h("span", null, "Progress saved " + (S.updated || "never") + " · ",
-      h("a", { href: "https://github.com/BradGroux/wow-forever-mission-control", target: "_blank", rel: "noopener noreferrer" }, "WoW Forever Legacy Mission Control")));
+      h("a", { href: "https://github.com/BradGroux/wow-forever-mission-control", target: "_blank", rel: "noopener noreferrer" }, "WoW Forever Legacy Mission Control"),
+      P.release && P.release !== "dev" ? [" · ", h("a", { href: "https://github.com/BradGroux/wow-forever-mission-control/releases/tag/" + encodeURIComponent(P.release), target: "_blank", rel: "noopener noreferrer", title: "Release notes" }, P.release)] : null));
   }
   render();
 })();

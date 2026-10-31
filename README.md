@@ -10,7 +10,7 @@ You describe your characters in one config file. Mission Control checks that the
 - a static web page with checklists, editable levels and rested state, saved in your browser, with JSON export and import
 - an optional silent in-game addon, **LegacyTracker**, that records levels, XP, rested XP and profession skill so you never type them in
 
-Every game name links to [Wowhead's WoW Forever database](https://www.wowhead.com/forever). Anything not yet confirmed for Forever is marked **Unverified** or **Classic data** on the page.
+Every game name links to [Wowhead's WoW Forever database](https://www.wowhead.com/forever). Data status shows as small tags on the page: **Seen in beta**, **Classic data** or **Unverified**.
 
 **Demo:** [bradgroux.github.io/wow-forever-mission-control](https://bradgroux.github.io/wow-forever-mission-control/) (the example Alliance roster).
 
@@ -103,7 +103,7 @@ Everything works by hand:
 
 ## The LegacyTracker addon
 
-[addon/LegacyTracker](addon/LegacyTracker) is a tiny, silent addon (Interface 16001) that works with any character names. It has no UI and prints nothing except when you type `/ltrack`. It records level, XP, rested XP, zone and profession skill for each character on the account; gold and time played only if you opt in. To share with your group, send `./mc scrub-addon` output, not the raw file. Install it into `World of Warcraft\_forever_\Interface\AddOns\`, play, then import `WTF\Account\<ACCOUNT>\SavedVariables\LegacyTracker.lua` on the page or with `./mc import-addon`. Full steps: [docs/addon.md](docs/addon.md).
+[addon/LegacyTracker](addon/LegacyTracker) is a tiny, silent addon (Interface 16001) that works with any character names. It has no UI and prints nothing except when you type `/ltrack`. It records level, XP, rested XP, zone and profession skill for each character on the account; gold and time played only if you opt in. To share with your group, send `./mc scrub-addon` output, not the raw file. Install it into `World of Warcraft\_forever_\Interface\AddOns\` (the `LegacyTracker-<version>.zip` on each [release](https://github.com/BradGroux/wow-forever-mission-control/releases/latest) is ready to unzip there), play, then import `WTF\Account\<ACCOUNT>\SavedVariables\LegacyTracker.lua` on the page or with `./mc import-addon`. Full steps: [docs/addon.md](docs/addon.md).
 
 ## Staying up to date
 
@@ -120,6 +120,10 @@ flowchart LR
   PRD --> UP
 ```
 
+## Releases
+
+Releases are named by date, `YYYY.MM.DD` (a second release the same day adds `.N`, e.g. `2026.11.04.1`). Each [GitHub release](https://github.com/BradGroux/wow-forever-mission-control/releases) has full notes plus two downloads: the **LegacyTracker** addon folder ready for `Interface/AddOns`, and the **static page** ready for any host. Every change is listed in [CHANGELOG.md](CHANGELOG.md); the current version is in [VERSION](VERSION) and in the page footer. Expect a release the day before launch and on launch day as data is confirmed. How releases are made: [docs/releasing.md](docs/releasing.md).
+
 ## Contributing
 
 Corrections and new data are very welcome, especially Horde routes, class quest details, racials and anything that changes at launch. You don't need to code: a Wowhead link in an issue helps. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the issues labeled [good first issue](https://github.com/BradGroux/wow-forever-mission-control/labels/good%20first%20issue). Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
@@ -128,6 +132,7 @@ Corrections and new data are very welcome, especially Horde routes, class quest 
 
 ```
 mc                      the one CLI (Python 3.9+, standard library only)
+VERSION, CHANGELOG.md   release version and the changelog
 Makefile                make targets for every mc command
 config/                 roster.schema.json, examples/; your roster.json goes here
 data/                   researched game data with sources (classes, races, world, professions, legacy, Wowhead ids)
@@ -136,12 +141,13 @@ addon/                  LegacyTracker addon and its test harness
 adapters/grokbot/       optional Grok Bot canvas Page
 scripts/                mc implementation and the SavedVariables parser
 tests/                  unit tests
+tools/                  Wowhead id lookup, release packaging
 docs/                   setup, config, addon, progress, hosting, updating, data, FAQ, agents
 ```
 
 ## Docs
 
-[Setup](docs/setup.md) · [Config reference](docs/config.md) · [Addon](docs/addon.md) · [Progress and sync](docs/progress.md) · [Hosting](docs/hosting.md) · [Updating](docs/updating.md) · [Game data](docs/data.md) · [FAQ](docs/faq.md) · [Agents](docs/agents/README.md)
+[Setup](docs/setup.md) · [Config reference](docs/config.md) · [Addon](docs/addon.md) · [Progress and sync](docs/progress.md) · [Hosting](docs/hosting.md) · [Updating](docs/updating.md) · [Game data](docs/data.md) · [FAQ](docs/faq.md) · [Agents](docs/agents/README.md) · [Releasing](docs/releasing.md) · [Changelog](CHANGELOG.md)
 
 ## License
 

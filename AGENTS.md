@@ -38,6 +38,8 @@ git remote -v
 | Serve the page | `./mc serve --port 8000` |
 | Run every check | `./mc doctor` and `python3 -m unittest discover -s tests` |
 | Pre-PR privacy check | `./mc leakcheck` |
+| Show the release version | `./mc version` (`--check`: VERSION, addon .toc and CHANGELOG agree) |
+| Cut a release (maintainers only) | follow [docs/releasing.md](docs/releasing.md) |
 
 `<char>` is a character id or name from the roster. After any progress change, run `./mc generate` so the page and canvas pick it up, then commit if the user keeps progress in git.
 
