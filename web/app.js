@@ -117,6 +117,7 @@
     return P.brackets[P.brackets.length - 1];
   }
   function nextUp() { return CHARS.slice().sort(function (a, b) { return lv(a.id) - lv(b.id); })[0]; }
+  var LEGACY_TOTAL = Object.keys(P.legacy.challenges).reduce(function (a, k) { return a + (P.legacy.challenges[k].total || 0); }, 0);
   function earned() {
     var cls = {}, pts = 0;
     CHARS.forEach(function (c) { [25, 45, 60].forEach(function (t) { if (lv(c.id) >= t) cls[c["class"] + t] = 1; }); });
@@ -308,7 +309,7 @@
       sec("Status", h("div", { class: "metrics" },
         h("div", null, h("b", null, nu.display), h("span", null, "Up next"), h("i", null, nu["class"] + " · level " + lv(nu.id))),
         h("div", null, h("b", null, nb.from + "–" + nb.to), h("span", null, "Current bracket"), h("i", null, "Target " + nb.to)),
-        h("div", null, h("b", null, earned() + " / " + P.coverage.legacy_from_plan), h("span", null, "Legacy points"), h("i", null, "Spend cap " + P.legacy.spend_cap)),
+        h("div", null, h("b", null, earned() + " / " + LEGACY_TOTAL), h("span", null, "Legacy points"), h("i", null, "Plan covers " + P.coverage.legacy_from_plan + " · spend cap " + P.legacy.spend_cap)),
         h("div", null, h("b", null, fmtDate(P.roster.launch)), h("span", null, "Launch"), h("i", null, P.roster.ruleset))),
         [h("button", { type: "button", class: "ob", onclick: exportJSON }, "Export progress"), h("button", { type: "button", class: "ob", onclick: importJSON }, "Import progress")]),
       sec("Levels", levelRows(true)),
@@ -371,16 +372,17 @@
     var ch = P.legacy.challenges;
     return [
       sec("Legacy points", [h("div", { class: "metrics" },
-        h("div", null, h("b", null, String(earned())), h("span", null, "Earned")),
+        h("div", null, h("b", null, String(earned())), h("span", null, "Earned"), h("i", null, "of " + LEGACY_TOTAL)),
         h("div", null, h("b", null, String(P.coverage.legacy_from_plan)), h("span", null, "In the plan"), h("i", null, P.coverage.distinct_classes + " classes · " + P.coverage.crafts_covered + " crafts")),
         h("div", null, h("b", null, String(P.legacy.spend_cap)), h("span", null, "Spend cap at launch")),
-        h("div", null, h("b", null, "65"), h("span", null, "All challenges"))), h("div", { class: "hscroll" }, rewardTrack(earned()))]),
+        h("div", null, h("b", null, String(LEGACY_TOTAL)), h("span", null, "All challenges"), P.legacy.claim_at ? h("i", null, "Claim: ", wl(P.legacy.claim_at.npc), ", ", wl(P.legacy.claim_at.zone), " " + P.legacy.claim_at.coords) : null)), h("div", { class: "hscroll" }, rewardTrack(earned()))]),
       h("div", { class: "grid2 gap-top" },
         panel(h("h3", { class: "ph3" }, "Challenges"), table(["Category", "Points", "How"], [
           ["Classes", String(ch["class"].total), "Each class at 25, 45, 60"], ["Crafts", String(ch.craft.total), "Each craft at 150, 225, 300"],
           ["PvP", String(ch.pvp.total), ch.pvp.items.join(", ")], ["Dungeons", String(ch.dungeon.total), ch.dungeon.items.join(", ")],
           ["Raids", String(ch.raid.total), ch.raid.items.join(", ")], ["Adventure", String(ch.adventure.total), ch.adventure.items.join(", ")]], [1])),
-        panel(h("h3", { class: "ph3" }, "Account"), checklist(P.account))),
+        panel(h("h3", { class: "ph3" }, "Account"), checklist(P.account.filter(function (a) { return a.tag !== "PvP"; })))),
+      sec("PvP", h("div", { class: "cols2" }, checklist(P.account.filter(function (a) { return a.tag === "PvP"; })))),
       sec("Perk trees", h("div", { class: "grid3" }, Object.keys(P.legacy.trees).map(function (t) {
         return h("div", null, h("h3", null, t), table(["Perk", "Ranks", "Effect"], P.legacy.trees[t].map(function (p) { return [p[0], String(p[1]), p[2]]; }), [1]));
       }))),
@@ -391,20 +393,24 @@
     var fac = P.roster.faction, bag = P.sleeping_bag;
     return [
       sec("Dungeons", table(["Dungeon", "Levels", "Zone", "Spelunker", ""], P.dungeons.map(function (d) {
-        return [d.name, d.min + "–" + d.max, d.zone, d.spelunker || "", h("span", { class: "pills" }, d["new"] ? h("span", { class: "pill new" }, "New") : null, d.travel ? h("span", { class: "pill" }, "Enemy territory") : null, statusTag(d.status))];
+        return [named(d), d.min + "–" + d.max, d.zone, d.spelunker || "", h("span", { class: "pills" }, d["new"] ? h("span", { class: "pill new" }, "New") : null, beta(d), d.travel ? h("span", { class: "pill" }, "Enemy territory") : null, statusTag(d.status))];
       }), [1])),
       sec(bag.name + " · from " + bag.min_level, [h("p", { class: "lead" }, L(bag.reward)), steps(bag.steps.map(function (st) { return { title: st.quest, sub: st[fac] || st.where }; }))])
     ];
   }
+  // Data notes: info shows as a dim line under the name; "not playable in beta" becomes a tag (house style: caveats are tags).
+  var BETA = /not playable in beta/i;
+  function named(x) { return h("span", { class: "named" }, L(x.name), x.note && !BETA.test(x.note) ? h("span", { class: "dt" }, L(x.note)) : null); }
+  function beta(x) { return x.note && BETA.test(x.note) ? h("span", { class: "pill warn" }, "Not in beta") : null; }
   function vWorld() {
     var fac = P.roster.faction;
     return [
       sec("Zones", table(["Zone", "Levels", "Quests", ""], P.zones.map(function (z) {
-        return [z.name, z.min + "–" + z.max, z.quests[fac] == null ? "" : String(z.quests[fac]), h("span", { class: "pills" }, z["new"] ? h("span", { class: "pill new" }, "New") : null, statusTag(z.status))];
+        return [named(z), z.min + "–" + z.max, z.quests[fac] == null ? h("span", { class: "q", title: "Quest count not known yet" }, "?") : String(z.quests[fac]), h("span", { class: "pills" }, z["new"] ? h("span", { class: "pill new" }, "New") : null, statusTag(z.status))];
       }), [1, 2])),
       h("div", { class: "grid2 gap-top" },
         panel(h("h3", { class: "ph3" }, "Boats, zeppelins and trams"), table(["From", "To", "Type", ""], P.transport.map(function (t) { return [t.from, t.to, t.kind, statusTag(t.status) || ""]; }))),
-        panel(h("h3", { class: "ph3" }, "Flight paths"), h("p", { class: "flow" }, P.flight_paths.map(function (f, i) { return [i ? " · " : "", wl(f)]; }))))
+        panel(h("h3", { class: "ph3" }, "Flight paths ", statusTag(P.flight_paths_status)), h("p", { class: "flow" }, P.flight_paths.map(function (f, i) { return [i ? " · " : "", wl(f)]; }))))
     ];
   }
   function vReference() {

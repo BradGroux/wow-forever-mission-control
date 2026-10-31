@@ -273,7 +273,7 @@ def build_plan(cfg, g, progress=None):
             zones = sorted({ch["start_zone"] for ch in chars})
         else:
             cand = [z for z in zones_ok if overlaps(lo, hi, z["min"], z["max"]) and z["min"] <= lo + 4 and z["min"] > 1]
-            cand.sort(key=lambda z: (-(z["quests"].get(fac) or 0), z["min"]))
+            cand.sort(key=lambda z: (z["quests"].get(fac) is None, -(z["quests"].get(fac) or 0), z["min"]))
             zones = [z["name"] for z in cand[:6]]
         bd = [d for d in dungeons if lo <= (d["min"] + d["max"]) / 2 < hi or (hi == 60 and (d["min"] + d["max"]) / 2 >= 60)]
         tasks, why = {}, []
@@ -328,6 +328,8 @@ def build_plan(cfg, g, progress=None):
     for k in ("raid", "adventure"):
         for it in g.legacy["challenges"][k]["items"]:
             account.append({"id": f"acct-{slug(it)}", "text": it, "tag": "Legacy"})
+    for it in g.legacy["challenges"]["pvp"]["items"]:
+        account.append({"id": f"acct-pvp-{slug(it)}", "text": it, "tag": "PvP"})
     # coverage and Legacy projection
     crafts = {c: [ch["id"] for ch, src in zip(chars, cfg["characters"]) if c in [n for n, _, _ in prof_spans(src)]] for c in CRAFTS}
     distinct = len({ch["class"] for ch in chars})
@@ -373,6 +375,7 @@ def build_plan(cfg, g, progress=None):
         "dungeons": dungeons,
         "transport": [t for t in g.world["transport"] if t["faction"] in (fac, "Both")],
         "flight_paths": g.world["flight_paths"][fac] + g.world["flight_paths"]["Both"],
+        "flight_paths_status": g.world.get("flight_paths_status", "unverified"),
         "legacy": g.legacy, "sleeping_bag": g.chains["sleeping_bag"], "professions": g.profs,
         "sources": g.sources, "links": links, "progress": prog,
     }
@@ -602,7 +605,12 @@ def plan_markdown(plan):
             o.append(f"**{c['display']}** ({c['race']} {c['class']})")
             o += [f"- [ ] {lt(i['text'])} `{i['tag']}`" for i in items]
             o.append("")
-    o += ["## Account", ""] + [f"- [ ] {lt(i['text'])}" + (f": {lt(i['detail'])}" if i.get("detail") else "") for i in plan["account"]]
+    ca = plan["legacy"].get("claim_at") or {}
+    total = sum(v["total"] for v in plan["legacy"]["challenges"].values())
+    o += ["## Account", "", f"All Legacy challenges: {total} points. This plan's leveling and crafts cover {plan['coverage']['legacy_from_plan']}; the list below covers the rest."]
+    if ca:
+        o += ["", f"Claim rewards from {lt(ca['npc'])} in {lt(ca['zone'])} ({ca['coords']})."]
+    o += [""] + [f"- [ ] {lt(i['text'])} `{i['tag']}`" + (f": {lt(i['detail'])}" if i.get("detail") else "") for i in plan["account"]]
     o += ["", "## Sources", ""] + [f"- [{s['title']}]({s['url']}) · {s['site']}" for s in plan["sources"].values()]
     return "\n".join(o) + "\n"
 

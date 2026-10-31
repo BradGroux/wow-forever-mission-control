@@ -331,14 +331,30 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 
 ## Account
 
-- [ ] Novice Spelunker: [Ragefire Chasm](https://www.wowhead.com/forever/zone=2437), [The Hall of Thanes](https://www.wowhead.com/forever/zone=16919), [Ruins of Lordaeron](https://www.wowhead.com/forever/zone=16611), [Wailing Caverns](https://www.wowhead.com/forever/zone=718), [The Deadmines](https://www.wowhead.com/forever/zone=1581), [Shadowfang Keep](https://www.wowhead.com/forever/zone=209), [Excavation Site: Wetlands](https://www.wowhead.com/forever/zone=16732)
-- [ ] Experienced Spelunker: [Blackfathom Deeps](https://www.wowhead.com/forever/zone=719), [City of Dalaran](https://www.wowhead.com/forever/zone=16544), [Gnomeregan](https://www.wowhead.com/forever/zone=721), [Razorfen Kraul](https://www.wowhead.com/forever/zone=491), [Scarlet Monastery](https://www.wowhead.com/forever/zone=796), [The Drowned City](https://www.wowhead.com/forever/quest=95775), [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold)
-- [ ] Master Spelunker: [Razorfen Downs](https://www.wowhead.com/forever/zone=722), [Uldaman](https://www.wowhead.com/forever/zone=1337), [Zul'Farrak](https://www.wowhead.com/forever/zone=1176), [Maraudon](https://www.wowhead.com/forever/zone=2100), [Alcaz Prison](https://www.wowhead.com/forever/search?q=Alcaz%20Prison), [Sunken Temple](https://www.wowhead.com/forever/zone=1477), [Blackrock Depths](https://www.wowhead.com/forever/zone=1584), [Dire Maul](https://www.wowhead.com/forever/zone=2557), [Blackmaw Hold](https://www.wowhead.com/forever/search?q=Blackmaw%20Hold), [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583), [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583), [Scholomance](https://www.wowhead.com/forever/zone=2057), [Stratholme](https://www.wowhead.com/forever/zone=2017), [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace)
-- [ ] Conqueror of the Deeps
-- [ ] Conqueror of the Wilds
-- [ ] Conqueror of the Lair
-- [ ] Explorer
-- [ ] Lord Valthalak Laid to Rest
+All Legacy challenges: 65 points. This plan's leveling and crafts cover 30; the list below covers the rest.
+
+Claim rewards from Innkeeper Wiley in [Ratchet](https://www.wowhead.com/forever/search?q=Ratchet) (62.0, 39.4).
+
+- [ ] Novice Spelunker `Legacy`: [Ragefire Chasm](https://www.wowhead.com/forever/zone=2437), [The Hall of Thanes](https://www.wowhead.com/forever/zone=16919), [Ruins of Lordaeron](https://www.wowhead.com/forever/zone=16611), [Wailing Caverns](https://www.wowhead.com/forever/zone=718), [The Deadmines](https://www.wowhead.com/forever/zone=1581), [Shadowfang Keep](https://www.wowhead.com/forever/zone=209), [Excavation Site: Wetlands](https://www.wowhead.com/forever/zone=16732)
+- [ ] Experienced Spelunker `Legacy`: [Blackfathom Deeps](https://www.wowhead.com/forever/zone=719), [City of Dalaran](https://www.wowhead.com/forever/zone=16544), [Gnomeregan](https://www.wowhead.com/forever/zone=721), [Razorfen Kraul](https://www.wowhead.com/forever/zone=491), [Scarlet Monastery](https://www.wowhead.com/forever/zone=796), [The Drowned City](https://www.wowhead.com/forever/quest=95775), [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold)
+- [ ] Master Spelunker `Legacy`: [Razorfen Downs](https://www.wowhead.com/forever/zone=722), [Uldaman](https://www.wowhead.com/forever/zone=1337), [Zul'Farrak](https://www.wowhead.com/forever/zone=1176), [Maraudon](https://www.wowhead.com/forever/zone=2100), [Alcaz Prison](https://www.wowhead.com/forever/search?q=Alcaz%20Prison), [Sunken Temple](https://www.wowhead.com/forever/zone=1477), [Blackrock Depths](https://www.wowhead.com/forever/zone=1584), [Dire Maul](https://www.wowhead.com/forever/zone=2557), [Blackmaw Hold](https://www.wowhead.com/forever/search?q=Blackmaw%20Hold), [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583), [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583), [Scholomance](https://www.wowhead.com/forever/zone=2057), [Stratholme](https://www.wowhead.com/forever/zone=2017), [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace)
+- [ ] Conqueror of the Deeps `Legacy`
+- [ ] Conqueror of the Wilds `Legacy`
+- [ ] Conqueror of the Lair `Legacy`
+- [ ] Explorer `Legacy`
+- [ ] Lord Valthalak Laid to Rest `Legacy`
+- [ ] Rank 3 `PvP`
+- [ ] Rank 7 `PvP`
+- [ ] Rank 10 `PvP`
+- [ ] Rank 13 `PvP`
+- [ ] Rank 14 `PvP`
+- [ ] Master of [Alterac](https://www.wowhead.com/forever/zone=36) Valley `PvP`
+- [ ] Master of [Arathi](https://www.wowhead.com/forever/zone=45) Basin `PvP`
+- [ ] Master of Darkspear Islands `PvP`
+- [ ] Master of Warsong Gulch `PvP`
+- [ ] Field of Honor: Week 4 `PvP`
+- [ ] Field of Honor: Week 7 `PvP`
+- [ ] Field of Honor: Week 10 `PvP`
 
 ## Sources
 

@@ -205,6 +205,27 @@ class Strict(unittest.TestCase):
         self.assertNotEqual(r.returncode, 0); self.assertIn("unknown checklist id", r.stderr)
 
 
+class LegacyTracking(unittest.TestCase):
+    def test_account_reaches_full_total(self):
+        p = mc.build_plan(EX, G)
+        ch = G.legacy["challenges"]
+        pvp = [a for a in p["account"] if a["tag"] == "PvP"]
+        self.assertEqual(len(pvp), ch["pvp"]["total"])
+        self.assertEqual(len(p["account"]), ch["pvp"]["total"] + ch["dungeon"]["total"] + ch["raid"]["total"] + ch["adventure"]["total"])
+        self.assertEqual(p["flight_paths_status"], G.world["flight_paths_status"])
+        md = mc.plan_markdown(p)
+        self.assertIn(G.legacy["claim_at"]["coords"], md)
+
+    def test_unknown_quest_counts_rank_last(self):
+        p = mc.build_plan(EX, G)
+        unknown = {z["name"] for z in G.world["zones"] if z["quests"].get("Alliance") is None}
+        for b in p["brackets"]:
+            seen_unknown = False
+            for z in b["zones"]:
+                if z in unknown: seen_unknown = True
+                else: self.assertFalse(seen_unknown and b["from"] > 1, f"{b['id']}: known zone after unknown")
+
+
 class ProgressSafety(unittest.TestCase):
     def base(self):
         p = mc.empty_progress(EX)
