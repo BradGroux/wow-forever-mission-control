@@ -93,10 +93,13 @@
     });
     Object.keys(extra.skills || {}).forEach(function (id) {
       out.skills[id] = out.skills[id] || {};
+      // skills observed by the addon carry the character's snapshot time
+      var seen = ((extra.levels || {})[id] || {}).lastSeenEpoch * 1000 || 0;
       Object.keys(extra.skills[id]).forEach(function (p) {
         var v = +extra.skills[id][p] || 0, k = "s:" + id + ":" + p;
-        if (held(k)) return;
-        out.skills[id][p] = st[k] != null ? (wins(k, bday) ? v : +out.skills[id][p] || 0) : Math.max(v, +out.skills[id][p] || 0);
+        if (held(k, seen)) return;
+        // an addon snapshot newer than a manual edit replaces it; otherwise the higher value wins
+        out.skills[id][p] = st[k] != null ? (wins(k, bday) ? v : +out.skills[id][p] || 0) : (seen && bst[k] != null) ? v : Math.max(v, +out.skills[id][p] || 0);
       });
     });
     if (st.n != null ? wins("n", bday) : extra.notes && !held("n")) out.notes = extra.notes || "";
@@ -532,7 +535,7 @@
   function fromAddon(text) {
     var all = parseLua(text), names = Object.keys(all).filter(function (k) { return all[k] && typeof all[k] === "object" && all[k].chars; });
     var dbName = names.indexOf("LegacyTrackerDB") >= 0 ? "LegacyTrackerDB" : names[0];
-    var db = all[dbName] || {}, chars = db.chars || {}, roster = {}, m = {}, cands = {}, best = {}, extra = { levels: {}, skills: {} }, skipped = [], stale = [], ambiguous = [];
+    var db = all[dbName] || {}, chars = db.chars || {}, roster = {}, m = {}, cands = {}, best = {}, extra = { levels: {}, skills: {} }, skipped = [], stale = [], ambiguous = [], invalid = [];
     CHARS.forEach(function (c) { roster[c.name.toLowerCase()] = c.id; });
     var map = Object.assign({}, (P.progress && P.progress.map) || {}, S.map || {}), have = S.levels || {};
     Object.keys(map).forEach(function (k) { m[k.toLowerCase()] = map[k]; });
@@ -550,6 +553,16 @@
       if (pick.length > 1) { ambiguous.push(id + " (" + pick.map(function (x) { return x.key; }).sort().join(", ") + ")"); return; }
       best[id] = pick[0].c;
     });
+    function whole(v, lo, hi) { return typeof v === "number" && isFinite(v) && v % 1 === 0 && v >= lo && v <= hi; }
+    function nonneg(v) { return v == null || (typeof v === "number" && isFinite(v) && v >= 0); }
+    Object.keys(best).forEach(function (id) {
+      var c = best[id], bad = [];
+      // same limits as checkProgress and ./mc import-addon: skip the record and say why
+      if (!whole(c.level, 1, 60)) bad.push("level " + c.level);
+      ["lastSeen", "xp", "xpMax", "rested"].forEach(function (f) { if (!nonneg(c[f])) bad.push(f + " " + c[f]); });
+      Object.keys(c.professions || {}).forEach(function (p) { var v = c.professions[p]; if (v && v.rank != null && !whole(v.rank, 0, 300)) bad.push(p + " rank " + v.rank); });
+      if (bad.length) { invalid.push(id + " (" + bad.join(", ") + ")"); delete best[id]; }
+    });
     Object.keys(best).forEach(function (id) {
       var c = best[id], xm = c.xpMax || 0, rs = c.rested || 0;
       if (c.lastSeen && have[id] && have[id].lastSeenEpoch && c.lastSeen <= have[id].lastSeenEpoch) { stale.push(id); return; }
@@ -561,7 +574,7 @@
       extra.skills[id] = {};
       Object.keys(c.professions || {}).forEach(function (p) { var v = c.professions[p]; if (v && v.rank != null) extra.skills[id][p] = v.rank; });
     });
-    return { extra: extra, db: dbName, matched: Object.keys(best).length, stale: stale, skipped: skipped, ambiguous: ambiguous };
+    return { extra: extra, db: dbName, matched: Object.keys(best).length, stale: stale, skipped: skipped, ambiguous: ambiguous, invalid: invalid };
   }
   function importJSON() {
     var ta = h("textarea", { "aria-label": "Progress JSON or LegacyTracker.lua", oninput: function () { ta.setCustomValidity(""); } });
@@ -573,7 +586,9 @@
           try {
             if (/^\s*[A-Za-z_]\w*\s*=\s*\{/.test(ta.value) && /\[?"?chars"?\]?\s*=/.test(ta.value)) {
               var r = fromAddon(ta.value);
+              if (r.invalid.length && !r.matched) throw new Error("LegacyTracker.lua has invalid data, nothing changed: " + r.invalid.join("; "));
               if (!r.matched) throw new Error("No roster characters in LegacyTracker.lua" + (r.skipped.length ? ": " + r.skipped.join(", ") : "") + (r.ambiguous.length ? "; ambiguous: " + r.ambiguous.join("; ") + " (map one Realm-Name with ./mc map)" : ""));
+              if (r.invalid.length) window.alert("LegacyTracker: skipped invalid data for " + r.invalid.join("; ") + ".");
               if (r.ambiguous.length) window.alert("LegacyTracker: skipped ambiguous " + r.ambiguous.join("; ") + ". Map one Realm-Name with ./mc map.");
               if (r.stale.length === r.matched) throw new Error("This LegacyTracker.lua is not newer than what is already saved");
               var cand = merge(S, r.extra);
