@@ -56,7 +56,10 @@ jobs:
         run: |
           # personal copies generate adapters/grokbot/mission-control.canvas.tsx; upstream generates build/
           for f in build/mission-control.canvas.tsx adapters/grokbot/mission-control.canvas.tsx; do
-            if [ -f "$f" ]; then npx --yes esbuild@0.24.0 "$f" --loader:.tsx=tsx --log-level=warning > /dev/null && echo "ok $f"; fi
+            if [ -f "$f" ]; then
+              npx --yes esbuild@0.24.0 "$f" --loader:.tsx=tsx --log-level=warning > /dev/null
+              echo "ok $f"
+            fi
           done
 
   addon:
