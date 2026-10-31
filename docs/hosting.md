@@ -2,6 +2,8 @@
 
 The page is static files in `web/`: `index.html`, `app.js`, `style.css` and `data/*.js`. No server code, no database, no build tools beyond `./mc generate`. Host it anywhere that serves files, or just open it locally.
 
+Each [release](https://github.com/BradGroux/wow-forever-mission-control/releases/latest) also has `mission-control-web-<version>.zip`: these files with the example roster, ready to upload. Add your own `data/plan.js` from `./mc generate` to show your roster.
+
 Progress ticked on a hosted page is saved in each visitor's browser. To publish shared progress, commit `progress/progress.json` and regenerate ([progress.md](progress.md)).
 
 ## Local

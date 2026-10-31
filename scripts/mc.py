@@ -15,7 +15,8 @@
   ./mc serve [--port 8000]               serve web/ on localhost
   ./mc ids [TEXT] [--open]               list checklist ids (filter by text; --open hides ticked ones)
   ./mc leakcheck                         fail if personal files are tracked (run before an upstream PR)
-  ./mc doctor                            CI checks: examples valid, outputs up to date, progress blocks intact
+  ./mc doctor                            CI checks: examples valid, outputs up to date, progress blocks intact, versions agree
+  ./mc version [--check]                 print the release version (VERSION); --check: VERSION, addon .toc and CHANGELOG agree
 Every command is plain Python 3.9+, standard library only.
 """
 import argparse, copy, datetime, html, json, math, os, re, sys, unicodedata, urllib.parse
@@ -33,6 +34,10 @@ CANVAS_TEMPLATE = os.path.join(ROOT, "adapters", "grokbot", "template.canvas.tsx
 CANVAS_OUT = os.path.join(ROOT, "adapters", "grokbot", "mission-control.canvas.tsx")
 BUILD = os.path.join(ROOT, "build")
 LAUNCH = "2026-11-04"
+VERSION_FILE = os.path.join(ROOT, "VERSION")
+CHANGELOG = os.path.join(ROOT, "CHANGELOG.md")
+ADDON_TOC = os.path.join(ROOT, "addon", "LegacyTracker", "LegacyTracker.toc")
+VERSION_RE = re.compile(r"^\d{4}\.\d{2}\.\d{2}(\.[1-9]\d*)?$")  # YYYY.MM.DD, or YYYY.MM.DD.N for a later release that day
 SCHEMA_VERSION = 1
 CRAFTS = ["Alchemy", "Blacksmithing", "Enchanting", "Engineering", "Leatherworking", "Tailoring"]
 GATHER = ["Herbalism", "Mining", "Skinning"]
@@ -42,6 +47,42 @@ BRACKETS = [(1, 10), (10, 16), (16, 22), (22, 26), (26, 32), (32, 40), (40, 45),
 MIN_CHARS, MAX_CHARS, RECOMMENDED_CHARS = 1, 10, 4
 CRAFT_TARGET = {150: 25, 225: 32, 300: 52}  # skill -> level by which to reach it
 WOWHEAD = "https://www.wowhead.com/forever"
+
+
+def release_version(path=None):
+    """The release version (YYYY.MM.DD[.N]) from the VERSION file, or "dev" when there is none."""
+    try:
+        with open(path or VERSION_FILE, encoding="utf-8") as fh:
+            return fh.read().strip() or "dev"
+    except OSError:
+        return "dev"
+
+
+def version_problems(root=None):
+    """VERSION, the addon .toc ## Version and the newest CHANGELOG.md entry must agree (CI runs this via doctor)."""
+    root = root or ROOT
+    out = []
+    v = release_version(os.path.join(root, "VERSION"))
+    if not VERSION_RE.match(v):
+        return [f"VERSION {v!r} is not a date version (YYYY.MM.DD or YYYY.MM.DD.N)"]
+    try:
+        d = datetime.date(*map(int, v.split(".")[:3]))
+    except ValueError:
+        return [f"VERSION {v!r} is not a real date"]
+    toc = os.path.join(root, "addon", "LegacyTracker", "LegacyTracker.toc")
+    m = re.search(r"^## Version:\s*(\S+)", open(toc, encoding="utf-8").read(), re.M) if os.path.exists(toc) else None
+    if not m or m.group(1) != v:
+        out.append(f"addon/LegacyTracker/LegacyTracker.toc ## Version is {m.group(1) if m else 'missing'}, VERSION is {v}")
+    cl = os.path.join(root, "CHANGELOG.md")
+    heads = re.findall(r"^## \[([^\]]+)\](?: - (\d{4}-\d{2}-\d{2}))?", open(cl, encoding="utf-8").read(), re.M) if os.path.exists(cl) else []
+    rel_heads = [(h, dt) for h, dt in heads if h.lower() != "unreleased"]
+    if not rel_heads:
+        out.append("CHANGELOG.md has no release entry")
+    elif rel_heads[0][0] != v:
+        out.append(f"CHANGELOG.md newest entry is {rel_heads[0][0]}, VERSION is {v}")
+    elif rel_heads[0][1] != d.isoformat():
+        out.append(f"CHANGELOG.md entry {v} should be dated {d.isoformat()}")
+    return out
 
 
 # ---------------------------------------------------------------- data
@@ -432,7 +473,7 @@ def build_plan(cfg, g, progress=None):
         links[n] = {"url": url, "direct": direct}
     prog = progress or empty_progress(cfg)
     return {
-        "schema": SCHEMA_VERSION, "generated_from": rel(cfg.get("_path", CONFIG), ROOT).replace(os.sep, "/"),
+        "schema": SCHEMA_VERSION, "release": release_version(), "generated_from": rel(cfg.get("_path", CONFIG), ROOT).replace(os.sep, "/"),
         "roster": {"name": cfg.get("roster_name", "Legacy Mission Control"), "faction": fac, "ruleset": cfg["ruleset"],
                    "launch": cfg.get("launch", LAUNCH), "key": roster_key(cfg)},
         "characters": chars, "brackets": brackets, "account": account,
@@ -953,7 +994,7 @@ def interview(answers=None):
 # ---------------------------------------------------------------- doctor
 def doctor():
     g = Game()
-    problems = []
+    problems = version_problems()
     for f in sorted(os.listdir(os.path.join(ROOT, "config", "examples"))):
         cfg = load_config(os.path.join(ROOT, "config", "examples", f))
         E, W, _ = validate(cfg, g)
@@ -1043,6 +1084,7 @@ def main(argv=None):
     s = sub.add_parser("map"); s.add_argument("char"); s.add_argument("ingame"); s.add_argument("--config")
     s = sub.add_parser("serve"); s.add_argument("--port", type=int, default=8000)
     sub.add_parser("doctor")
+    s = sub.add_parser("version"); s.add_argument("--check", action="store_true", help="exit 1 unless VERSION, the addon .toc and CHANGELOG.md agree")
     s = sub.add_parser("ids"); s.add_argument("text", nargs="?"); s.add_argument("--open", action="store_true"); s.add_argument("--config")
     sub.add_parser("leakcheck")
     a = ap.parse_args(argv)
@@ -1101,6 +1143,13 @@ def main(argv=None):
         for x in probs: print("LEAK:", x)
         print("leakcheck: ok" if not probs else f"leakcheck: {len(probs)} problem(s); see CONTRIBUTING.md")
         return 1 if probs else 0
+    if a.cmd == "version":
+        print(release_version())
+        if a.check:
+            probs = version_problems()
+            for x in probs: print("FAIL:", x)
+            return 1 if probs else 0
+        return 0
     if a.cmd == "doctor":
         probs = doctor()
         for x in probs: print("FAIL:", x)

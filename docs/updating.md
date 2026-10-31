@@ -85,6 +85,8 @@ git commit --no-edit
 
 ## After updating
 
+- [CHANGELOG.md](../CHANGELOG.md) lists what changed in each release; the page footer shows the version you're on.
+
 - `./mc validate`: new data can turn up a new warning (for example a corrected race and class rule).
 - Checklist ids are stable, so your ticks survive. An item that upstream renamed or removed simply drops out of the list.
 - Have an agent? Ask it to "sync with upstream"; [AGENTS.md](../AGENTS.md) has the steps.

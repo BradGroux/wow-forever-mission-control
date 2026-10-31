@@ -27,6 +27,10 @@ jobs:
         run: ./mc validate
       - name: Doctor (outputs up to date, SAVED block intact, ids unique, sources known)
         run: ./mc doctor
+      - name: Release version agrees (VERSION, addon .toc, CHANGELOG.md)
+        run: ./mc version --check
+      - name: Release assets build (addon zip, web zip)
+        run: python tools/package_release.py --check
       - name: Unit tests
         run: python -m unittest discover -s tests -v
       - name: Generated files are committed

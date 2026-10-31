@@ -18,7 +18,7 @@ It has no window, no minimap button and no chat messages. Type `/ltrack` to prin
 
 ## Install
 
-1. Get the files. Either clone your copy of this repo, or on GitHub open **Code > Download ZIP** and unzip it.
+1. Get the files. Easiest: download `LegacyTracker-<version>.zip` from the [latest release](https://github.com/BradGroux/wow-forever-mission-control/releases/latest) and unzip it; it contains the `LegacyTracker` folder. Or clone your copy of this repo, or on GitHub open **Code > Download ZIP** and unzip it.
 2. Copy the folder `addon/LegacyTracker` (the folder itself, containing `LegacyTracker.toc` and `LegacyTracker.lua`) into the WoW Forever AddOns folder:
 
    **Windows** (default install):
