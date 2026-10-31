@@ -11,6 +11,11 @@ Horde · PvP · launch 2026-11-04
 | Morvane | [Undead](https://www.wowhead.com/forever/race=5) | [Paladin](https://www.wowhead.com/forever/class=2) | Retribution | Holy | [Skinning](https://www.wowhead.com/forever/skill=393), [Leatherworking](https://www.wowhead.com/forever/skill=165) | [Tirisfal Glades](https://www.wowhead.com/forever/zone=85) |
 | Zalaji | [Troll](https://www.wowhead.com/forever/race=8) | [Mage](https://www.wowhead.com/forever/class=8) | Frost | Frost | [Tailoring](https://www.wowhead.com/forever/skill=197), [Enchanting](https://www.wowhead.com/forever/skill=333) | [Durotar](https://www.wowhead.com/forever/zone=14) |
 
+- Grukk ([Orc](https://www.wowhead.com/forever/race=2)) racials: [Savage](https://www.wowhead.com/forever/search?q=Savage), [Blood Fury](https://www.wowhead.com/forever/spell=20572), [Shatter Curse](https://www.wowhead.com/forever/spell=1299026), [Hardiness](https://www.wowhead.com/forever/spell=20573) `Unverified`
+- Thalwen ([Tauren](https://www.wowhead.com/forever/race=6)) racials: [Cultivation](https://www.wowhead.com/forever/spell=20552), [Endurance](https://www.wowhead.com/forever/spell=20550), [Plainsrunning](https://www.wowhead.com/forever/spell=1259918), [War Stomp](https://www.wowhead.com/forever/spell=20549) `Unverified`
+- Morvane ([Undead](https://www.wowhead.com/forever/race=5)) racials: [Cannibalize](https://www.wowhead.com/forever/spell=20577), [Touch of the Grave](https://www.wowhead.com/forever/spell=1260201), [Underwater Breathing](https://www.wowhead.com/forever/spell=5227), [Will of the Forsaken](https://www.wowhead.com/forever/spell=7744) `Unverified`
+- Zalaji ([Troll](https://www.wowhead.com/forever/race=8)) racials: [Beast Slaying](https://www.wowhead.com/forever/spell=20557), [Berserking](https://www.wowhead.com/forever/spell=20554), [Regeneration](https://www.wowhead.com/forever/spell=20555), [Rapid Regeneration](https://www.wowhead.com/forever/spell=1260270) `Unverified`
+
 ## Craft coverage
 
 | Craft | Characters |
@@ -61,12 +66,12 @@ Zones: [The Barrens](https://www.wowhead.com/forever/zone=17), [Silverpine Fores
 - [ ] Run [Ragefire Chasm](https://www.wowhead.com/forever/zone=2437) `Dungeon`
 
 **Thalwen** (Tauren Druid)
-- [ ] [Bear Form](https://www.wowhead.com/forever/spell=5487) at 10 `Class`
+- [ ] [Bear Form](https://www.wowhead.com/forever/spell=5487) at 10 `Class`: Also Growl and Maul `Seen in beta`
 - [ ] [Cure Poison](https://www.wowhead.com/forever/spell=8946) at 14 `Class`
 - [ ] Run [Ragefire Chasm](https://www.wowhead.com/forever/zone=2437) `Dungeon`
 
 **Morvane** (Undead Paladin)
-- [ ] [Redemption](https://www.wowhead.com/forever/spell=7328) at 12 `Class`
+- [ ] [Redemption](https://www.wowhead.com/forever/spell=7328) at 12 `Class`: [The Tome of Divinity](https://www.wowhead.com/forever/quest=1785) chain on Alliance `Seen in beta`
 - [ ] Run [Ragefire Chasm](https://www.wowhead.com/forever/zone=2437) `Dungeon`
 
 **Zalaji** (Troll Mage)
@@ -98,7 +103,7 @@ Zones: [The Barrens](https://www.wowhead.com/forever/zone=17), [Silverpine Fores
 - [ ] Run [The Deadmines](https://www.wowhead.com/forever/zone=1581) `Dungeon`
 
 **Zalaji** (Troll Mage)
-- [ ] [Teleport](https://www.wowhead.com/forever/search?q=Teleport) at 20 `Class`
+- [ ] [Teleport](https://www.wowhead.com/forever/search?q=Teleport) at 20 `Class`: City teleports need [Rune of Teleportation](https://www.wowhead.com/forever/item=17031) `Seen in beta`
 - [ ] Run [Ruins of Lordaeron](https://www.wowhead.com/forever/zone=16611) `Dungeon`
 - [ ] Run [Wailing Caverns](https://www.wowhead.com/forever/zone=718) `Dungeon`
 - [ ] Run [The Deadmines](https://www.wowhead.com/forever/zone=1581) `Dungeon`
@@ -206,31 +211,31 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Thousand 
 Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](https://www.wowhead.com/forever/zone=440), [Desolace](https://www.wowhead.com/forever/zone=405), [Arathi Highlands](https://www.wowhead.com/forever/zone=45), [Dustwallow Marsh](https://www.wowhead.com/forever/zone=15), [Feralas](https://www.wowhead.com/forever/zone=357)
 
 **Grukk** (Orc Warrior)
-- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
+- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Warrior](https://www.wowhead.com/forever/class=1) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
 
 **Thalwen** (Tauren Druid)
-- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
+- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Druid](https://www.wowhead.com/forever/class=11) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
 
 **Morvane** (Undead Paladin)
 - [ ] [Warhorse](https://www.wowhead.com/forever/spell=13819) at 40 `Class`
-- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
+- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Paladin](https://www.wowhead.com/forever/class=2) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
 
 **Zalaji** (Troll Mage)
-- [ ] [Portals](https://www.wowhead.com/forever/search?q=Portals) at 40 `Class`
-- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`
-- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`
+- [ ] [Portals](https://www.wowhead.com/forever/search?q=Portals) at 40 `Class`: [Rune of Portals](https://www.wowhead.com/forever/item=17032) `Seen in beta`
+- [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
+- [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Mage](https://www.wowhead.com/forever/class=8) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
 - [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
@@ -281,7 +286,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 150 `Legacy`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 225 `Legacy`
 - [ ] [Engineering](https://www.wowhead.com/forever/skill=202) to 300 `Legacy`
-- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`: 1,000 gold `Seen in beta`
 - [ ] Master [Warrior](https://www.wowhead.com/forever/class=1) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -294,7 +299,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 - [ ] Run [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) `Dungeon`
 
 **Thalwen** (Tauren Druid)
-- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`: 1,000 gold `Seen in beta`
 - [ ] Master [Druid](https://www.wowhead.com/forever/class=11) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -307,8 +312,8 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 - [ ] Run [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) `Dungeon`
 
 **Morvane** (Undead Paladin)
-- [ ] [Charger](https://www.wowhead.com/forever/spell=23214) at 60 `Class`
-- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
+- [ ] [Charger](https://www.wowhead.com/forever/spell=23214) at 60 `Class`: Forsaken paladins get their own level 60 epic mount quest
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`: 1,000 gold `Seen in beta`
 - [ ] Master [Paladin](https://www.wowhead.com/forever/class=2) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
@@ -321,7 +326,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Eastern Plaguelands
 - [ ] Run [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) `Dungeon`
 
 **Zalaji** (Troll Mage)
-- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`
+- [ ] [Journeyman Riding](https://www.wowhead.com/forever/spell=33391) at 60 `Class`: 1,000 gold `Seen in beta`
 - [ ] Master [Mage](https://www.wowhead.com/forever/class=8) at 60 `Legacy`
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`

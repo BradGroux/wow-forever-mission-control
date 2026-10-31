@@ -659,6 +659,46 @@ class AuditProgress(unittest.TestCase):
             self.assertIn("out of range", str(cm.exception.code))
         self.assertNotIn("c:acct-explorer", p.get("stamp") or {})
 
+class StatusAndNotes(unittest.TestCase):
+    def test_racials_status_kept(self):
+        # #66: racial ability status travels into the plan, separate from the combination status
+        p = mc.build_plan(EX, G)
+        c = p["characters"][0]
+        self.assertEqual((c["racials_status"], c["racials_source"]), ("unverified", G.races["Human"]["racials_source"]))
+        self.assertEqual(G.races["Human"]["status"], "beta")
+        md = mc.plan_markdown(p)
+        self.assertRegex(md, r"Aldric \(\[Human\]\([^)]*\)\) racials: .*The Human Spirit.*`Unverified`")
+        g2 = mc.Game(); g2.races["Human"] = dict(g2.races["Human"], racials_status="confirmed")
+        p2 = mc.build_plan(EX, g2)
+        self.assertEqual(p2["characters"][0]["racials_status"], "confirmed")
+        line = [l for l in mc.plan_markdown(p2).splitlines() if l.startswith("- Aldric (")][0]
+        self.assertNotIn("`", line.split("racials:")[1].replace("](", ""))
+
+    def tasks(self, plan, cid):
+        return {t["text"]: t for b in plan["brackets"] for t in b["tasks"][cid]}
+
+    def test_milestone_notes_in_tasks_and_markdown(self):
+        # #67: recorded costs and trainer notes reach the checklist and Markdown, with their status
+        p = mc.build_plan(EX, G)
+        t = self.tasks(p, "aldric")
+        self.assertEqual(t["Riding at 40"]["detail"], "Apprentice Riding: 100 gold, first mount included")
+        self.assertEqual(t["Riding at 40"]["status"], "beta")
+        self.assertEqual(t["Journeyman Riding at 60"]["detail"], "1,000 gold")
+        self.assertEqual(t["Dual Specialization at 40"]["detail"], "Class trainer in a major city")
+        self.assertNotIn("gold", t["Dual Specialization at 40"]["detail"])  # no invented price
+        self.assertEqual(self.tasks(p, "brannoc")["Taming the Beast at 10"]["detail"], "Tame Beast and Call Pet at 10")
+        md = mc.plan_markdown(p)
+        self.assertRegex(md, r"Riding\]\([^)]*\) at 40 `Class`: Apprentice .*100 gold, first mount included `Seen in beta`")
+        self.assertIn("1,000 gold `Seen in beta`", md)
+        self.assertIn("Class trainer in a major city", md)
+        # faction-specific class milestone note (Alliance Paladin), with its Classic data status
+        pal = mc.build_plan(cfg_with(chars={0: {"class": "Paladin", "leveling_spec": "Retribution", "endgame_spec": "Holy"}}), G)
+        vf = self.tasks(pal, "aldric")["Verigan's Fist at 20"]
+        self.assertEqual((vf["detail"], vf["status"]), ("The Test of Righteousness chain", "classic"))
+        self.assertRegex(mc.plan_markdown(pal), r"Test of Righteousness\]\([^)]*\) chain `Classic data`")
+        # milestones without a note stay plain
+        self.assertNotIn("detail", self.tasks(p, "aldric")["Defensive Stance at 10"])
+
 
 class Safety(unittest.TestCase):
     EVIL = "Test</script><script>alert(1)</script><!-- & \u2028"

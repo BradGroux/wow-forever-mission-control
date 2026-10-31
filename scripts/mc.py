@@ -316,6 +316,8 @@ def build_plan(cfg, g, progress=None):
             "role": ch.get("role", ""), "notes": ch.get("notes", ""),
             "start_zone": r["start_zone"], "start_area": r["start_area"], "first_hub": r["first_hub"],
             "capital": r["capital"], "racials": r["racials"], "race_notes": r["notes"],
+            # racial abilities have their own status, separate from the race/class combination's
+            "racials_status": r.get("racials_status", "confirmed"), "racials_source": r.get("racials_source", r.get("source")),
             "professions": [{"name": n, "from": a, **({"until": b} if b <= 60 else {})} for n, a, b in prof_spans(ch)],
             "milestones": sorted(ms, key=lambda m: m["level"]),
         })
@@ -341,8 +343,8 @@ def build_plan(cfg, g, progress=None):
         for ch, src in zip(chars, cfg["characters"]):
             items = []
 
-            def add(key, text, tag):
-                items.append({"id": f"{bid}-{ch['id']}-{key}", "text": text, "tag": tag})
+            def add(key, text, tag, **extra):
+                items.append({"id": f"{bid}-{ch['id']}-{key}", "text": text, "tag": tag, **{k: v for k, v in extra.items() if v}})
             if lo == 1:
                 add("create", f"Create {ch['name']}, {ch['race']} {ch['class']}, in {ch['start_zone']}", "Start")
             for n, a, b in prof_spans(src):
@@ -358,7 +360,9 @@ def build_plan(cfg, g, progress=None):
                             add(f"{slug(n)}-{skill}", f"{n} to {skill}", "Legacy")
             for m in ch["milestones"]:
                 if lo <= m["level"] < hi or (hi == 60 and m["level"] == 60):
-                    add(f"m-{slug(m['name'])}", f"{m['name']} at {m['level']}", "Class")
+                    # a recorded cost or trainer note travels with its status, so a beta price isn't read as live pricing
+                    add(f"m-{slug(m['name'])}", f"{m['name']} at {m['level']}", "Class",
+                        detail=m.get("note"), status=m.get("status") if m.get("note") else None)
             for lv, nm in zip(g.legacy["challenges"]["class"]["levels"], g.legacy["challenges"]["class"]["names"]):
                 if lo < lv <= hi:
                     add(f"legacy-{lv}", f"{nm} {ch['class']} at {lv}", "Legacy")
@@ -770,6 +774,9 @@ def save_progress(p, path=PROGRESS):
 
 
 # ---------------------------------------------------------------- outputs
+STATUS_MARK = {"unverified": "Unverified", "classic": "Classic data", "beta": "Seen in beta"}
+
+
 def plan_markdown(plan):
     L = plan["links"]
 
@@ -788,6 +795,11 @@ def plan_markdown(plan):
     for c in plan["characters"]:
         pr = ", ".join(a(p["name"]) + (f" {p['from']}-{p['until']}" if "until" in p else (f" from {p['from']}" if p["from"] > 1 else "")) for p in c["professions"])
         o.append(f"| {c['display']} | {a(c['race'])} | {a(c['class'])} | {c['leveling_spec']} | {c['endgame_spec']} | {pr} | {a(c['start_zone'])} |")
+    o.append("")
+    for c in plan["characters"]:
+        st = c.get("racials_status")
+        o.append(f"- {c['display']} ({a(c['race'])}) racials: " + ", ".join(a(x) for x in c["racials"])
+                 + (f" `{STATUS_MARK[st]}`" if st in STATUS_MARK else ""))
     cv = plan["coverage"]
     o += ["", "## Craft coverage", "", "| Craft | Characters |", "|---|---|"]
     names = {c["id"]: c["display"] for c in plan["characters"]}
@@ -810,7 +822,8 @@ def plan_markdown(plan):
             if not items:
                 continue
             o.append(f"**{c['display']}** ({c['race']} {c['class']})")
-            o += [f"- [ ] {lt(i['text'])} `{i['tag']}`" for i in items]
+            o += [f"- [ ] {lt(i['text'])} `{i['tag']}`" + (f": {lt(i['detail'])}" if i.get("detail") else "")
+                  + (f" `{STATUS_MARK[i['status']]}`" if i.get("status") in STATUS_MARK else "") for i in items]
             o.append("")
     ca = plan["legacy"].get("claim_at") or {}
     total = sum(v["total"] for v in plan["legacy"]["challenges"].values())
