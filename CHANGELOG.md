@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 
 ## [Unreleased]
 
+### Added
+
+- **Design standards.** [docs/design.md](docs/design.md) documents the page rules (no instructions, captions, state words or caveats in the body; level ranges; Wowhead links; class icons and colors), the palette tokens, status tags, layout, spacing and mobile behavior, and how the standalone page and the Grok Bot Page stay matched. AGENTS.md, CONTRIBUTING.md and the pull request template point to it ([#73](https://github.com/BradGroux/wow-forever-mission-control/issues/73)).
+
 ## [2026.10.31] - 2026-10-31
 
 First public release, four days before World of Warcraft: Forever launches on November 4, 2026.

@@ -142,12 +142,12 @@ adapters/grokbot/       optional Grok Bot canvas Page
 scripts/                mc implementation and the SavedVariables parser
 tests/                  unit tests
 tools/                  Wowhead id lookup, release packaging
-docs/                   setup, config, addon, progress, hosting, updating, data, FAQ, agents
+docs/                   setup, config, addon, progress, hosting, updating, data, design, FAQ, agents
 ```
 
 ## Docs
 
-[Setup](docs/setup.md) · [Config reference](docs/config.md) · [Addon](docs/addon.md) · [Progress and sync](docs/progress.md) · [Hosting](docs/hosting.md) · [Updating](docs/updating.md) · [Game data](docs/data.md) · [FAQ](docs/faq.md) · [Agents](docs/agents/README.md) · [Releasing](docs/releasing.md) · [Changelog](CHANGELOG.md)
+[Setup](docs/setup.md) · [Config reference](docs/config.md) · [Addon](docs/addon.md) · [Progress and sync](docs/progress.md) · [Hosting](docs/hosting.md) · [Updating](docs/updating.md) · [Game data](docs/data.md) · [Design standards](docs/design.md) · [FAQ](docs/faq.md) · [Agents](docs/agents/README.md) · [Releasing](docs/releasing.md) · [Changelog](CHANGELOG.md)
 
 ## License
 

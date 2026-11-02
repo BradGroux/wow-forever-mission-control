@@ -97,6 +97,19 @@ Never put the user's character names, account name, realm, progress, SavedVariab
 
 Data changes must follow the sourcing rules in [CONTRIBUTING.md](CONTRIBUTING.md#data-sourcing-rules): a Wowhead or Blizzard link per fact, and `"status": "unverified"` when unsure.
 
+## Design standards
+
+Before changing anything a player sees (`web/`, `adapters/grokbot/template.canvas.tsx`, page text in `data/` or `./mc plan` output), read [docs/design.md](docs/design.md). These rules are must-follow:
+
+- No how-to or instruction text, no "Showing…" captions, and no caveat or disclaimer sentences in the page body.
+- No invented shorthand or codes: brackets are level ranges with an en dash (`1–12`, `20–30`).
+- No redundant state words such as "Selected"; show state visually.
+- Data status (Seen in beta, Classic data, Unverified) is a small tag, never a sentence.
+- Every game name links to Wowhead Forever through `data/wowhead.json` (verified ids; search link as the fallback).
+- Every character and class shows its class icon and official class color from `data/classes.json`.
+- Use only the fixed dark palette tokens in docs/design.md; keep the body centered in `.wrap` and spacing on the 4 / 8 / 12 / 16 / 24 / 32 / 48 scale; check desktop and 360px wide.
+- The standalone page and the Grok Bot Page must keep matching; change both in the same pull request.
+
 ## Rules
 
 - Never commit secrets, tokens, Battle.net account names, or raw `WTF/` folders.

@@ -75,7 +75,7 @@ Agents: [AGENTS.md](AGENTS.md) has the same steps.
 
 - `./mc` is Python 3.9+, standard library only. Keep it that way.
 - The page (`web/`) is plain HTML, CSS and JavaScript with no build step and no dependencies. It must keep working from `file://`.
-- Page style: every game name links to Wowhead; no instructions or captions in the page body; level ranges instead of codes.
+- Page style follows [docs/design.md](docs/design.md): no instructions, captions, state words or caveats in the page body; level ranges instead of codes; every game name links to Wowhead; class icons and colors; the fixed palette; the standalone page and the Grok Bot Page match.
 - The addon is Lua 5.1, Interface 16001, silent outside `/ltrack`.
 - Generated files (`web/data/*.js`, `docs/examples/*`) are committed; regenerate them, don't edit them.
 
