@@ -1,6 +1,6 @@
 # Using Mission Control with AI agents
 
-[AGENTS.md](../../AGENTS.md) is the single source of instructions. Every platform below reads it directly or through a pointer file, and every workflow is a plain `./mc` command, so no platform has special features the others lack.
+[AGENTS.md](../../AGENTS.md) is the single source of instructions. Every platform below reads it directly or through a pointer file, and every workflow is a plain `./mc` command, so no platform has special features the others lack. Agents changing anything a player sees follow [docs/design.md](../design.md).
 
 ## Prompts that work everywhere
 
