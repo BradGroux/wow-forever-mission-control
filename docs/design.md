@@ -9,7 +9,7 @@ Values below are taken from [`web/style.css`](../web/style.css), [`web/app.js`](
 1. **No how-to or instruction text in the page body.** No "Click a card to…", "Tick items as you go", "Import your file here". Controls explain themselves through their labels. How-to belongs in `docs/`, the README and dialogs that the player opened on purpose (Import).
 2. **No "Showing…" captions.** No "Showing levels 20–30 for Aldric". The selected tab, segment or card already says that.
 3. **No invented shorthand or codes.** Brackets are level ranges written with an en dash: `1–12`, `20–30`, never `B1`, `Br3` or `L20-30`. Projections read "By the end of 20–30". Spell out game names (Legacy, Spelunker, Cozy Sleeping Bag). The one exception is the Road to 60 timeline, where dungeon dots may use the community's standard names (`RFC`, `SFK`, `BRD`, from the `SHORT` table in `web/app.js`) because space is tight; the full name is always in the dot's `<title>` tooltip and everywhere else on the page.
-4. **No redundant state words.** No "Selected", "Active", "Current tab", "(checked)". State is shown visually: a class-colored or gold border on the chosen card, an underline on the chosen tab, a filled segment, a filled checkbox with strikethrough.
+4. **No redundant state words.** No "Selected", "Active", "Current tab", "(checked)". State is shown visually: a gold border on the chosen card and a gold fill on the chosen bracket band, an underline on the chosen tab, a filled segment, a filled checkbox with strikethrough.
 5. **No caveat or disclaimer sentences in the body.** No "This may change at launch" or "Data is unconfirmed". Data status goes in a small tag next to the thing it describes (see [Status tags](#status-tags)). Uncertain items are collected in the Reference tab's **Open questions** table.
 6. **Every game name links to Wowhead's WoW Forever database.** Quests, NPCs, zones, items, dungeons, spells, factions, races and professions. See [Wowhead links](#wowhead-links).
 7. **Class icons and class colors wherever a character or class appears.** Roster cards, panel heads, level rows, timeline rows, table cells naming a character, coverage dots and checklists. See [Classes](#class-colors-and-icons).
@@ -39,9 +39,17 @@ The standalone page uses CSS custom properties on `:root` (`color-scheme: dark`)
 
 Radii: `--r` 10px (cards, panels, tables, dialogs), `--r-sm` 6px (inputs, buttons, checklist rows), 999px for pills. Fonts: `--font` (system UI stack) at 15px/1.5, `--mono` for JSON. Numbers in tables and inputs use `font-variant-numeric: tabular-nums`.
 
-SVG charts (timeline, reward track) can't read CSS variables reliably on every host, so they use the fixed constants `C` in `web/app.js`: `t1 #ECECEC`, `t2 #BEBEBE`, `t3 #9C9C9C`, `f2 #2B2B2B`, `b1 #4A4A4A`, `b0 #353535`, `bg #070707`, `gold #C9A227`. The chosen bracket band is filled `#ECECEC` with `#070707` text.
+SVG charts (timeline, reward track) can't read CSS variables reliably on every host, so they use the fixed constants `C` in `web/app.js`: `t1 #ECECEC`, `t2 #BEBEBE`, `t3 #9C9C9C`, `f2 #2B2B2B`, `b1 #4A4A4A`, `b0 #353535`, `bg #070707`, `gold #C9A227`.
 
-The Grok Bot Page uses the same constants (`SV` in the canvas template, with `bg #141414` to sit on the canvas ground) plus `useGrokTheme()` for subtle dividers. It highlights the chosen card and bracket in gold (`#C9A227`) with dark text (`#1A1405` / `#111`).
+The Grok Bot Page uses the same constants (`SV` in the canvas template, with `bg #141414` to sit on the canvas ground) plus `useGrokTheme()` for subtle dividers.
+
+## Chosen items
+
+One rule on both pages: **the chosen item is marked in gold (`#C9A227`)**.
+
+- **Roster card:** every card has a 4px left edge in its class color. The chosen card's other three sides become a 2px gold border; the class-colored left edge stays. On the page, padding drops by 1px on the thicker sides so the content doesn't move.
+- **Road to 60 bracket band:** the chosen band is filled and stroked gold with dark text (`#1A1405`); other bands are `f2` with a `b1` stroke and `t1` text.
+- Tabs and segmented controls keep their own neutral style (underline, filled segment) on each host.
 
 ## Class colors and icons
 
@@ -64,7 +72,7 @@ Icons are Wowhead's class icons, `https://wow.zamimg.com/images/wow/icons/medium
 How the class color is used:
 
 - Character names are bold in the class color (`.nm`, `--cc`).
-- Roster cards: class-colored name, progress bar and "Up next" pill (18% class-color tint); the chosen card gets a class-colored border on the page, a gold border plus a 4px class-colored left edge on the Grok Bot Page.
+- Roster cards: class-colored name, progress bar and "Up next" pill (18% class-color tint); every card has a 4px class-colored left edge (see [Chosen items](#chosen-items) for the chosen card).
 - Checklists tick to a class-colored box; account-wide lists use gold.
 - Coverage tables mark a character with a class-colored dot.
 - Timeline rows: class-colored progress line and milestone dots; rows for characters not chosen are dimmed to 55%.
@@ -108,7 +116,7 @@ Other tags: **New** (green, `.pill.new`) for content new in Forever, **Not in be
 - [ ] Brackets and ranges are level ranges with an en dash (`20–30`), no codes
 - [ ] Every new game name is in `data/wowhead.json` with a verified id (or shows the dotted search link on purpose)
 - [ ] Characters and classes use the icon and class color from `data/classes.json`
-- [ ] Colors come from the palette tokens above; no new hex values
+- [ ] Colors come from the palette tokens above; no new hex values; chosen cards and bracket bands are gold
 - [ ] Data status is a tag (Seen in beta, Classic data, Unverified), not a sentence
 - [ ] Spacing uses the 4 / 8 / 12 / 16 / 24 / 32 / 48 scale; body stays centered in `.wrap`
 - [ ] Checked at desktop width and at 360px

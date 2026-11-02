@@ -9,6 +9,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 
 - **Design standards.** [docs/design.md](docs/design.md) documents the page rules (no instructions, captions, state words or caveats in the body; level ranges; Wowhead links; class icons and colors), the palette tokens, status tags, layout, spacing and mobile behavior, and how the standalone page and the Grok Bot Page stay matched. AGENTS.md, CONTRIBUTING.md and the pull request template point to it ([#73](https://github.com/BradGroux/wow-forever-mission-control/issues/73)).
 
+### Changed
+
+- **Chosen items are gold on the standalone page, as on the Grok Bot Page.** The chosen roster card has a 2px gold border and keeps a 4px class-colored left edge that every card now has; the chosen Road to 60 bracket band is filled gold with dark text instead of light gray. [docs/design.md](docs/design.md#chosen-items) states the single rule ([#75](https://github.com/BradGroux/wow-forever-mission-control/issues/75)).
+
 ## [2026.10.31] - 2026-10-31
 
 First public release, four days before World of Warcraft: Forever launches on November 4, 2026.
