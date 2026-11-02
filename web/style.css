@@ -26,9 +26,10 @@ button, input, select { font: inherit; color: inherit; }
 #top h1 { font-size: 28px; line-height: 1.2; }
 #top .sub { color: var(--t2); margin-top: 4px; }
 .roster { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 24px; }
-.rc { text-align: left; background: var(--f1); border: 1px solid var(--b1); border-radius: var(--r); padding: 14px 16px; cursor: pointer; display: grid; gap: 10px; transition: border-color .15s, background .15s; }
+.rc { text-align: left; background: var(--f1); border: 1px solid var(--b1); border-left: 4px solid var(--cc); border-radius: var(--r); padding: 14px 16px 14px 13px; cursor: pointer; display: grid; gap: 10px; transition: border-color .15s, background .15s; }
 .rc:hover { background: var(--f2); }
-.rc[aria-checked="true"] { border-color: var(--cc); box-shadow: inset 0 0 0 1px var(--cc); }
+/* chosen card: 2px gold border, class-colored left edge kept; padding drops 1px so content doesn't move */
+.rc[aria-checked="true"] { border-color: var(--gold); border-left-color: var(--cc); border-width: 2px 2px 2px 4px; padding: 13px 15px 13px 13px; }
 .rc-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .rc-top .nm { font-weight: 600; font-size: 16px; color: var(--cc); }
 .rc-top .meta { color: var(--t3); font-size: 13px; }
@@ -181,6 +182,8 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--b0); c
   #top h1 { font-size: 22px; }
   .roster { grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
   .rc { padding: 10px 12px; gap: 8px; }
+  .rc[aria-checked="true"] { padding: 9px 11px 9px 9px; }
+  .rc:not([aria-checked="true"]) { padding-left: 9px; }
   .rc-row { flex-direction: column; gap: 2px; font-size: 12px; }
   .rc-row.q span:last-child { text-align: left; }
   .rc-top .meta { display: none; }

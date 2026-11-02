@@ -299,8 +299,8 @@
       var on = UI.bracket === b.id, bw = x(b.to) - x(b.from) - 3;
       svg.appendChild(s("g", { style: { cursor: "pointer" }, onclick: function () { UI.bracket = b.id; UI.tab = "brackets"; setHash(); render(); } },
         s("title", null, "Levels " + b.from + "–" + b.to),
-        s("rect", { x: x(b.from) + 1.5, y: top, width: bw, height: bandH, rx: 6, fill: on ? "#ECECEC" : C.f2, stroke: on ? "#ECECEC" : C.b1 }),
-        s("text", { x: (x(b.from) + x(b.to)) / 2, y: top + bandH / 2 + 5.5, "text-anchor": "middle", style: { "font-size": (bw < 70 ? 15 : 16) + "px", "font-weight": 600 }, fill: on ? "#070707" : C.t1 }, b.from + "–" + b.to)));
+        s("rect", { x: x(b.from) + 1.5, y: top, width: bw, height: bandH, rx: 6, fill: on ? C.gold : C.f2, stroke: on ? C.gold : C.b1 }),
+        s("text", { x: (x(b.from) + x(b.to)) / 2, y: top + bandH / 2 + 5.5, "text-anchor": "middle", style: { "font-size": (bw < 70 ? 15 : 16) + "px", "font-weight": 600 }, fill: on ? "#1A1405" : C.t1 }, b.from + "–" + b.to)));
     });
     var y0 = top + bandH + 12;
     rows.forEach(function (r, i) {
