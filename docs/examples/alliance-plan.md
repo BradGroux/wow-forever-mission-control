@@ -13,7 +13,7 @@ Alliance · Normal · launch 2026-11-04
 
 - Aldric ([Human](https://www.wowhead.com/forever/race=1)) racials: [Will to Survive](https://www.wowhead.com/forever/spell=1259718), [Perception](https://www.wowhead.com/forever/spell=20600), [Ruthless](https://www.wowhead.com/forever/spell=20597), [The Human Spirit](https://www.wowhead.com/forever/spell=20598) `Unverified`
 - Elowen ([Night Elf](https://www.wowhead.com/forever/race=4)) racials: [Elune's Light](https://www.wowhead.com/forever/spell=1259799), [Wisp Spirit](https://www.wowhead.com/forever/spell=20585), [Quickness](https://www.wowhead.com/forever/spell=20582), [Shadowmeld](https://www.wowhead.com/forever/spell=20580) `Unverified`
-- Brannoc ([Dwarf](https://www.wowhead.com/forever/race=3)) racials: [Find Treasure](https://www.wowhead.com/forever/spell=2481), [Big Game Hunter](https://www.wowhead.com/forever/spell=1259721), [Artisan's Precision](https://www.wowhead.com/forever/search?q=Artisan%27s%20Precision), [Stoneform](https://www.wowhead.com/forever/spell=20594) `Unverified`
+- Brannoc ([Dwarf](https://www.wowhead.com/forever/race=3)) racials: [Find Treasure](https://www.wowhead.com/forever/spell=2481), [Big Game Hunter](https://www.wowhead.com/forever/spell=1259721), [Artisan's Precision](https://www.wowhead.com/forever/spell=1259719), [Stoneform](https://www.wowhead.com/forever/spell=20594) `Unverified`
 - Fizzwick ([Gnome](https://www.wowhead.com/forever/race=7)) racials: [Eureka!](https://www.wowhead.com/forever/spell=1259823), [Expansive Mind](https://www.wowhead.com/forever/spell=20591), [Engineering Specialization](https://www.wowhead.com/forever/spell=20593), [Escape Artist](https://www.wowhead.com/forever/spell=20589) `Unverified`
 
 ## Craft coverage
