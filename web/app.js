@@ -286,9 +286,15 @@
     rows.forEach(function (r) {
       var ends = [];
       r.marks.sort(function (a, b) { return a.lv - b.lv; }).forEach(function (m) {
-        var cx = x(m.lv), w = m.label.length * fs * 0.52 + 10;
+        var cx = x(m.lv), tw = m.label.length * fs * 0.52, w = tw + 10;
         m.cx = cx; m.tier = -1;
-        for (var t = 0; t < 3; t++) { if ((ends[t] === undefined || cx - w / 2 > ends[t]) && cx + w / 2 < W + 30) { m.tier = t; ends[t] = cx + w / 2; break; } }
+        // End-anchored labels (right edge) render leftward from tx, not centered
+        // on cx, so tier placement must use their real span or they overlap the
+        // previous label in the same tier and run past the SVG edge.
+        var endAnchor = cx + tw / 2 > W - 4, tx = endAnchor ? Math.min(W - 4, cx + 8) : cx;
+        var left = endAnchor ? tx - tw - 5 : cx - w / 2, right = endAnchor ? tx + 5 : cx + w / 2;
+        m.anchor = endAnchor ? "end" : "middle"; m.tx = tx;
+        for (var t = 0; t < 3; t++) { if ((ends[t] === undefined || left > ends[t]) && right <= W - 4) { m.tier = t; ends[t] = right; break; } }
       });
       r.tiers = Math.max(1, 1 + Math.max.apply(null, r.marks.map(function (m) { return m.tier; }).concat([0])));
       r.h = 24 + r.tiers * tierH;
@@ -314,7 +320,7 @@
         var ly = y - 14 - m.tier * tierH;
         if (m.tier > 0) g.appendChild(s("line", { x1: m.cx, x2: m.cx, y1: ly + 4, y2: y - 8, stroke: C.b1 }));
         g.appendChild(s("circle", { cx: m.cx, cy: y, r: 6, fill: r.fill }));
-        var tw = m.label.length * fs * 0.52, anchor = m.cx + tw / 2 > W - 4 ? "end" : "middle", tx = anchor === "end" ? Math.min(W - 4, m.cx + 8) : m.cx;
+        var anchor = m.anchor, tx = m.tx;
         if (m.tier >= 0) g.appendChild(s("text", { x: tx, y: ly, "text-anchor": anchor, fill: r.dim ? C.t3 : C.t2, style: { "font-size": fs + "px" } }, m.label));
         svg.appendChild(g);
       });
