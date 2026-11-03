@@ -11,10 +11,10 @@ Horde · PvP · launch 2026-11-04
 | Morvane | [Undead](https://www.wowhead.com/forever/race=5) | [Paladin](https://www.wowhead.com/forever/class=2) | Retribution | Holy | [Skinning](https://www.wowhead.com/forever/skill=393), [Leatherworking](https://www.wowhead.com/forever/skill=165) | [Tirisfal Glades](https://www.wowhead.com/forever/zone=85) |
 | Zalaji | [Troll](https://www.wowhead.com/forever/race=8) | [Mage](https://www.wowhead.com/forever/class=8) | Frost | Frost | [Tailoring](https://www.wowhead.com/forever/skill=197), [Enchanting](https://www.wowhead.com/forever/skill=333) | [Durotar](https://www.wowhead.com/forever/zone=14) |
 
-- Grukk ([Orc](https://www.wowhead.com/forever/race=2)) racials: [Savage](https://www.wowhead.com/forever/spell=20574), [Blood Fury](https://www.wowhead.com/forever/spell=20572), [Shatter Curse](https://www.wowhead.com/forever/spell=1299026), [Hardiness](https://www.wowhead.com/forever/spell=20573) `Unverified`
-- Thalwen ([Tauren](https://www.wowhead.com/forever/race=6)) racials: [Cultivation](https://www.wowhead.com/forever/spell=20552), [Endurance](https://www.wowhead.com/forever/spell=20550), [Plainsrunning](https://www.wowhead.com/forever/spell=1259918), [War Stomp](https://www.wowhead.com/forever/spell=20549) `Unverified`
-- Morvane ([Undead](https://www.wowhead.com/forever/race=5)) racials: [Cannibalize](https://www.wowhead.com/forever/spell=20577), [Touch of the Grave](https://www.wowhead.com/forever/spell=1260201), [Underwater Breathing](https://www.wowhead.com/forever/spell=5227), [Will of the Forsaken](https://www.wowhead.com/forever/spell=7744) `Unverified`
-- Zalaji ([Troll](https://www.wowhead.com/forever/race=8)) racials: [Beast Slaying](https://www.wowhead.com/forever/spell=20557), [Berserking](https://www.wowhead.com/forever/spell=20554), [Regeneration](https://www.wowhead.com/forever/spell=20555), [Rapid Regeneration](https://www.wowhead.com/forever/spell=1260270) `Unverified`
+- Grukk ([Orc](https://www.wowhead.com/forever/race=2)) racials: [Command](https://www.wowhead.com/forever/spell=21563), [Blood Fury](https://www.wowhead.com/forever/spell=20572), [Shatter Curse](https://www.wowhead.com/forever/spell=1299026), [Hardiness](https://www.wowhead.com/forever/spell=20573) `Seen in beta`
+- Thalwen ([Tauren](https://www.wowhead.com/forever/race=6)) racials: [Cultivation](https://www.wowhead.com/forever/spell=20552), [Endurance](https://www.wowhead.com/forever/spell=20550), [Plainsrunning](https://www.wowhead.com/forever/spell=1259918), [War Stomp](https://www.wowhead.com/forever/spell=20549) `Seen in beta`
+- Morvane ([Undead](https://www.wowhead.com/forever/race=5)) racials: [Cannibalize](https://www.wowhead.com/forever/spell=20577), [Touch of the Grave](https://www.wowhead.com/forever/spell=1260201), [Underwater Breathing](https://www.wowhead.com/forever/spell=5227), [Will of the Forsaken](https://www.wowhead.com/forever/spell=7744) `Seen in beta`
+- Zalaji ([Troll](https://www.wowhead.com/forever/race=8)) racials: [Beast Slaying](https://www.wowhead.com/forever/spell=20557), [Berserking](https://www.wowhead.com/forever/spell=20554), [Regeneration](https://www.wowhead.com/forever/spell=20555), [Rapid Regeneration](https://www.wowhead.com/forever/spell=1260270) `Seen in beta`
 
 ## Craft coverage
 
@@ -103,7 +103,7 @@ Zones: [The Barrens](https://www.wowhead.com/forever/zone=17), [Silverpine Fores
 - [ ] Run [The Deadmines](https://www.wowhead.com/forever/zone=1581) `Dungeon`
 
 **Zalaji** (Troll Mage)
-- [ ] [Teleport](https://www.wowhead.com/forever/spell=1227703) at 20 `Class`: City teleports need [Rune of Teleportation](https://www.wowhead.com/forever/item=17031) `Seen in beta`
+- [ ] [Teleport: Orgrimmar](https://www.wowhead.com/forever/spell=3567) at 20 `Class`: City teleports need [Rune of Teleportation](https://www.wowhead.com/forever/item=17031) `Seen in beta`
 - [ ] Run [Ruins of Lordaeron](https://www.wowhead.com/forever/zone=16611) `Dungeon`
 - [ ] Run [Wailing Caverns](https://www.wowhead.com/forever/zone=718) `Dungeon`
 - [ ] Run [The Deadmines](https://www.wowhead.com/forever/zone=1581) `Dungeon`
