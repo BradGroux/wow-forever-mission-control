@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 
 ## [Unreleased]
 
+## [2026.11.03] - 2026-11-03
+
+Pre-launch release, the day before World of Warcraft: Forever launches on November 4, 2026 at 3:00 PM PST (5:00 PM CST). Updates continue at launch and in the days after launch so the data stays current.
+
 ### Added
 
 - **Design standards.** [docs/design.md](docs/design.md) documents the page rules (no instructions, captions, state words or caveats in the body; level ranges; Wowhead links; class icons and colors), the palette tokens, status tags, layout, spacing and mobile behavior, and how the standalone page and the Grok Bot Page stay matched. AGENTS.md, CONTRIBUTING.md and the pull request template point to it ([#73](https://github.com/BradGroux/wow-forever-mission-control/issues/73)).
@@ -19,6 +23,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 
 - **Mage teleport milestone linked the wrong spell.** `Teleport` pointed to an Engineering "Teleport" spell (1227703) from [#78](https://github.com/BradGroux/wow-forever-mission-control/pull/78); the milestone is now [Teleport: Stormwind](https://www.wowhead.com/forever/spell=3561) for Alliance and [Teleport: Orgrimmar](https://www.wowhead.com/forever/spell=3567) for Horde, both level 20 ([#79](https://github.com/BradGroux/wow-forever-mission-control/issues/79)).
 - **Road to 60 timeline labels** no longer overlap or run past the right edge of the chart on the standalone page ([#77](https://github.com/BradGroux/wow-forever-mission-control/pull/77)).
+
+### Known limitations
+
+- Launch-day checks stay open until the game is live: racials ([#6](https://github.com/BradGroux/wow-forever-mission-control/issues/6)), class milestones tagged Classic data ([#4](https://github.com/BradGroux/wow-forever-mission-control/issues/4)), Riding and Dual Specialization level and cost ([#8](https://github.com/BradGroux/wow-forever-mission-control/issues/8)), transport routes ([#5](https://github.com/BradGroux/wow-forever-mission-control/issues/5)), Horde data ([#1](https://github.com/BradGroux/wow-forever-mission-control/issues/1)), the Skyborne start ([#7](https://github.com/BradGroux/wow-forever-mission-control/issues/7)), and the Interface version, a Forever API or Armory, and Legacy changes ([#2](https://github.com/BradGroux/wow-forever-mission-control/issues/2)).
+- About 75 names still link to Wowhead search instead of a verified id ([#3](https://github.com/BradGroux/wow-forever-mission-control/issues/3)).
+- The addon declares Interface 16001 from the beta client; if the launch client reports a different number, enable out-of-date addons until the launch-day release.
+
+### Upgrade and sync
+
+- **Existing copy:** merge the Sync from upstream pull request (or `make sync`), then `./mc generate`, `./mc validate` and `./mc doctor`, and commit. Roster and progress files are never touched.
+- **Addon:** replace `Interface/AddOns/LegacyTracker` with the folder from `LegacyTracker-2026.11.03.zip`. Saved data is kept.
+- **Hosted page:** redeploy after `./mc generate`, or unzip `mission-control-web-2026.11.03.zip` and add your own `data/plan.js`.
 
 ## [2026.10.31] - 2026-10-31
 
@@ -117,5 +133,6 @@ Found in review and audits before release. Each links its issue and the pull req
 - **Hosted page:** redeploy after `./mc generate`. To host without the repo, unzip `mission-control-web-2026.10.31.zip` and add your own `data/plan.js`.
 - Progress files from earlier development builds keep working. `./mc generate` now refuses invalid values (for example a level above 60) and names the field: fix it with `./mc level` or `./mc skill`, or restore a copy from `progress/backups/`.
 
-[Unreleased]: https://github.com/BradGroux/wow-forever-mission-control/compare/2026.10.31...HEAD
+[Unreleased]: https://github.com/BradGroux/wow-forever-mission-control/compare/2026.11.03...HEAD
+[2026.11.03]: https://github.com/BradGroux/wow-forever-mission-control/compare/2026.10.31...2026.11.03
 [2026.10.31]: https://github.com/BradGroux/wow-forever-mission-control/releases/tag/2026.10.31
