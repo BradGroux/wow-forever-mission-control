@@ -1,5 +1,5 @@
 {
- "_about": "Race to faction, playable classes (56 combos, 28 per faction), start zone and racials. Class lists are from Blizzard's announcement checked against the beta client. Racial names changed several times in beta, so racials are marked unverified.",
+ "_about": "Race to faction, playable classes (56 combos, 28 per faction), start zone and racials. Class lists are from Blizzard's announcement checked against the beta client. Racials follow Blizzard's final pre-launch pass (Oct 26 development notes, repeated Nov 2) as listed in Wowhead's Forever racials guide and tooltips, so they are tagged beta until launch.",
  "races": {
   "Human": {
    "faction": "Alliance",
@@ -27,7 +27,7 @@
    ],
    "status": "beta",
    "source": "egt-combos",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races"
   },
   "Dwarf": {
@@ -56,7 +56,7 @@
    ],
    "status": "beta",
    "source": "egt-combos",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races"
   },
   "Night Elf": {
@@ -81,7 +81,7 @@
    "notes": [],
    "status": "beta",
    "source": "egt-combos",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races"
   },
   "Gnome": {
@@ -109,7 +109,7 @@
    ],
    "status": "beta",
    "source": "egt-combos",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races"
   },
   "High Order Skyborne": {
@@ -127,7 +127,7 @@
    "capital": "Stormwind City",
    "racials": [
     "Walk on Air",
-    "Read Ley Line",
+    "Read Leyline",
     "Wind Blessed",
     "Elemental Insight"
    ],
@@ -140,7 +140,7 @@
    "capital_note": "No Skyborne capital; Valanaar is the racial hub",
    "status": "blizzard",
    "source": "bz-skyborne",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races",
    "first_hub_status": "beta",
    "first_hub_source": "wt-zephras",
@@ -162,7 +162,7 @@
    "first_hub": "Razor Hill",
    "capital": "Orgrimmar",
    "racials": [
-    "Savage",
+    "Command",
     "Blood Fury",
     "Shatter Curse",
     "Hardiness"
@@ -172,7 +172,7 @@
    ],
    "status": "beta",
    "source": "egt-combos",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races"
   },
   "Undead": {
@@ -200,7 +200,7 @@
    ],
    "status": "beta",
    "source": "egt-combos",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races"
   },
   "Tauren": {
@@ -226,7 +226,7 @@
    ],
    "status": "beta",
    "source": "egt-combos",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races"
   },
   "Troll": {
@@ -256,7 +256,7 @@
    ],
    "status": "beta",
    "source": "egt-combos",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races"
   },
   "Windshaper Skyborne": {
@@ -287,7 +287,7 @@
    "capital_note": "No Skyborne capital; Valanaar is the racial hub",
    "status": "blizzard",
    "source": "bz-skyborne",
-   "racials_status": "unverified",
+   "racials_status": "beta",
    "racials_source": "wh-races",
    "first_hub_status": "beta",
    "first_hub_source": "wt-zephras",

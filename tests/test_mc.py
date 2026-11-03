@@ -662,7 +662,8 @@ class AuditProgress(unittest.TestCase):
 class StatusAndNotes(unittest.TestCase):
     def test_racials_status_kept(self):
         # #66: racial ability status travels into the plan, separate from the combination status
-        p = mc.build_plan(EX, G)
+        g0 = mc.Game(); g0.races["Human"] = dict(g0.races["Human"], racials_status="unverified")
+        p = mc.build_plan(EX, g0)
         c = p["characters"][0]
         self.assertEqual((c["racials_status"], c["racials_source"]), ("unverified", G.races["Human"]["racials_source"]))
         self.assertEqual(G.races["Human"]["status"], "beta")

@@ -8,10 +8,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 ### Added
 
 - **Design standards.** [docs/design.md](docs/design.md) documents the page rules (no instructions, captions, state words or caveats in the body; level ranges; Wowhead links; class icons and colors), the palette tokens, status tags, layout, spacing and mobile behavior, and how the standalone page and the Grok Bot Page stay matched. AGENTS.md, CONTRIBUTING.md and the pull request template point to it ([#73](https://github.com/BradGroux/wow-forever-mission-control/issues/73)).
+- **Verified Wowhead id** for the Dwarf racial Artisan's Precision, which linked to search ([#78](https://github.com/BradGroux/wow-forever-mission-control/pull/78), refs [#3](https://github.com/BradGroux/wow-forever-mission-control/issues/3)).
 
 ### Changed
 
+- **Racials follow Blizzard's final pre-launch pass.** Orc `Command` (+5% Hunter and Warlock pet damage) replaces the removed `Savage`; High Order Skyborne's `Read Leyline` uses the in-game spelling; every race's racials are tagged **Seen in beta** instead of **Unverified**, from Blizzard's Nov 2 development notes and Wowhead's Forever racials guide. Launch confirmation stays on [#6](https://github.com/BradGroux/wow-forever-mission-control/issues/6) ([#79](https://github.com/BradGroux/wow-forever-mission-control/issues/79)).
 - **Chosen items are gold on the standalone page, as on the Grok Bot Page.** The chosen roster card has a 2px gold border and keeps a 4px class-colored left edge that every card now has; the chosen Road to 60 bracket band is filled gold with dark text instead of light gray. [docs/design.md](docs/design.md#chosen-items) states the single rule ([#75](https://github.com/BradGroux/wow-forever-mission-control/issues/75)).
+
+### Fixed
+
+- **Mage teleport milestone linked the wrong spell.** `Teleport` pointed to an Engineering "Teleport" spell (1227703) from [#78](https://github.com/BradGroux/wow-forever-mission-control/pull/78); the milestone is now [Teleport: Stormwind](https://www.wowhead.com/forever/spell=3561) for Alliance and [Teleport: Orgrimmar](https://www.wowhead.com/forever/spell=3567) for Horde, both level 20 ([#79](https://github.com/BradGroux/wow-forever-mission-control/issues/79)).
+- **Road to 60 timeline labels** no longer overlap or run past the right edge of the chart on the standalone page ([#77](https://github.com/BradGroux/wow-forever-mission-control/pull/77)).
 
 ## [2026.10.31] - 2026-10-31
 

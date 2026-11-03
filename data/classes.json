@@ -417,9 +417,18 @@
     },
     {
      "level": 20,
-     "name": "Teleport",
+     "name": "Teleport: Stormwind",
      "kind": "trainer",
-     "faction": "both",
+     "faction": "Alliance",
+     "status": "beta",
+     "source": "wh-db",
+     "note": "Teleport: Ironforge also at 20; city teleports need Rune of Teleportation"
+    },
+    {
+     "level": 20,
+     "name": "Teleport: Orgrimmar",
+     "kind": "trainer",
+     "faction": "Horde",
      "status": "beta",
      "source": "wh-db",
      "note": "City teleports need Rune of Teleportation"

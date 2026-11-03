@@ -1017,7 +1017,7 @@
    "id": 491,
    "type": "zone"
   },
-  "Read Ley Line": {
+  "Read Leyline": {
    "id": 1259705,
    "type": "spell"
   },
@@ -1113,10 +1113,6 @@
   "Ruthless": {
    "type": "spell",
    "id": 20597
-  },
-  "Savage": {
-   "type": "spell",
-   "id": 20574
   },
   "Save Techbot's Brain!": {
    "id": 2922,
@@ -1349,10 +1345,6 @@
   "Teldrassil": {
    "id": 141,
    "type": "zone"
-  },
-  "Teleport": {
-   "type": "spell",
-   "id": 1227703
   },
   "Teleport Darnassus": {
    "id": 3565,
@@ -1787,6 +1779,14 @@
    "type": "spell",
    "id": 63624,
    "tooltip": "Learn a Second Talent Specialization"
+  },
+  "Command": {
+   "type": "spell",
+   "id": 21563
+  },
+  "Teleport: Orgrimmar": {
+   "type": "spell",
+   "id": 3567
   }
  }
 }
