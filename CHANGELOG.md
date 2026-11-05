@@ -13,6 +13,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 
 - **Interface 16001 confirmed for the live client.** Launch build 1.60.1.70790 (`wowf`, Nov 4) is still on the 1.60.1 line, so the addon's `## Interface: 16001` and the CI check stay as they are ([#2](https://github.com/BradGroux/wow-forever-mission-control/issues/2)).
 
+### Fixed
+
+- **CI's Python 3.9 job runs again.** GitHub moved `ubuntu-latest` to Ubuntu 26.04, which has no Python 3.9, so the Linux test jobs now run on `ubuntu-24.04` ([#83](https://github.com/BradGroux/wow-forever-mission-control/pull/83)).
+
 ## [2026.11.03] - 2026-11-03
 
 Pre-launch release, the day before World of Warcraft: Forever launches on November 4, 2026 at 3:00 PM PST (5:00 PM CST). Updates continue at launch and in the days after launch so the data stays current.
