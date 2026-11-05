@@ -2,7 +2,7 @@
 ## Title: LegacyTracker
 ## Notes: Silently records level, XP, rested XP and profession skill per character for WoW Forever Legacy Mission Control. Type /ltrack for a summary.
 ## Author: WoW Forever Legacy Mission Control contributors
-## Version: 2026.11.03
+## Version: 2026.11.04
 ## SavedVariables: LegacyTrackerDB
 
 LegacyTracker.lua

@@ -5,6 +5,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 
 ## [Unreleased]
 
+## [2026.11.04] - 2026-11-04
+
+Launch-day release. World of Warcraft: Forever went live on November 4, 2026 at 3:00 PM PST (5:00 PM CST) on client build 1.60.1.70790.
+
 ### Added
 
 - **Righteous Fury at level 10** for Paladins (was 16 in the beta), from Blizzard's final pre-launch development notes, with its Wowhead Forever link ([spell 25780](https://www.wowhead.com/forever/spell=25780)). New source `bz-devnotes` ([#4](https://github.com/BradGroux/wow-forever-mission-control/issues/4)).
@@ -16,6 +20,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 ### Fixed
 
 - **CI's Python 3.9 job runs again.** GitHub moved `ubuntu-latest` to Ubuntu 26.04, which has no Python 3.9, so the Linux test jobs now run on `ubuntu-24.04` ([#83](https://github.com/BradGroux/wow-forever-mission-control/pull/83)).
+
+### Known limitations
+
+- Still open after the first hours of launch, since nobody has reached the levels involved yet: racials in game ([#6](https://github.com/BradGroux/wow-forever-mission-control/issues/6)), class quests tagged Classic data ([#4](https://github.com/BradGroux/wow-forever-mission-control/issues/4)), live riding prices and the Dual Specialization cost ([#8](https://github.com/BradGroux/wow-forever-mission-control/issues/8)), Classic-data boats, zeppelins, tram and flight paths ([#5](https://github.com/BradGroux/wow-forever-mission-control/issues/5)), Horde data ([#1](https://github.com/BradGroux/wow-forever-mission-control/issues/1)) and Skyborne class quests ([#7](https://github.com/BradGroux/wow-forever-mission-control/issues/7)).
+- There is no Forever Armory and no public character lookup yet. Blizzard's undocumented `profile-forever` API lists your own characters with a Battle.net login, but character pages still return 404, so progress stays manual or addon-based ([#2](https://github.com/BradGroux/wow-forever-mission-control/issues/2), [#84](https://github.com/BradGroux/wow-forever-mission-control/issues/84)).
+- About 75 names still link to Wowhead search instead of a verified id ([#3](https://github.com/BradGroux/wow-forever-mission-control/issues/3)).
+
+### Upgrade and sync
+
+- **Existing copy:** merge the Sync from upstream pull request (or `make sync`), then `./mc generate`, `./mc validate` and `./mc doctor`, and commit. Roster and progress files are never touched.
+- **Addon:** replace `Interface/AddOns/LegacyTracker` with the folder from `LegacyTracker-2026.11.04.zip`. Saved data is kept. Interface is still 16001, so the 2026.11.03 addon keeps loading too.
+- **Hosted page:** redeploy after `./mc generate`, or unzip `mission-control-web-2026.11.04.zip` and add your own `data/plan.js`.
 
 ## [2026.11.03] - 2026-11-03
 
@@ -145,6 +161,7 @@ Found in review and audits before release. Each links its issue and the pull req
 - **Hosted page:** redeploy after `./mc generate`. To host without the repo, unzip `mission-control-web-2026.10.31.zip` and add your own `data/plan.js`.
 - Progress files from earlier development builds keep working. `./mc generate` now refuses invalid values (for example a level above 60) and names the field: fix it with `./mc level` or `./mc skill`, or restore a copy from `progress/backups/`.
 
-[Unreleased]: https://github.com/BradGroux/wow-forever-mission-control/compare/2026.11.03...HEAD
+[Unreleased]: https://github.com/BradGroux/wow-forever-mission-control/compare/2026.11.04...HEAD
+[2026.11.04]: https://github.com/BradGroux/wow-forever-mission-control/compare/2026.11.03...2026.11.04
 [2026.11.03]: https://github.com/BradGroux/wow-forever-mission-control/compare/2026.10.31...2026.11.03
 [2026.10.31]: https://github.com/BradGroux/wow-forever-mission-control/releases/tag/2026.10.31
