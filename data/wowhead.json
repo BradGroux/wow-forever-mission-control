@@ -1078,6 +1078,10 @@
    "type": "skill",
    "id": 762
   },
+  "Righteous Fury": {
+   "type": "spell",
+   "id": 25780
+  },
   "Riverglades": {
    "type": "zone",
    "id": 16591
