@@ -399,3 +399,4 @@ Claim rewards from Innkeeper Wiley in [Ratchet](https://www.wowhead.com/forever/
 - [Zephras Isle Walkthrough (Skyborne Starting Zone)](https://www.warcrafttavern.com/forever/guides/zephras-isle-walkthrough/) · warcrafttavern.com
 - [Riding in WoW Forever: Mount Level, Cost and Trainers](https://mmonster.co/wow-forever/guides/mounts/riding) · mmonster.co
 - [How To Get A Mount In WoW Forever: Cost, Requirement & Mount Options](https://www.method.gg/wow-forever/how-to-get-a-mount-in-wow-forever-cost-requirement-and-mount-options) · method.gg
+- [WoW Forever Beta Development Notes (final pre-launch notes, updated November 4)](https://us.forums.blizzard.com/en/wow/t/wow-forever-beta-development-notes-updated-november-2/2360696/9) · us.forums.blizzard.com

@@ -5,6 +5,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Ver
 
 ## [Unreleased]
 
+### Added
+
+- **Righteous Fury at level 10** for Paladins (was 16 in the beta), from Blizzard's final pre-launch development notes, with its Wowhead Forever link ([spell 25780](https://www.wowhead.com/forever/spell=25780)). New source `bz-devnotes` ([#4](https://github.com/BradGroux/wow-forever-mission-control/issues/4)).
+
+### Changed
+
+- **Interface 16001 confirmed for the live client.** Launch build 1.60.1.70790 (`wowf`, Nov 4) is still on the 1.60.1 line, so the addon's `## Interface: 16001` and the CI check stay as they are ([#2](https://github.com/BradGroux/wow-forever-mission-control/issues/2)).
+
 ## [2026.11.03] - 2026-11-03
 
 Pre-launch release, the day before World of Warcraft: Forever launches on November 4, 2026 at 3:00 PM PST (5:00 PM CST). Updates continue at launch and in the days after launch so the data stays current.

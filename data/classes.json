@@ -98,6 +98,14 @@
      ]
     },
     {
+     "level": 10,
+     "name": "Righteous Fury",
+     "kind": "trainer",
+     "faction": "both",
+     "status": "blizzard",
+     "source": "bz-devnotes"
+    },
+    {
      "level": 12,
      "name": "Redemption",
      "kind": "class quest",
