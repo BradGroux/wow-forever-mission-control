@@ -218,7 +218,11 @@ SlashCmdList.LEGACYTRACKER = function(msg)
         if twin and canonical ~= k then
           local spaced = db.chars[k]
           twin.levels = twin.levels or {}
-          if spaced.levels then for lv, t in pairs(spaced.levels) do if not twin.levels[lv] then twin.levels[lv] = t end end end
+          if spaced.levels then
+            for lv, t in pairs(spaced.levels) do
+              if not twin.levels[lv] then twin.levels[lv] = t end
+            end
+          end
           if (spaced.level or 0) > (twin.level or 0) then twin.level = spaced.level end
           if (spaced.lastSeen or 0) > (twin.lastSeen or 0) then twin.lastSeen = spaced.lastSeen end
           db.chars[k] = nil
@@ -228,7 +232,8 @@ SlashCmdList.LEGACYTRACKER = function(msg)
         end
       end
     end
-    print("|cff33ff99LegacyTracker|r: clean removed " .. removed .. " duplicate(s), kept " .. kept .. " spaced entry(ies) with no canonical twin.")
+    print("|cff33ff99LegacyTracker|r: clean removed " .. removed .. " duplicate(s), kept " .. kept
+      .. " spaced entry(ies) with no canonical twin.")
     return
   end
   if not inCombat() then pcall(snapshot, true) end
