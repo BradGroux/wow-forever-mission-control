@@ -208,7 +208,7 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Duskwood]
 
 ## Levels 40-45
 
-[Razorfen Downs](https://www.wowhead.com/forever/zone=722) (37-46), [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) (40-45), Level 45: Experienced class Legacy points, [Riding](https://www.wowhead.com/forever/skill=762) at 40
+[Razorfen Downs](https://www.wowhead.com/forever/zone=722) (37-46), [Krol'dok Stronghold](https://www.wowhead.com/forever/zone=16842) (40-45), Level 45: Experienced class Legacy points, [Riding](https://www.wowhead.com/forever/skill=762) at 40
 
 Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](https://www.wowhead.com/forever/zone=440), [Desolace](https://www.wowhead.com/forever/zone=405), [Feralas](https://www.wowhead.com/forever/zone=357), [Badlands](https://www.wowhead.com/forever/zone=3), [Arathi Highlands](https://www.wowhead.com/forever/zone=45)
 
@@ -217,21 +217,21 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](
 - [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Warrior](https://www.wowhead.com/forever/class=1) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
-- [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
+- [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/zone=16842) `Dungeon`
 
 **Elowen** (Night Elf Druid)
 - [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
 - [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Druid](https://www.wowhead.com/forever/class=11) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
-- [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
+- [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/zone=16842) `Dungeon`
 
 **Brannoc** (Dwarf Hunter)
 - [ ] [Riding](https://www.wowhead.com/forever/skill=762) at 40 `Class`: Apprentice [Riding](https://www.wowhead.com/forever/skill=762): 100 gold, first mount included `Seen in beta`
 - [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Hunter](https://www.wowhead.com/forever/class=3) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
-- [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
+- [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/zone=16842) `Dungeon`
 
 **Fizzwick** (Gnome Warlock)
 - [ ] [Summon Felsteed](https://www.wowhead.com/forever/spell=5784) at 40 `Class`
@@ -239,11 +239,11 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](
 - [ ] [Dual Specialization](https://www.wowhead.com/forever/spell=63624) at 40 `Class`: Class trainer in a major city
 - [ ] Experienced [Warlock](https://www.wowhead.com/forever/class=9) at 45 `Legacy`
 - [ ] Run [Razorfen Downs](https://www.wowhead.com/forever/zone=722) `Dungeon`
-- [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold) `Dungeon`
+- [ ] Run [Krol'dok Stronghold](https://www.wowhead.com/forever/zone=16842) `Dungeon`
 
 ## Levels 45-52
 
-[Uldaman](https://www.wowhead.com/forever/zone=1337) (41-51), [Zul'Farrak](https://www.wowhead.com/forever/zone=1176) (44-54), [Maraudon](https://www.wowhead.com/forever/zone=2100) (46-55), [Alcaz Prison](https://www.wowhead.com/forever/search?q=Alcaz%20Prison) (48-53)
+[Uldaman](https://www.wowhead.com/forever/zone=1337) (41-51), [Zul'Farrak](https://www.wowhead.com/forever/zone=1176) (44-54), [Maraudon](https://www.wowhead.com/forever/zone=2100) (46-55), [Alcaz Prison](https://www.wowhead.com/forever/zone=16620) (48-53)
 
 Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](https://www.wowhead.com/forever/zone=440), [Western Plaguelands](https://www.wowhead.com/forever/zone=28), [Feralas](https://www.wowhead.com/forever/zone=357), [Un'Goro Crater](https://www.wowhead.com/forever/zone=490), [Badlands](https://www.wowhead.com/forever/zone=3)
 
@@ -252,21 +252,21 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](
 - [ ] Run [Uldaman](https://www.wowhead.com/forever/zone=1337) `Dungeon`
 - [ ] Run [Zul'Farrak](https://www.wowhead.com/forever/zone=1176) `Dungeon`
 - [ ] Run [Maraudon](https://www.wowhead.com/forever/zone=2100) `Dungeon`
-- [ ] Run [Alcaz Prison](https://www.wowhead.com/forever/search?q=Alcaz%20Prison) `Dungeon`
+- [ ] Run [Alcaz Prison](https://www.wowhead.com/forever/zone=16620) `Dungeon`
 
 **Elowen** (Night Elf Druid)
 - [ ] [Alchemy](https://www.wowhead.com/forever/skill=171) to 300 `Legacy`
 - [ ] Run [Uldaman](https://www.wowhead.com/forever/zone=1337) `Dungeon`
 - [ ] Run [Zul'Farrak](https://www.wowhead.com/forever/zone=1176) `Dungeon`
 - [ ] Run [Maraudon](https://www.wowhead.com/forever/zone=2100) `Dungeon`
-- [ ] Run [Alcaz Prison](https://www.wowhead.com/forever/search?q=Alcaz%20Prison) `Dungeon`
+- [ ] Run [Alcaz Prison](https://www.wowhead.com/forever/zone=16620) `Dungeon`
 
 **Brannoc** (Dwarf Hunter)
 - [ ] [Leatherworking](https://www.wowhead.com/forever/skill=165) to 300 `Legacy`
 - [ ] Run [Uldaman](https://www.wowhead.com/forever/zone=1337) `Dungeon`
 - [ ] Run [Zul'Farrak](https://www.wowhead.com/forever/zone=1176) `Dungeon`
 - [ ] Run [Maraudon](https://www.wowhead.com/forever/zone=2100) `Dungeon`
-- [ ] Run [Alcaz Prison](https://www.wowhead.com/forever/search?q=Alcaz%20Prison) `Dungeon`
+- [ ] Run [Alcaz Prison](https://www.wowhead.com/forever/zone=16620) `Dungeon`
 
 **Fizzwick** (Gnome Warlock)
 - [ ] [Tailoring](https://www.wowhead.com/forever/skill=197) to 300 `Legacy`
@@ -275,11 +275,11 @@ Zones: [Stranglethorn Vale](https://www.wowhead.com/forever/zone=33), [Tanaris](
 - [ ] Run [Uldaman](https://www.wowhead.com/forever/zone=1337) `Dungeon`
 - [ ] Run [Zul'Farrak](https://www.wowhead.com/forever/zone=1176) `Dungeon`
 - [ ] Run [Maraudon](https://www.wowhead.com/forever/zone=2100) `Dungeon`
-- [ ] Run [Alcaz Prison](https://www.wowhead.com/forever/search?q=Alcaz%20Prison) `Dungeon`
+- [ ] Run [Alcaz Prison](https://www.wowhead.com/forever/zone=16620) `Dungeon`
 
 ## Levels 52-60
 
-[Sunken Temple](https://www.wowhead.com/forever/zone=1477) (50-60), [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) (52-60), [Dire Maul](https://www.wowhead.com/forever/zone=2557) (54-60), [Blackmaw Hold](https://www.wowhead.com/forever/search?q=Blackmaw%20Hold) (55-60), [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583) (55-60), [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583) (55-60), [Scholomance](https://www.wowhead.com/forever/zone=2057) (58-60), [Stratholme](https://www.wowhead.com/forever/zone=2017) (58-60), [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) (58-60), Level 60: Master class Legacy points
+[Sunken Temple](https://www.wowhead.com/forever/zone=1477) (50-60), [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) (52-60), [Dire Maul](https://www.wowhead.com/forever/zone=2557) (54-60), [Blackmaw Hold](https://www.wowhead.com/forever/zone=16554) (55-60), [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583) (55-60), [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583) (55-60), [Scholomance](https://www.wowhead.com/forever/zone=2057) (58-60), [Stratholme](https://www.wowhead.com/forever/zone=2017) (58-60), [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace) (58-60), Level 60: Master class Legacy points
 
 Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://www.wowhead.com/forever/zone=1377), [Eastern Plaguelands](https://www.wowhead.com/forever/zone=139), [Western Plaguelands](https://www.wowhead.com/forever/zone=28), [Feralas](https://www.wowhead.com/forever/zone=357), [Un'Goro Crater](https://www.wowhead.com/forever/zone=490)
 
@@ -293,7 +293,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://w
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
 - [ ] Run [Dire Maul](https://www.wowhead.com/forever/zone=2557) `Dungeon`
-- [ ] Run [Blackmaw Hold](https://www.wowhead.com/forever/search?q=Blackmaw%20Hold) `Dungeon`
+- [ ] Run [Blackmaw Hold](https://www.wowhead.com/forever/zone=16554) `Dungeon`
 - [ ] Run [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583) `Dungeon`
 - [ ] Run [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583) `Dungeon`
 - [ ] Run [Scholomance](https://www.wowhead.com/forever/zone=2057) `Dungeon`
@@ -306,7 +306,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://w
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
 - [ ] Run [Dire Maul](https://www.wowhead.com/forever/zone=2557) `Dungeon`
-- [ ] Run [Blackmaw Hold](https://www.wowhead.com/forever/search?q=Blackmaw%20Hold) `Dungeon`
+- [ ] Run [Blackmaw Hold](https://www.wowhead.com/forever/zone=16554) `Dungeon`
 - [ ] Run [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583) `Dungeon`
 - [ ] Run [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583) `Dungeon`
 - [ ] Run [Scholomance](https://www.wowhead.com/forever/zone=2057) `Dungeon`
@@ -320,7 +320,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://w
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
 - [ ] Run [Dire Maul](https://www.wowhead.com/forever/zone=2557) `Dungeon`
-- [ ] Run [Blackmaw Hold](https://www.wowhead.com/forever/search?q=Blackmaw%20Hold) `Dungeon`
+- [ ] Run [Blackmaw Hold](https://www.wowhead.com/forever/zone=16554) `Dungeon`
 - [ ] Run [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583) `Dungeon`
 - [ ] Run [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583) `Dungeon`
 - [ ] Run [Scholomance](https://www.wowhead.com/forever/zone=2057) `Dungeon`
@@ -334,7 +334,7 @@ Zones: [Tanaris](https://www.wowhead.com/forever/zone=440), [Silithus](https://w
 - [ ] Run [Sunken Temple](https://www.wowhead.com/forever/zone=1477) `Dungeon`
 - [ ] Run [Blackrock Depths](https://www.wowhead.com/forever/zone=1584) `Dungeon`
 - [ ] Run [Dire Maul](https://www.wowhead.com/forever/zone=2557) `Dungeon`
-- [ ] Run [Blackmaw Hold](https://www.wowhead.com/forever/search?q=Blackmaw%20Hold) `Dungeon`
+- [ ] Run [Blackmaw Hold](https://www.wowhead.com/forever/zone=16554) `Dungeon`
 - [ ] Run [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583) `Dungeon`
 - [ ] Run [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583) `Dungeon`
 - [ ] Run [Scholomance](https://www.wowhead.com/forever/zone=2057) `Dungeon`
@@ -348,8 +348,8 @@ All Legacy challenges: 65 points. This plan's leveling and crafts cover 30; the 
 Claim rewards from Innkeeper Wiley in [Ratchet](https://www.wowhead.com/forever/search?q=Ratchet) (62.0, 39.4).
 
 - [ ] Novice Spelunker `Legacy`: All 6: [Ragefire Chasm](https://www.wowhead.com/forever/zone=2437) or [The Hall of Thanes](https://www.wowhead.com/forever/zone=16919), [Ruins of Lordaeron](https://www.wowhead.com/forever/zone=16611), [Wailing Caverns](https://www.wowhead.com/forever/zone=718), [The Deadmines](https://www.wowhead.com/forever/zone=1581), [Shadowfang Keep](https://www.wowhead.com/forever/zone=209), [Excavation Site: Wetlands](https://www.wowhead.com/forever/zone=16732)
-- [ ] Experienced Spelunker `Legacy`: All 10: [City of Dalaran](https://www.wowhead.com/forever/zone=16544), [Blackfathom Deeps](https://www.wowhead.com/forever/zone=719), [Gnomeregan](https://www.wowhead.com/forever/zone=721), [The Drowned City](https://www.wowhead.com/forever/quest=95775), [Scarlet Monastery](https://www.wowhead.com/forever/zone=796): Graveyard, [Scarlet Monastery](https://www.wowhead.com/forever/zone=796): Library, [Scarlet Monastery](https://www.wowhead.com/forever/zone=796): Armory, [Scarlet Monastery](https://www.wowhead.com/forever/zone=796): Cathedral, [Razorfen Kraul](https://www.wowhead.com/forever/zone=491), [Krol'dok Stronghold](https://www.wowhead.com/forever/search?q=Krol%27dok%20Stronghold)
-- [ ] Master Spelunker `Legacy`: All 17: [Razorfen Downs](https://www.wowhead.com/forever/zone=722), [Uldaman](https://www.wowhead.com/forever/zone=1337), [Zul'Farrak](https://www.wowhead.com/forever/zone=1176), [Maraudon](https://www.wowhead.com/forever/zone=2100), [Alcaz Prison](https://www.wowhead.com/forever/search?q=Alcaz%20Prison), [Sunken Temple](https://www.wowhead.com/forever/zone=1477), [Blackrock Depths](https://www.wowhead.com/forever/zone=1584), [Blackmaw Hold](https://www.wowhead.com/forever/search?q=Blackmaw%20Hold), [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583), [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583), [Scholomance](https://www.wowhead.com/forever/zone=2057), [Stratholme](https://www.wowhead.com/forever/zone=2017): Live, [Stratholme](https://www.wowhead.com/forever/zone=2017): Dead, [Dire Maul](https://www.wowhead.com/forever/zone=2557): East, [Dire Maul](https://www.wowhead.com/forever/zone=2557): North, [Dire Maul](https://www.wowhead.com/forever/zone=2557): West, [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace)
+- [ ] Experienced Spelunker `Legacy`: All 10: [City of Dalaran](https://www.wowhead.com/forever/zone=16544), [Blackfathom Deeps](https://www.wowhead.com/forever/zone=719), [Gnomeregan](https://www.wowhead.com/forever/zone=721), [The Drowned City](https://www.wowhead.com/forever/quest=95775), [Scarlet Monastery](https://www.wowhead.com/forever/zone=796): Graveyard, [Scarlet Monastery](https://www.wowhead.com/forever/zone=796): Library, [Scarlet Monastery](https://www.wowhead.com/forever/zone=796): Armory, [Scarlet Monastery](https://www.wowhead.com/forever/zone=796): Cathedral, [Razorfen Kraul](https://www.wowhead.com/forever/zone=491), [Krol'dok Stronghold](https://www.wowhead.com/forever/zone=16842)
+- [ ] Master Spelunker `Legacy`: All 17: [Razorfen Downs](https://www.wowhead.com/forever/zone=722), [Uldaman](https://www.wowhead.com/forever/zone=1337), [Zul'Farrak](https://www.wowhead.com/forever/zone=1176), [Maraudon](https://www.wowhead.com/forever/zone=2100), [Alcaz Prison](https://www.wowhead.com/forever/zone=16620), [Sunken Temple](https://www.wowhead.com/forever/zone=1477), [Blackrock Depths](https://www.wowhead.com/forever/zone=1584), [Blackmaw Hold](https://www.wowhead.com/forever/zone=16554), [Lower Blackrock Spire](https://www.wowhead.com/forever/zone=1583), [Upper Blackrock Spire](https://www.wowhead.com/forever/zone=1583), [Scholomance](https://www.wowhead.com/forever/zone=2057), [Stratholme](https://www.wowhead.com/forever/zone=2017): Live, [Stratholme](https://www.wowhead.com/forever/zone=2017): Dead, [Dire Maul](https://www.wowhead.com/forever/zone=2557): East, [Dire Maul](https://www.wowhead.com/forever/zone=2557): North, [Dire Maul](https://www.wowhead.com/forever/zone=2557): West, [Shaper's Terrace](https://www.wowhead.com/forever/search?q=Shaper%27s%20Terrace)
 - [ ] Conqueror of the Deeps `Legacy`
 - [ ] Conqueror of the Wilds `Legacy`
 - [ ] Conqueror of the Lair `Legacy`
