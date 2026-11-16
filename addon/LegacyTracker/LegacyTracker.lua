@@ -27,7 +27,11 @@ local function charKey()
   local realm = fn(GetNormalizedRealmName) and GetNormalizedRealmName() or nil
   if not realm or realm == "" then realm = GetRealmName() end
   if not realm or realm == "" then return nil end
-  return realm .. "-" .. name, name, realm
+  -- Keys must never contain spaces: the realm fallback can return a spaced
+  -- realm ("Aerie Peak"), and the same character then gets a second entry as
+  -- soon as the other form is used. Display name/realm are kept as returned;
+  -- only the key is normalized.
+  return (realm:gsub("%s+", "") .. "-" .. name:gsub("%s+", "")), name, realm
 end
 
 local function getDB()
@@ -197,6 +201,39 @@ SlashCmdList.LEGACYTRACKER = function(msg)
     local state = opt == "on" and "will be recorded" or "are not recorded (cleared)"
     print("|cff33ff99LegacyTracker|r: gold and time played " .. state)
     if opt == "on" then playedRequested = false; requestPlayed() end
+    return
+  end
+  -- /ltrack clean: remove spaced duplicate entries, but only when the
+  -- space-free entry for the same character exists. Level history is merged
+  -- into the surviving entry first. A spaced entry with no twin is the
+  -- character's only record, so it is kept, never deleted.
+  local cleanCmd = (msg or ""):lower():match("^%s*clean%s*$")
+  if cleanCmd then
+    local db = getDB()
+    local removed, kept = 0, 0
+    for k in pairs(db.chars) do
+      if k:find("%s") then
+        local canonical = k:gsub("%s+", "")
+        local twin = db.chars[canonical]
+        if twin and canonical ~= k then
+          local spaced = db.chars[k]
+          twin.levels = twin.levels or {}
+          if spaced.levels then
+            for lv, t in pairs(spaced.levels) do
+              if not twin.levels[lv] then twin.levels[lv] = t end
+            end
+          end
+          if (spaced.level or 0) > (twin.level or 0) then twin.level = spaced.level end
+          if (spaced.lastSeen or 0) > (twin.lastSeen or 0) then twin.lastSeen = spaced.lastSeen end
+          db.chars[k] = nil
+          removed = removed + 1
+        else
+          kept = kept + 1
+        end
+      end
+    end
+    print("|cff33ff99LegacyTracker|r: clean removed " .. removed .. " duplicate(s), kept " .. kept
+      .. " spaced entry(ies) with no canonical twin.")
     return
   end
   if not inCombat() then pcall(snapshot, true) end
