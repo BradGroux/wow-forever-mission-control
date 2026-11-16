@@ -87,10 +87,14 @@ assert(LegacyTrackerDB.chars["Aerie Peak-Aldric"] == nil, "clean did not remove 
 assert(LegacyTrackerDB.chars["AeriePeak-Aldric"].levels[13] == now, "clean did not merge the duplicate's level history")
 assert(LegacyTrackerDB.chars["AeriePeak-Aldric"].level == 13, "clean did not keep the duplicate's higher level")
 -- a spaced entry with no twin is the character's only record: kept, not deleted
-LegacyTrackerDB.chars["Example Realm-Elowen"] = { levels = { [10] = now }, level = 10, lastSeen = now }
+-- (Brandt has no space-free entry, unlike Elowen, who already has one)
+LegacyTrackerDB.chars["Example Realm-Brandt"] = { levels = { [10] = now }, level = 10, lastSeen = now }
 SlashCmdList.LEGACYTRACKER("clean")
 assert(printed[#printed]:find("removed 0 duplicate") and printed[#printed]:find("kept 1 spaced"), "clean did not report keeping the sole spaced entry")
-assert(LegacyTrackerDB.chars["Example Realm-Elowen"], "clean deleted a spaced entry with no twin")
+assert(LegacyTrackerDB.chars["Example Realm-Brandt"], "clean deleted a spaced entry with no twin")
+-- these entries exist only to exercise clean; the serialized sample must not change
+LegacyTrackerDB.chars["AeriePeak-Aldric"] = nil
+LegacyTrackerDB.chars["Example Realm-Brandt"] = nil
 
 -- Serialize like the WoW client does.
 local function ser(v, ind)
