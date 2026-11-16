@@ -73,6 +73,25 @@ assert(ChatFrame1:IsEventRegistered("TIME_PLAYED_MSG"), "chat frame not re-regis
 SlashCmdList.LEGACYTRACKER("extras off")
 assert(e.money == nil and e.timePlayed == nil and LegacyTrackerDB.settings.extras == false, "extras off did not clear")
 
+-- spaced realm names must not create a second key, and /ltrack clean only
+-- removes a spaced entry when its space-free twin exists
+st.realm, st.name, st.level, st.xp, st.rested = "Aerie Peak", "Aldric", 12, 100, 0
+fire("PLAYER_ENTERING_WORLD"); run(); fire("PLAYER_LOGOUT")
+assert(LegacyTrackerDB.chars["AeriePeak-Aldric"], "spaced realm created a spaced key")
+assert(LegacyTrackerDB.chars["Aerie Peak-Aldric"] == nil, "spaced realm key was not normalized")
+LegacyTrackerDB.chars["Aerie Peak-Aldric"] = { levels = { [13] = now }, level = 13, lastSeen = now }
+local beforeClean = #printed
+SlashCmdList.LEGACYTRACKER("clean")
+assert(#printed == beforeClean + 1 and printed[#printed]:find("removed 1 duplicate"), "clean did not report removing the duplicate")
+assert(LegacyTrackerDB.chars["Aerie Peak-Aldric"] == nil, "clean did not remove the spaced duplicate")
+assert(LegacyTrackerDB.chars["AeriePeak-Aldric"].levels[13] == now, "clean did not merge the duplicate's level history")
+assert(LegacyTrackerDB.chars["AeriePeak-Aldric"].level == 13, "clean did not keep the duplicate's higher level")
+-- a spaced entry with no twin is the character's only record: kept, not deleted
+LegacyTrackerDB.chars["Example Realm-Elowen"] = { levels = { [10] = now }, level = 10, lastSeen = now }
+SlashCmdList.LEGACYTRACKER("clean")
+assert(printed[#printed]:find("removed 0 duplicate") and printed[#printed]:find("kept 1 spaced"), "clean did not report keeping the sole spaced entry")
+assert(LegacyTrackerDB.chars["Example Realm-Elowen"], "clean deleted a spaced entry with no twin")
+
 -- Serialize like the WoW client does.
 local function ser(v, ind)
   if type(v) == "string" then return string.format("%q", v) end

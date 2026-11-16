@@ -12,6 +12,8 @@ It does **not** record gold or time played unless you turn that on with `/ltrack
 
 It has no window, no minimap button and no chat messages. Type `/ltrack` to print a one-line summary per character. It works with any character names, on any realm, and needs no setup. Data stays on your computer in a SavedVariables file until you import it.
 
+Character keys never contain spaces, so a spaced realm name can't create a second entry for the same character. If an old spaced duplicate is already in your SavedVariables, `/ltrack clean` removes it only when the space-free entry for that character exists (merging its level history first); a spaced entry with no twin is left alone.
+
 - Interface version: **16001** (WoW Forever)
 - Files: [addon/LegacyTracker/](../addon/LegacyTracker)
 - Lua 5.1, no libraries
