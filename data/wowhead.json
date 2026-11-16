@@ -41,6 +41,10 @@
    "type": "skill",
    "id": 171
   },
+  "Alcaz Prison": {
+   "type": "zone",
+   "id": 16620
+  },
   "Alterac": {
    "id": 36,
    "type": "zone"
@@ -156,6 +160,10 @@
   "Blackfathom Villainy": {
    "id": 1200,
    "type": "quest"
+  },
+  "Blackmaw Hold": {
+   "type": "zone",
+   "id": 16554
   },
   "Blackrock Depths": {
    "id": 1584,
@@ -752,6 +760,10 @@
   "Knowledge in the Deeps": {
    "id": 971,
    "type": "quest"
+  },
+  "Krol'dok Stronghold": {
+   "type": "zone",
+   "id": 16842
   },
   "Leatherworking": {
    "type": "skill",
